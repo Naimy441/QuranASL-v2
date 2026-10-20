@@ -48,7 +48,7 @@ MERCIFUL | =MERCY+ALWAYS | most merciful,especially merciful,rahim | low | Ar-Ra
 KIND | B @chest:f6 p:B f:I ~circle:F6x1 | B @chest:f4 p:B f:FI | kind,kindness,gentle,benevolent | med
 FORGIVE | B @base.palm p:D f:F > @base.palm:f8 d:0.2 ;x2 | B @neutral p:U f:FI | forgive,forgiving,forgiveness,pardon,excuse,forgiver | high
 REPENT | =SORRY+AGAIN | repent,repentance,turn back,tawbah | med
-BLESS | A @lips p:I f:U at:tipT > 5 @neutral:o6f10 p:D f:F d:0.4 ;sym | bless,blessing,blessed,favor,barakah | med
+BLESS | A @lips:o3 p:I f:U at:tipT > 5 @neutral:o8f10 p:D f:F d:0.4 ;sym | bless,blessing,blessed,favor,barakah | med
 FAVOR | =BLESS | favor,favors,grace,bounty | med
 REWARD | X @neutral:o8 p:I f:F > @far:o8 d:0.3 ;sym | reward,rewarded,recompense,gift | med
 PAY | 1 @base.palm p:D f:F at:tipI > @base.palm:f12u4 d:0.2 | B @neutral p:U f:FI | pay,repay,compensate,due | high
@@ -84,7 +84,7 @@ FEAR-GOD | R @forehead:o4f2 p:I f:U > @neutral:u8f10 f:FU ~arc:f4 d:0.4 ;face:br
 RESPECT | R @forehead:o4f2 p:I f:U > @neutral:u8f10 f:FU ~arc:f4 d:0.4 | respect,honor,revere | high
 HONOR | H @forehead:o4 p:I f:U at:tipM > @neutral:u4f10 f:FU ~arc:f6 d:0.4 | honor,honored,noble,dignity,generous | high
 FAST | F @lips:o4 p:B f:U at:tipI > @lips:i4 at:tipI d:0.3 | fast,fasting,sawm | low
-CHARITY | flatO @chest:f4 p:U f:F > 5 @far:u2 p:U d:0.35 ;sym | charity,alms,zakah,zakat,sadaqah,spend | low | GDM has distinct signs for zakat/sadaqah
+CHARITY | flatO @chest:o6f4 p:U f:F > 5 @far:o8u2 p:U d:0.35 ;sym | charity,alms,zakah,zakat,sadaqah,spend | low | GDM has distinct signs for zakat/sadaqah
 PILGRIMAGE | =fs:HAJJ | hajj,pilgrimage | low
 MOSQUE | =fs:MASJID | mosque,masjid | low
 KAABA | S @neutral:u4 p:D f:F > @neutral:u4 ~circle:U10x1 | S @neutral:o2 p:D f:F | kaaba,house,sacred house | low

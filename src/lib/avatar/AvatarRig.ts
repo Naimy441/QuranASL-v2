@@ -195,12 +195,12 @@ export class AvatarRig {
     jaw.position.set(0, -ry * 0.5, rz * 0.12);
     H.add(jaw);
     // nose
-    const nose = new THREE.Mesh(new THREE.SphereGeometry(0.0125, 18, 14), mats.skin);
-    nose.scale.set(1, 1.7, 1.15);
-    nose.position.set(0, -0.006, surf(0, -0.006) - 0.001);
+    const nose = new THREE.Mesh(new THREE.SphereGeometry(0.0105, 18, 14), mats.skin);
+    nose.scale.set(1.15, 1.05, 0.95);
+    nose.position.set(0, -0.012, surf(0, -0.012) - 0.0015);
     H.add(nose);
-    const bridge = new THREE.Mesh(new THREE.CapsuleGeometry(0.0062, 0.026, 4, 10), mats.skin);
-    bridge.position.set(0, 0.012, surf(0, 0.012) - 0.002);
+    const bridge = new THREE.Mesh(new THREE.CapsuleGeometry(0.0052, 0.022, 4, 10), mats.skin);
+    bridge.position.set(0, 0.006, surf(0, 0.006) - 0.0035);
     bridge.rotation.x = -0.25;
     H.add(bridge);
     // ears
@@ -366,8 +366,8 @@ export class AvatarRig {
       const p = f.puff;
       const base = c.userData.base as THREE.Vector3;
       c.visible = p > 0.02;
-      c.scale.setScalar(1 + p * 0.25);
-      c.position.set(base.x * (1 + p * 0.12), base.y, base.z + p * 0.026);
+      c.scale.setScalar(1 + p * 0.1);
+      c.position.set(base.x * (1 + p * 0.06), base.y, base.z + p * 0.018);
     }
     // mouth (lip tubes rebuilt only when the shape changes)
     const open = Math.min(1, f.mouthOpen);
@@ -424,7 +424,13 @@ export class AvatarRig {
       const high = Math.max(0, W.y - 1.35);
       // Hands crossing the midline pull the elbow forward rather than out.
       const cross = Math.max(0, -sx * W.x) * 1.2;
-      const pole = new THREE.Vector3(S.x + sx * (0.22 + high * 0.15 - cross * 0.5), S.y - 0.55 + high * 0.35, S.z - 0.2 + cross * 0.3 + Math.max(0, W.z - 0.25) * 0.25);
+      // Raised hands (face signs) keep the elbow low and in front of the body.
+      const face = Math.min(1, high / 0.25);
+      const pole = new THREE.Vector3(
+        S.x + sx * (0.22 - face * 0.1 - cross * 0.5),
+        S.y - 0.55 - face * 0.15,
+        S.z - 0.2 + face * 0.45 + cross * 0.3 + Math.max(0, W.z - 0.25) * 0.25,
+      );
       const E = solveElbow(S, W, pole, BODY.upperArm, BODY.forearm, new THREE.Vector3());
       const up = this.upper[s];
       up.position.copy(S);

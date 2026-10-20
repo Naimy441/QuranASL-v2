@@ -52,6 +52,8 @@ export interface HandKey {
   /** Bezier bulge for the segment ARRIVING at this key (torso space, metres). */
   arc?: [number, number, number];
   overlay?: Overlay;
+  /** Linear (un-eased) interpolation into this key — used for dense captured motion. */
+  lin?: boolean;
 }
 
 export type FaceKey =
@@ -75,6 +77,8 @@ export interface CompiledSign {
   R: HandKey[];
   L: HandKey[] | null; // null = non-dominant hand not used
   face?: Partial<FaceState>;
+  /** Time-varying facial grammar (captured signs). */
+  faceTrack?: { t: number; f: Partial<FaceState> }[];
 }
 
 export interface SignEntry {

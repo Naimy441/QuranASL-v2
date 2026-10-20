@@ -1,5 +1,6 @@
 import { compileSign } from "./dsl";
 import { fingerspell } from "./fingerspell";
+import { getMocap, mocapSign } from "./mocap";
 import { buildTimeline } from "./timeline";
 import type { CompiledSign, SignEntry } from "./types";
 import { LEX_CORE } from "./lexicon/core";
@@ -7,6 +8,7 @@ import { LEX_RELIGION } from "./lexicon/religion";
 import { LEX_NATURE } from "./lexicon/nature";
 import { LEX_MORE } from "./lexicon/more";
 import { LEX_EXTRA } from "./lexicon/extra";
+import { LEX_ISLAMIC, LEX_PROPHETS, MOCAP_LINKS } from "./lexicon/islamic";
 
 /*
  * Lexicon line format (one sign per line, "#" comments):
@@ -27,9 +29,11 @@ export function parseLexicon(src: string, cat: string): SignEntry[] {
     const def = defParts.join(" | ");
     const [en, conf, note] = fields;
     if (!id || !def) continue;
+    const mocap = /mocap:([A-Z0-9-]+)/.exec(note ?? "")?.[1];
     out.push({
       id,
       def,
+      mocap,
       en: en ? en.split(",").map((w) => w.trim().toLowerCase()).filter(Boolean) : [],
       conf: (conf as SignEntry["conf"]) || "med",
       note: note || undefined,
@@ -70,9 +74,14 @@ export class Lexicon {
     return [...this.entries.values()].filter((e) => e.id === base || e.id.startsWith(base + "."));
   }
 
+  /** When false, captured motion is ignored and parametric definitions are used. */
+  useMocap = true;
+
   compile(id: string, seen: string[] = []): CompiledSign {
     const e = this.entries.get(id);
     if (!e) throw new Error(`No sign "${id}"`);
+    const clip = this.useMocap && e.mocap ? getMocap(e.mocap) : undefined;
+    if (clip) return mocapSign(clip);
     if (e.def.startsWith("=")) {
       if (seen.includes(id)) throw new Error(`Cyclic compound ${[...seen, id].join(" > ")}`);
       const parts = e.def
@@ -114,7 +123,16 @@ export function getLexicon(): Lexicon {
     ...parseLexicon(LEX_NATURE, "nature"),
     ...parseLexicon(LEX_MORE, "more"),
     ...parseLexicon(LEX_EXTRA, "extra"),
+    ...parseLexicon(LEX_ISLAMIC, "religion"),
+    ...parseLexicon(LEX_PROPHETS, "names"),
   ]);
+  // Link captured community signs; keep the drawn version reachable as a variant.
+  for (const [gloss, clip] of Object.entries(MOCAP_LINKS)) {
+    const e = _lex.get(gloss);
+    if (!e || e.mocap) continue;
+    _lex.add({ ...e, id: gloss + ".drawn", en: [], note: "parametric draft" });
+    e.mocap = clip;
+  }
   return _lex;
 }
 

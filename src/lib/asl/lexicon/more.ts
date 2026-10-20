@@ -1,7 +1,7 @@
 // Verbs of motion, perception, communication and action; qualities.
 export const LEX_MORE = String.raw`
 # ---------- perception & communication ----------
-SEE | V @eyes:f4 p:B f:U at:tipI > @eyes:f18 p:D f:F d:0.3 | see,saw,seen,sight,behold,observe | high
+SEE | V @eyes:f4 p:B f:U at:tipI > @face:f14 p:D f:F at:palm d:0.3 | see,saw,seen,sight,behold,observe | high
 LOOK | V @neutral:u10 p:D f:F > @far:u10 d:0.3 | look,looked,watch,gaze | high
 WITNESS | V @eyes:f4 p:B f:U at:tipI > @neutral:f16 p:D f:F d:0.3 > B @neutral:f12u4 p:F f:U d:0.2 | witness,witnessed,testify,testimony | med
 HEAR | 1 @ear:f3i2 p:F f:O at:tipI > @ear:f5i3 at:tipI d:0.12 ;x2 | hear,heard,hearing,listen | high
@@ -16,7 +16,7 @@ CALL | B @neutral:f14 p:B f:U > bentB @neutral:b2u4 d:0.3 | call,called,summon,i
 SHOUT | claw5 @mouth:f3 p:B f:U > @face:u10f14 d:0.25 ;face:mouthOpen=0.8,browUp=0.5 | shout,cry out,scream,blast,shriek | high
 WHISPER | B @mouth:o4 p:I f:U at:radial > @mouth:o4f2 at:radial d:0.15 ;x2 face:lipsPress=0.2 | whisper,whisperer,whispering | high
 ASK | 1 @neutral:u6f12 p:B f:U > X @neutral:u4f6 d:0.2 | ask,asked,question,request | high
-ANSWER | 1 @mouth:f3 p:I f:U > @neutral:f14 p:D f:F d:0.3 ;sym | answer,respond,reply | high
+ANSWER | 1 @mouth:o4f3 p:I f:U > @neutral:o6f14 p:D f:F d:0.3 ;sym | answer,respond,reply | high
 COMMAND | 1 @mouth:f2 p:I f:U at:tipI > @neutral:u6f16 f:F d:0.2 ;face:browDown=0.4 | command,commanded,order,ordained | high
 WARN | B @base.back:u3 p:D f:F > @base.back d:0.1 ;x2 | B @neutral p:D f:FI | warn,warning,warner | high
 ANNOUNCE | 1 @mouth:o2f2 p:I f:U at:tipI > @neutral:o14u8f10 d:0.3 ;sym | announce,proclaim,declare,good news | high

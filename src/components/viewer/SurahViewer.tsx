@@ -10,6 +10,7 @@ import { humanVideos } from "@/lib/data/human-videos";
 import GlossStrip from "./GlossStrip";
 import HumanVideos from "./HumanVideos";
 import { loadOverrides } from "@/lib/studio/overrides";
+import { useMocapReady } from "@/lib/hooks/useMocap";
 
 const AvatarCanvas = dynamic(() => import("@/components/avatar/AvatarCanvas"), {
   ssr: false,
@@ -34,6 +35,7 @@ export default function SurahViewer({ n }: { n: number }) {
   const [showWords, setShowWords] = useState(false);
   const pb = useRef<PlaybackState>({ time: 0, playing: false, rate: 0.85, loop: false });
   const listRef = useRef<HTMLOListElement>(null);
+  const mocapReady = useMocapReady();
 
   useEffect(() => {
     let live = true;
@@ -74,7 +76,8 @@ export default function SurahViewer({ n }: { n: number }) {
   }, [surah, gloss, overrides, hasBismillah, n]);
 
   const cur = items[idx];
-  const anim = useMemo(() => (cur?.gloss ? animateGloss(cur.gloss) : null), [cur?.gloss]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const anim = useMemo(() => (cur?.gloss ? animateGloss(cur.gloss) : null), [cur?.gloss, mocapReady]);
 
   // keep playback ref in sync
   useEffect(() => {

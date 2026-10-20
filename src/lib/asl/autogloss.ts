@@ -60,6 +60,9 @@ function stem(w: string): string[] {
 
 const norm = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[ʿʾ’‘`]/g, "'");
 
+/** Use a name sign from the dictionary when one exists, otherwise fingerspell. */
+const nameSign = (name: string, lex: Lexicon) => (lex.has(name) ? name : "fs:" + name);
+
 export interface AutoGlossResult {
   gloss: string;
   unknown: string[];
@@ -94,7 +97,7 @@ export function autoGloss(english: string, lex: Lexicon = getLexicon()): AutoGlo
       let matched = false;
       for (let n = Math.min(4, words.length - i); n >= 2; n--) {
         const phrase = words.slice(i, i + n).join(" ").toLowerCase();
-        if (NAMES[phrase]) { signs.push("fs:" + NAMES[phrase]); i += n - 1; matched = true; break; }
+        if (NAMES[phrase]) { signs.push(nameSign(NAMES[phrase], lex)); i += n - 1; matched = true; break; }
         const hit = lex.byWord.get(phrase);
         if (hit) { signs.push(hit[0]); i += n - 1; matched = true; break; }
       }
@@ -102,7 +105,7 @@ export function autoGloss(english: string, lex: Lexicon = getLexicon()): AutoGlo
       if (["not", "no", "never", "nor", "none", "cannot"].includes(w)) neg = true;
       if (["if", "whoever", "when", "whenever"].includes(w)) cond = true;
       if (w === "allah") { signs.push("ALLAH"); continue; }
-      if (NAMES[w]) { signs.push("fs:" + NAMES[w]); continue; }
+      if (NAMES[w]) { signs.push(nameSign(NAMES[w], lex)); continue; }
       // Sahih International capitalises pronouns referring to Allah
       if (/^(We|Us|Our|He|Him|His|I|Me|My)$/.test(raw) && i > 0 && raw !== "I") {
         signs.push(raw === "His" || raw === "Our" || raw === "My" ? "POSS-a" : "ALLAH");

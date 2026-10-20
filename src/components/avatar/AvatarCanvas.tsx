@@ -24,6 +24,8 @@ export interface AvatarCanvasProps {
   background?: string;
   className?: string;
   ariaLabel?: string;
+  /** "face" frames the head for close inspection of facial grammar. */
+  framing?: "body" | "face";
 }
 
 function Rig({ timeline, playback, onTime, onEnd, avatar = "amina" }: Pick<AvatarCanvasProps, "timeline" | "playback" | "onTime" | "onEnd" | "avatar">) {
@@ -68,11 +70,12 @@ function Rig({ timeline, playback, onTime, onEnd, avatar = "amina" }: Pick<Avata
 
 const IDLE = buildTimeline([]);
 
-function CameraRig({ mode }: { mode: "3d" | "2d" }) {
+function CameraRig({ mode, framing = "body" }: { mode: "3d" | "2d"; framing?: "body" | "face" }) {
   const { size } = useThree();
   const aspect = size.width / Math.max(1, size.height);
   // Keep the signing space (head to waist, elbow to elbow) in frame.
   const zoom = Math.min(size.height / 0.95, (size.width / 0.95) * 1);
+  if (framing === "face") return <PerspectiveCamera makeDefault position={[0, 1.62, 0.75]} fov={30} near={0.05} far={20} />;
   return mode === "2d" ? (
     <OrthographicCamera makeDefault position={[0, 1.33, 3]} zoom={zoom} near={0.1} far={10} />
   ) : (
@@ -80,11 +83,11 @@ function CameraRig({ mode }: { mode: "3d" | "2d" }) {
   );
 }
 
-export default function AvatarCanvas({ mode = "3d", background, className, ariaLabel, ...rest }: AvatarCanvasProps) {
+export default function AvatarCanvas({ mode = "3d", background, className, ariaLabel, framing, ...rest }: AvatarCanvasProps) {
   return (
     <div className={className} role="img" aria-label={ariaLabel ?? "3D signing avatar"}>
       <Canvas shadows dpr={[1, 2]} gl={{ antialias: true, preserveDrawingBuffer: true }} style={{ background: background ?? "transparent" }}>
-        <CameraRig mode={mode} />
+        <CameraRig mode={mode} framing={framing} />
         <ambientLight intensity={mode === "2d" ? 1.4 : 0.7} />
         <hemisphereLight args={["#fff6ea", "#30343c", mode === "2d" ? 0.6 : 0.9]} />
         <directionalLight position={[1.2, 2.6, 2.4]} intensity={mode === "2d" ? 0.6 : 2.1} castShadow shadow-mapSize={[1024, 1024]} />
@@ -93,7 +96,7 @@ export default function AvatarCanvas({ mode = "3d", background, className, ariaL
         <Rig {...rest} />
         {mode === "3d" && <ContactShadows position={[0, 0.03, 0]} opacity={0.35} scale={2} blur={2.4} far={1} />}
         <OrbitControls
-          target={[0, 1.36, 0]}
+          target={framing === "face" ? [0, 1.6, 0] : [0, 1.36, 0]}
           enablePan={false}
           enableRotate={mode === "3d"}
           minDistance={0.8}

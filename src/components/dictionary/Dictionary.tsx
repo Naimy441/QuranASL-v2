@@ -8,6 +8,8 @@ import { getLexicon, overrideEntries } from "@/lib/asl/lexicon";
 import { buildTimeline } from "@/lib/asl/timeline";
 import { fingerspell } from "@/lib/asl/fingerspell";
 import { loadSignOverrides } from "@/lib/studio/signOverrides";
+import { useMocapReady } from "@/lib/hooks/useMocap";
+import { hasMocap } from "@/lib/asl/mocap";
 
 const AvatarCanvas = dynamic(() => import("@/components/avatar/AvatarCanvas"), { ssr: false });
 
@@ -20,6 +22,7 @@ export default function Dictionary() {
   const [spell, setSpell] = useState("");
   const [freq, setFreq] = useState<Record<string, number>>({});
   const pb = useRef<PlaybackState>({ time: 0, playing: true, rate: 0.8, loop: true });
+  const mocapReady = useMocapReady();
   useEffect(() => {
     overrideEntries(Object.values(loadSignOverrides()));
     fetch("/data/gloss/freq.json").then((r) => r.json()).then(setFreq).catch(() => {});
@@ -38,7 +41,8 @@ export default function Dictionary() {
     } catch {
       return null;
     }
-  }, [sel, spell, lex]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sel, spell, lex, mocapReady]);
   useEffect(() => {
     pb.current.time = 0;
     pb.current.playing = true;
@@ -55,6 +59,7 @@ export default function Dictionary() {
         {!spell && e && (
           <div className="rounded-xl border border-line bg-panel p-3 text-sm">
             <p><strong>English:</strong> {e.en?.join(", ") || "—"}</p>
+            {e.mocap && hasMocap(e.mocap) && <p className="mb-1 text-brand">Motion captured from a Global Deaf Muslim video</p>}
             <p className="mt-1"><strong>Confidence:</strong> <span className={e.conf === "low" ? "text-warn" : e.conf === "high" ? "text-ok" : ""}>{e.conf}</span>{e.note ? ` · ${e.note}` : ""}</p>
             {freq[e.id] ? <p className="mt-1 text-ink-2">Used {freq[e.id]}× in the hand-glossed surahs</p> : null}
             <p className="mt-2 break-all font-mono text-xs text-ink-2">{e.def}</p>

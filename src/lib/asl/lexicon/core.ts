@@ -30,7 +30,7 @@ WHO-REL | 1 @neutral:o6f8 p:D f:FO > @neutral:o8f10 d:0.12 | who,whom,which,whoe
 # ---------- question words ----------
 WHAT | 5 @neutral:o8 p:U f:F > @neutral:o11 d:0.15 ;sym x2 face:browDown=0.8 | what | high
 WHO | 1 @chin:f3 p:I f:U at:tipI ~circle:B2x2 ;face:browDown=0.8 | who | high
-WHY | B @forehead:o4 p:B f:U at:tipM > Y @forehead:o4f12 p:B f:U d:0.25 ;face:browDown=0.8 | why | high
+WHY | B @temple p:B f:IU at:tipM > Y @forehead:o4f12 p:B f:U d:0.25 ;face:browDown=0.8 | why | high
 HOW | curvedB @neutral:o2u2 p:B f:D > @neutral:o4u4 p:U f:F d:0.25 ;sym face:browDown=0.8 | how | high
 WHERE | 1 @neutral:u8f2 p:F f:U ~shake:2 ;face:browDown=0.8 | where | high
 WHEN | 1 @base.tipI:u5o3 p:D f:F ~circle:U3x1 > @base.tipI:u1 at:tipI d:0.12 | 1 @neutral p:B f:U | when | med
@@ -40,11 +40,11 @@ HOW-MANY | S @neutral:u2 p:U f:F > 5 @neutral:u6 d:0.2 ;face:browDown=0.8 | how 
 # ---------- function words ----------
 AND | 5 @neutral:o2 p:B f:I > flatO @neutral:o16 d:0.3 | and | med
 BUT | 1 @neutral:i4u4 p:F f:U > @neutral:o12u4 d:0.25 ;sym | but,however,yet | high
-IF | I @temple:f2 p:B f:U at:tipP > @temple:f12 d:0.25 ;face:browUp=0.8 | if,suppose,whether | high
-BECAUSE | 1 @forehead:o4 p:B f:U at:tipI > A @forehead:o12u6 d:0.3 | because,for,since | high
+IF | I @temple p:B f:IU at:tipP > @temple:f12 d:0.25 ;face:browUp=0.8 | if,suppose,whether | high
+BECAUSE | 1 @temple p:B f:IU at:tipI > A @forehead:o12u6 d:0.3 | because,for,since | high
 WITH | A @neutral:o4 p:I f:F > @neutral:o1 d:0.2 ;sym | with,together | high
 WITHOUT | A @neutral:o1 p:I f:F > 5 @neutral:o10 p:U d:0.25 ;sym | without | high
-FOR | 1 @temple:f2 p:B f:U at:tipI > @temple:f12 f:F d:0.25 | for | high
+FOR | 1 @temple p:B f:IU at:tipI > @temple:f12 f:F d:0.25 | for | high
 FROM | X @base.tipI:b2 p:I f:F > @base.tipI:b12 d:0.25 | 1 @neutral:f6 p:B f:U | from | high
 TO | 1 @neutral:b4 p:D f:F > @base.tipI at:tipI d:0.25 | 1 @neutral:f6 p:B f:U | to,toward,unto | high
 IN | flatO @base.palm:u8 p:D f:D > @base.palm:d2 d:0.25 | C @neutral p:I f:F | in,into,within,inside | high
@@ -171,9 +171,9 @@ KING | K @^shoulder p:B f:U > @hip:f6 d:0.45 | king,sovereign,ruler | high
 LEADER | =LEAD+PERSON | leader | med
 
 # ---------- emotion & mind ----------
-KNOW | B @forehead:o4 p:B f:U at:tipM > @forehead:o4f3 d:0.1 ;x2 | know,knew,knowing,knowledge,aware | high
-NOT-KNOW | B @forehead:o4 p:B f:U at:tipM > @forehead:o10f12 p:F d:0.25 ;face:shake=0.1 | do not know | high
-THINK | 1 @forehead:o4 p:B f:U at:tipI > @forehead:o4f3 d:0.1 ;x2 | think,thought,consider,suppose,reckon | high
+KNOW | B @temple p:B f:IU at:tipM > @temple:o3 d:0.1 ;x2 | know,knew,knowing,knowledge,aware | high
+NOT-KNOW | B @temple p:B f:IU at:tipM > @forehead:o10f12 p:F d:0.25 ;face:shake=0.1 | do not know | high
+THINK | 1 @temple p:B f:IU at:tipI > @temple:o3 d:0.1 ;x2 | think,thought,consider,suppose,reckon | high
 UNDERSTAND | S @temple:f4 p:B f:U > 1 d:0.18 | understand,comprehend,realize | high
 REMEMBER | 10 @forehead:o3 p:I f:F at:tipT > @neutral:u2 at:tipT d:0.4 | 10 @neutral p:I f:F | remember,remembrance,mention,recall,reminder | high
 FORGET | B @forehead:i4 p:B f:O > A @forehead:o12 d:0.3 | forget,forgot,neglect | high
@@ -181,8 +181,8 @@ LEARN | 5 @base.palm:u4 p:D f:F > flatO @forehead:f4 p:B f:U d:0.4 | B @neutral 
 TEACH | flatO @forehead:o6f6 p:F f:U > @forehead:o6f18 d:0.2 ;sym x2 | teach,taught,instruct | high
 WISE | X @forehead:f5 p:I f:F > @forehead:f5d3 d:0.12 ;x2 | wise,wisdom | high
 FOOL | X @forehead:f4 p:I f:U > ~twist:30 | fool,foolish | low
-MIND | 1 @forehead:o4 p:B f:U at:tipI ~tap:1 | mind,intellect,reason,intelligent | high
-BELIEVE | 1 @forehead:o4 p:B f:U at:tipI > curvedB @neutral:u2 p:D f:F d:0.4 | curvedB @neutral p:U f:F | believe,belief,faith,believer,believers | high
+MIND | 1 @temple p:B f:IU at:tipI ~tap:1 | mind,intellect,reason,intelligent | high
+BELIEVE | 1 @temple p:B f:IU at:tipI > curvedB @neutral:u2 p:D f:F d:0.4 | curvedB @neutral p:U f:F | believe,belief,faith,believer,believers | high
 DOUBT | bentV @eyes:f8 p:D f:F > @eyes:f8 ~shake:1 h:0.3 | doubt,uncertain,suspicion | med
 FEEL | open8 @chest p:B f:U at:tipM > @chest:u4 d:0.25 | feel,feeling,sense | high
 HEART | open8 @heart:f1 p:B f:U at:tipM > @heart:f3 d:0.1 ;x2 | heart,hearts | high
@@ -190,7 +190,7 @@ LOVE | S @^chestSide:f2 p:B f:UI > @^chestSide:f3 d:0.2 | S @^chestSide:f5 p:B f
 LIKE | 5 @chest:f1 p:B f:U at:tipM > 8 @chest:f12 d:0.25 | like,enjoy,fond | high
 HATE | 8 @neutral:o6f4 p:D f:F > 5 @neutral:o8f12 d:0.15 ;sym | hate,hatred,detest,despise | high
 HAPPY | B @chest:d4 p:B f:I > @chest:u6 ~arc:f3 d:0.15 ;x2 face:smile=0.8,browUp=0.3 | happy,glad,joy,joyful,rejoice,delight | high
-SAD | 5 @eyes:f8 p:B f:U > @chin:f8d8 d:0.45 ;sym face:browInnerUp=0.9,frown=0.6 | sad,grief,grieve,sorrow | high
+SAD | 5 @eyes:o5f8 p:B f:U > @chin:o6f8d8 d:0.45 ;sym face:browInnerUp=0.9,frown=0.6 | sad,grief,grieve,sorrow | high
 ANGRY | claw5 @stomach:f3 p:B f:I > @chestHigh:f4 d:0.35 ;sym face:browDown=1,squint=0.5,frown=0.6 | angry,anger,wrath,rage,furious | high
 AFRAID | S @chestSide:f8 p:B f:I > 5 @chest:f8o2 d:0.12 ;sym face:eyesWide=0.8,browInnerUp=0.6 | afraid,fear,scared,terror,dread | high
 WORRY | B @face:o8f8 p:B f:I ~circle:B5x2 ;alt face:browInnerUp=0.6,browDown=0.3 | worry,anxious,anxiety | med
@@ -213,7 +213,7 @@ MUST | X @neutral:u6 p:D f:F > @neutral:d4 d:0.2 | must,obligated | high
 CAN | S @neutral:o6u4 p:D f:F > @neutral:o6d4 d:0.2 ;sym | can,able,ability,could,capable,power | high
 CANNOT | 1 @neutral:u6o4 p:D f:FI > @neutral:d4o0 d:0.2 | 1 @neutral p:D f:FO | cannot,can not,unable | high
 TRY | S @neutral:o8 p:I f:F > @far:o8 ~arc:d4 d:0.35 ;sym | try,strive,effort,attempt,struggle | high
-DECIDE | 1 @forehead:o4 p:B f:U at:tipI > F @neutral:o6 p:I f:F d:0.35 | F @neutral:u6 p:I f:F > @neutral:u0 d:0.35 | decide,decision,decree,determine | high
+DECIDE | 1 @temple p:B f:IU at:tipI > F @neutral:o6 p:I f:F d:0.35 | F @neutral:u6 p:I f:F > @neutral:u0 d:0.35 | decide,decision,decree,determine | high
 CHOOSE | F @far p:D f:F > @neutral:b2 d:0.3 | choose,chose,select,prefer | high
 PROMISE | 1 @lips:f1 p:I f:U at:tipI > B @base.back:u2 p:D f:F d:0.35 | S @neutral p:I f:F | promise,promised,vow,covenant | high
 SWEAR | 1 @lips:f1 p:I f:U at:tipI > B @face:o14f6 p:F f:U d:0.35 | swear,oath | high | oath formula "By the ..."

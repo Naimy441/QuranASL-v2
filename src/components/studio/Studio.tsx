@@ -10,6 +10,7 @@ import { loadGloss, loadSurah, loadSurahList, type GlossFile, type Surah, type S
 import { allOverrides, loadOverrides, saveOverride } from "@/lib/studio/overrides";
 import { loadSignOverrides, saveSignOverride, loadReviews, saveReview } from "@/lib/studio/signOverrides";
 import GlossStrip from "@/components/viewer/GlossStrip";
+import { useMocapReady } from "@/lib/hooks/useMocap";
 
 const AvatarCanvas = dynamic(() => import("@/components/avatar/AvatarCanvas"), { ssr: false });
 
@@ -67,6 +68,7 @@ export default function Studio() {
   const [lexVer, setLexVer] = useState(0);
   const pb = useRef<PlaybackState>({ time: 0, playing: false, rate: 0.85, loop: false });
   const dragFrom = useRef<number | null>(null);
+  const mocapReady = useMocapReady();
 
   // initial selection from the URL, sign overrides from storage
   useEffect(() => {
@@ -105,7 +107,7 @@ export default function Studio() {
 
   const gloss = useMemo(() => toGloss(chips), [chips]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const anim = useMemo(() => (gloss ? animateGloss(gloss) : null), [gloss, lexVer]);
+  const anim = useMemo(() => (gloss ? animateGloss(gloss) : null), [gloss, lexVer, mocapReady]);
   useEffect(() => {
     pb.current.time = 0;
     pb.current.playing = true;
@@ -189,7 +191,8 @@ export default function Studio() {
     } finally {
       if (prev) tmp.add(prev);
     }
-  }, [tab, signId, signDef, signErr]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab, signId, signDef, signErr, mocapReady]);
   const saveSign = () => {
     const prev = lex.get(signId);
     const entry = { ...(prev ?? { id: signId, en: [], conf: "low" as const }), id: signId, def: signDef, src: `studio:${reviewer || "anon"}` };

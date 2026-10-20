@@ -144,7 +144,7 @@ ROTTEN | flatO @neutral:o4 p:U f:F > 5 ~wiggle:10 d:0.3 ;sym | rotten,decayed,cr
 SURFACE | B @base.back:u3b6 p:D f:F > @base.back:u3f8 d:0.3 | B @neutral p:D f:FI | surface,face of the earth | med
 YOURSELF | 10 @neutral:f12 p:I f:F > @neutral:f16 d:0.12 ;x2 | yourself | high
 LESSON | bentB @base.palm:u4 p:D f:I at:ulnar > @base.palm:b6u4 at:ulnar d:0.25 | B @neutral p:U f:FI | lesson,example,warning | med
-FROWN | bent5 @eyes:f6u3 p:B f:U > @eyes:f6 d:0.25 ;sym face:browDown=1,frown=0.8 | frown,frowned,scowl | med
+FROWN | bent5 @eyes:o5f6u3 p:B f:U > @eyes:o5f6 d:0.25 ;sym face:browDown=1,frown=0.8 | frown,frowned,scowl | med
 BLIND | bentV @eyes:f2 p:B f:U at:tipI > @eyes:f1 at:tipI d:0.1 | blind | high
 ATTENTION | B @temple:f2o3 p:I f:U > @face:f16o6 d:0.3 ;sym | attention,attend,focus | high
 HURRY | H @neutral:o6 p:I f:F > @neutral:o6f6 d:0.12 ;sym x2 | hurry,haste,rush,striving | high
@@ -183,7 +183,7 @@ GREEDY | claw5 @far p:U f:F > S @chest:f4 d:0.3 ;face:browDown=0.4,squint=0.4 | 
 FREE | F @neutral:i3 p:B f:U > @neutral:o12 p:F d:0.3 ;sym | free,freedom,release,liberate | high
 LEFT | L @neutral:o2 p:F f:U > @neutral:i10 d:0.3 | left,left side,companions of the left | high
 RIGHT-SIDE | R @neutral:o2 p:F f:U > @neutral:o14 d:0.3 | right side,right hand,companions of the right | high
-QUIET | B @lips:f2 p:I f:U > @neutral:o10 p:D f:F d:0.4 ;sym | quiet,still,calm,silent | high
+QUIET | B @lips:o3f2 p:I f:U > @neutral:o12 p:D f:F d:0.4 ;sym | quiet,still,calm,silent | high
 OPPRESS | B @base.back:u8 p:D f:FI > @base.back:u1 d:0.3 | 10 @neutral p:I f:F | oppress,oppressed,mistreat,harsh | med
 DRAG | curved5 @far:u4 p:D f:F > S @neutral:b4 d:0.35 ;sym | drag,dragged,seize | high
 HAIR | F @temple:u4 p:I f:U at:tipI > @temple:u4 ~shake:1 h:0.3 | hair,forelock | high
@@ -231,7 +231,7 @@ UNJUST | =NOT+EQUAL | unjust,injustice,unjustly,unfair,wrong,wronged,wronging | 
 ANYONE | =SOMETHING | anyone,anybody,everyone else | low
 COMMIT | =DO | commit,committed,commits,doers,practice | med
 DURING | 1 @neutral:o6 p:D f:F > @far:o6 d:0.4 ;sym | during,while,meanwhile | high
-GOAL | 1 @forehead:o4 p:B f:U at:tipI > @base.tipI at:tipI d:0.4 | 1 @high:f20 p:B f:U | goal,destination,aim,purpose | high
+GOAL | 1 @temple p:B f:IU at:tipI > @base.tipI at:tipI d:0.4 | 1 @high:f20 p:B f:U | goal,destination,aim,purpose | high
 APPOINT | =DECIDE | specified,appointed,appointment,determined | med
 WHEREIN | =IN | wherein,therein | med
 VISION | =SEE | vision,sight,perceive,perceived | med
@@ -250,7 +250,7 @@ CHOSEN | =CHOOSE | chosen,chose,selected | high
 INTEND | =WANT | intend,intended,intends,intention | med
 PLACE | flatO @neutral:o6 p:D f:F > @neutral:o6d3 d:0.15 | place,position,location,station | med
 WAR | 4 @neutral:o8 p:B f:I > @neutral:i4 d:0.25 > @neutral:o8 d:0.25 ;sym | war,battle,fighting,combat | high
-SICK | open8 @forehead:o2 p:B f:U at:tipM | open8 @stomach p:B f:U at:tipM | ill,sick,sickness,disease,illness | high
+SICK | open8 @temple p:B f:IU at:tipM | open8 @stomach p:B f:U at:tipM | ill,sick,sickness,disease,illness | high
 TOUCH | open8 @base.back:u4 p:D f:F at:tipM > @base.back:u0 at:tipM d:0.15 | B @neutral p:D f:FI | touch,touched,touches,afflicted | high
 DEFEAT | S @neutral:u6 p:D f:F > @neutral:u0 d:0.25 | S @neutral:d2 p:I f:F | defeat,overcome,overpower,conquer,prevail,victorious | high
 STATEMENT | =SAY | statement,saying,speech,claim,claimed,claims | med
@@ -308,7 +308,7 @@ MOUNT | =MOUNTAIN | mount | low
 PREVIOUS | =BEFORE | previous,preceding,earlier | high
 FOOTSTEPS | =FOLLOW | footsteps | low
 STOMACH | 1 @stomach:f3 p:I f:B at:tipI | stomach,belly,bellies,womb,wombs | high
-HEAD | bentB @temple:u2 p:B f:U at:tipM > @jaw at:tipM d:0.25 | head,heads | high
+HEAD | bentB @temple:u2 p:I f:BU at:tipM > @jaw at:tipM d:0.25 | head,heads | high
 EMIGRATE | =LEAVE+MOVE | emigrated,emigrate,emigrants,hijrah | low
 LOAN | V @nose:f2 p:I f:U at:tipI > @neutral:f12 d:0.3 | loan,lend,lent,borrow | med
 TRUSTWORTHY | =TRUST | trustworthy,faithful,reliable | med
@@ -457,7 +457,7 @@ AFTERNOON | B @neutral:u6o4 p:D f:FO > @neutral:u2o8 d:0.3 | B @neutral:d4 p:D f
 SUCCESSOR | =FOLLOW+PERSON | successors,successor,vicegerent,khalifah | med
 RELATE | =STORY | relate,recount,narrate | med
 BEGIN | =START | began,begin,beginning,originate | high
-WONDER | 1 @forehead:o4 p:B f:U at:tipI ~circle:B3x2 | wonder,wondered,marvel | high
+WONDER | 1 @temple p:B f:IU at:tipI ~circle:B3x2 | wonder,wondered,marvel | high
 SETTLED | =STAY | settled,settle,establishment,established | med
 IMMEDIATELY | =QUICK | immediately,instantly,at once | med
 SPERM | =SEED | sperm,sperm-drop,drop,fluid | med

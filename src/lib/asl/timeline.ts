@@ -27,12 +27,18 @@ export interface FaceSpan {
   ramp?: number;
 }
 
+export interface FaceTrack {
+  start: number;
+  keys: { t: number; f: Partial<FaceState> }[];
+}
+
 export interface Timeline {
   dur: number;
   R: HandKey[];
   L: HandKey[];
   items: TimelineItem[];
   faces: FaceSpan[];
+  tracks: FaceTrack[];
 }
 
 /** Input unit for the sequencer. */
@@ -70,6 +76,7 @@ export function buildTimeline(units: SeqUnit[], opts: { lead?: number; tail?: nu
   const L: HandKey[] = [restKey("L", 0, lead)];
   const items: TimelineItem[] = [];
   const faces: FaceSpan[] = [];
+  const tracks: FaceTrack[] = [];
   let cursor = lead; // end of last activity
   let lActive = false;
 
@@ -109,6 +116,7 @@ export function buildTimeline(units: SeqUnit[], opts: { lead?: number; tail?: nu
     const end = start + s.dur;
     items.push({ index: u.index, label: u.label, kind: u.kind, start, end });
     if (s.face) faces.push({ start: start - 0.08, end: end + 0.04, face: s.face, ramp: 0.1 });
+    if (s.faceTrack?.length) tracks.push({ start, keys: s.faceTrack });
     if (u.face) faces.push({ start: start - 0.1, end, face: u.face, ramp: 0.12 });
     cursor = end;
   }
@@ -120,7 +128,7 @@ export function buildTimeline(units: SeqUnit[], opts: { lead?: number; tail?: nu
   const restT = cursor + 0.45;
   R.push(restKey("R", restT, tail));
   L.push(restKey("L", restT, tail));
-  return { dur: restT + tail, R, L, items, faces };
+  return { dur: restT + tail, R, L, items, faces, tracks };
 }
 
 // ---------------------------------------------------------------------------
@@ -201,7 +209,7 @@ export function sampleHand(keys: HandKey[], t: number, out: HandPose): HandPose 
   const b = keys[i + 1];
   const span = Math.max(1e-4, b.t - aEnd);
   const u = (t - aEnd) / span;
-  const e = ease(u);
+  const e = b.lin ? u : ease(u);
   // position: quadratic bezier with optional bulge
   const ax = a.pos[0], ay = a.pos[1], az = a.pos[2];
   const bx = b.pos[0], by = b.pos[1], bz = b.pos[2];
@@ -216,7 +224,7 @@ export function sampleHand(keys: HandKey[], t: number, out: HandPose): HandPose 
   qb.set(...b.quat);
   out.quat.copy(qa).slerp(qb, e);
   // handshape changes lead the movement slightly
-  out.shape = lerpHandshape(a.shape, b.shape, ease(Math.min(1, u * 1.35)));
+  out.shape = lerpHandshape(a.shape, b.shape, b.lin ? u : ease(Math.min(1, u * 1.35)));
   return out;
 }
 
@@ -232,6 +240,22 @@ export function sampleFace(tl: Timeline, t: number, out: FaceState): FaceState {
       const target = NEUTRAL_FACE[key] + (v as number) * w;
       // channels combine by taking the stronger deviation
       if (Math.abs(target - NEUTRAL_FACE[key]) > Math.abs(cur - NEUTRAL_FACE[key])) out[key] = target;
+    }
+  }
+  for (const tr of tl.tracks ?? []) {
+    const lt = t - tr.start;
+    const ks = tr.keys;
+    if (lt < -0.1 || lt > ks[ks.length - 1].t + 0.1) continue;
+    let i = 0;
+    while (i < ks.length - 2 && ks[i + 1].t < lt) i++;
+    const a = ks[i], b = ks[Math.min(i + 1, ks.length - 1)];
+    const u = b.t > a.t ? Math.max(0, Math.min(1, (lt - a.t) / (b.t - a.t))) : 0;
+    const w = Math.min(1, (lt + 0.1) / 0.1, (ks[ks.length - 1].t + 0.1 - lt) / 0.1);
+    for (const [k, va] of Object.entries(a.f)) {
+      const key = k as keyof FaceState;
+      const vb = (b.f[key] as number) ?? (va as number);
+      const val = NEUTRAL_FACE[key] + ((va as number) + (vb - (va as number)) * u) * w;
+      if (Math.abs(val - NEUTRAL_FACE[key]) > Math.abs(out[key] - NEUTRAL_FACE[key])) out[key] = val;
     }
   }
   return out;

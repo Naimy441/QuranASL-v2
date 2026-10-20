@@ -10,6 +10,7 @@ import { buildTimeline, sampleHand, makePose } from "@/lib/asl/timeline";
 import type { CompiledSign } from "@/lib/asl/types";
 import { compareHands, dtw, FINGER_NAMES, FINGERS, handFeatures, rigLandmarks, type FingerScore } from "@/lib/practice/features";
 import { orderDeck, review, loadCards } from "@/lib/practice/srs";
+import { useMocapReady } from "@/lib/hooks/useMocap";
 
 const AvatarCanvas = dynamic(() => import("@/components/avatar/AvatarCanvas"), { ssr: false });
 
@@ -64,6 +65,7 @@ export default function Practice() {
   const path = useRef<[number, number][]>([]);
   const recording = useRef(false);
   const pb = useRef<PlaybackState>({ time: 0, playing: true, rate: 0.8, loop: true });
+  const mocapReady = useMocapReady();
 
   useEffect(() => {
     DECKS[deckId].ids().then((ids) => {
@@ -73,7 +75,8 @@ export default function Practice() {
   }, [deckId]);
 
   const id = deck[pos];
-  const sign = useMemo(() => (id ? compile(id) : null), [id]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const sign = useMemo(() => (id ? compile(id) : null), [id, mocapReady]);
   const timeline = useMemo(() => (sign ? buildTimeline([{ index: 0, label: id, kind: "sign", sign }]) : null), [sign, id]);
   const ref = useMemo(() => {
     if (!sign) return null;
