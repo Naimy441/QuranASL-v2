@@ -233,7 +233,7 @@ for (const [key, cfg] of Object.entries(map)) {
   ]);
   fs.writeFileSync(path.join(outDir, `${cfg.id}.json`), JSON.stringify(out));
   made++;
-  console.log(`${cfg.id.padEnd(16)} ${stem.padEnd(18)} frames ${s1 - s0 + 1} seg ${out.seg.join("-")}s L:${out.L ? "yes" : "no"} segs:${segs.map((s) => (s[0] / cap.fps).toFixed(1) + "-" + (s[1] / cap.fps).toFixed(1)).join(",")}`);
+  console.log(`${cfg.id.padEnd(16)} ${stem.padEnd(18)} frames ${s1 - s0 + 1} seg ${out.seg.join("-")}s L:${out.L ? "yes" : "no"}`);
 }
 const ids = fs.readdirSync(outDir).filter((f) => f.endsWith(".json") && f !== "index.json").map((f) => f.slice(0, -5));
 fs.writeFileSync(path.join(outDir, "index.json"), JSON.stringify(ids));

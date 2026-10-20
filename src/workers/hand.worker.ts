@@ -6,7 +6,7 @@ import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
 let landmarker: HandLandmarker | null = null;
 
 async function init() {
-  const fileset = await FilesetResolver.forVisionTasks("/mediapipe/wasm", true);
+  const fileset = await FilesetResolver.forVisionTasks("/mediapipe/wasm", false);
   landmarker = await HandLandmarker.createFromOptions(fileset, {
     baseOptions: { modelAssetPath: "/mediapipe/hand_landmarker.task", delegate: "GPU" },
     runningMode: "VIDEO",
@@ -25,6 +25,12 @@ self.onmessage = async (e: MessageEvent) => {
     } catch (err) {
       postMessage({ type: "error", error: String(err) });
     }
+    return;
+  }
+  if (msg.type === "frame" && !landmarker) {
+    // not ready yet: always answer so the sender never stalls
+    (msg.bitmap as ImageBitmap).close();
+    postMessage({ type: "result", ms: 0, hands: [] });
     return;
   }
   if (msg.type === "frame" && landmarker) {

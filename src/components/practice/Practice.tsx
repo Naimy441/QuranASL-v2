@@ -179,13 +179,20 @@ export default function Practice() {
     let stopped = false;
     const worker = new Worker(new URL("../../workers/hand.worker.ts", import.meta.url), { type: "module" });
     workerRef.current = worker;
+    let ready = false;
     setStatus("Loading hand tracker…");
     worker.onmessage = (e) => {
       const m = e.data;
-      if (m.type === "ready") setStatus("Show your hand to the camera");
+      if (m.type === "ready") {
+        ready = true;
+        setStatus("Show your hand to the camera");
+      }
       else if (m.type === "error") setStatus("Hand tracker failed: " + m.error);
       else if (m.type === "result") {
         busy.current = false;
+        const dbg = ((window as unknown as { __practice?: { frames: number; hands: number } }).__practice ??= { frames: 0, hands: 0 });
+        dbg.frames++;
+        dbg.hands += m.hands.length;
         onResultRef.current(m.hands, m.ms);
       }
     };
@@ -199,7 +206,7 @@ export default function Practice() {
         await v.play();
         const loop = async () => {
           if (stopped) return;
-          if (!busy.current && v.readyState >= 2) {
+          if (ready && !busy.current && v.readyState >= 2) {
             busy.current = true;
             const bmp = await createImageBitmap(v);
             worker.postMessage({ type: "frame", bitmap: bmp, ts: performance.now() }, [bmp]);
