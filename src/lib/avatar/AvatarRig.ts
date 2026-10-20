@@ -16,7 +16,7 @@ export interface AvatarStyle {
 }
 
 export const AVATAR_PRESETS: Record<string, AvatarStyle> = {
-  amina: { skin: "#c58c67", top: "#1d3b4f", accent: "#d9b36c", headwear: "hijab", hijab: "#3d4f5f", beard: false, hair: "#2a1d17" },
+  amina: { skin: "#c58c67", top: "#1d3b4f", accent: "#d9b36c", headwear: "hijab", hijab: "#8a7968", beard: false, hair: "#2a1d17" },
   yusuf: { skin: "#a8724f", top: "#22313f", accent: "#c9a25a", headwear: "kufi", hijab: "#f1ede4", beard: true, hair: "#1f1712" },
   sam: { skin: "#e0b493", top: "#2b2f3a", accent: "#6aa6d9", headwear: "none", hijab: "#333", beard: false, hair: "#3b2a1f" },
 };
@@ -304,9 +304,19 @@ export class AvatarRig {
       chinWrap.position.set(0, -0.05, -0.004);
       H.add(chinWrap);
       // drape over neck & shoulders (torso space)
-      const drapeProf: [number, number][] = [[0.0, 0.16], [0.07, 0.15], [0.085, 0.09], [0.1, 0.03], [0.15, -0.04], [0.2, -0.1], [0.203, -0.125]];
+      const drapeProf: [number, number][] = [[0.0, 0.16], [0.07, 0.15], [0.085, 0.09], [0.11, 0.03], [0.17, -0.015], [0.215, -0.05], [0.232, -0.09], [0.23, -0.12]];
+      const drapeGeo = new THREE.LatheGeometry(drapeProf.map(([r, y]) => new THREE.Vector2(r, y)), 64);
+      // Curved hem: the drape hangs lower over the chest and back than over the shoulders.
+      const pa = drapeGeo.attributes.position;
+      for (let i = 0; i < pa.count; i++) {
+        const x = pa.getX(i), y = pa.getY(i), z = pa.getZ(i);
+        if (y > -0.02) continue;
+        const front = Math.abs(z) / (Math.hypot(x, z) || 1);
+        pa.setY(i, y - front * front * (-y - 0.02) * 0.55);
+      }
+      drapeGeo.computeVertexNormals();
       const drape = new THREE.Mesh(
-        new THREE.LatheGeometry(drapeProf.map(([r, y]) => new THREE.Vector2(r, y)), 48),
+        drapeGeo,
         new THREE.MeshStandardMaterial({ color: style.hijab, roughness: 0.9, side: THREE.DoubleSide }),
       );
       drape.scale.set(1, 1, 0.74);

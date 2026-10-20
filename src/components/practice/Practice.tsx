@@ -272,7 +272,7 @@ export default function Practice() {
           </label>
         </div>
         <div className="stage relative aspect-[4/3] overflow-hidden rounded-2xl border border-line">
-          <AvatarCanvas className="absolute inset-0" timeline={timeline} playback={pb} ariaLabel={`Avatar demonstrating ${id}`} />
+          <AvatarCanvas className="absolute inset-0" timeline={timeline} playback={pb} xr ariaLabel={`Avatar demonstrating ${id}`} />
           <div className="absolute left-3 top-3 rounded-lg bg-black/60 px-3 py-1.5 font-mono text-xl text-white">
             {id?.startsWith("fs:") ? `Letter ${id.slice(3)}` : id}
           </div>

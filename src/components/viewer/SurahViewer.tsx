@@ -176,6 +176,7 @@ export default function SurahViewer({ n }: { n: number }) {
             onEnd={onEnd}
             mode={mode}
             avatar={avatar}
+            xr
             ariaLabel={`Avatar signing ${cur?.label ?? ""} in ASL`}
           />
           {/* caption */}
