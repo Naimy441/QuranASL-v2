@@ -680,4 +680,25 @@ SEARCH | =SEEK | search,searched,roam | high
 SUNRISE | =MORNING | sunrise,rising of the sun | high
 SUNSET | =EVENING | sunset,setting of the sun | high
 FORCE | C @neutral:u4 p:B f:U > @neutral:d4f6 p:D d:0.2 | force,compel,coerce | high
+
+# ---------- batch 10: Surahs 41-42 ----------
+WILLING | =WANT | willing,willingly | high
+FIRM | =STRONG | firm,firmly,firmly set | high
+ARRIVE | bentB @far:u2 p:B f:U > @base.palm:u1 p:D d:0.3 | B @neutral p:U f:FI | arrive,arrived,reach | high
+MUCH | =MANY | much | high
+TWIST | X @neutral:o2 p:D f:F ~twist:60 ;sym | twist,distort,deviate | med
+MULTIPLY | =MORE+MANY | multiply,multiplying,increase in number | med
+KEY | X @base.palm:u4 p:I f:F at:pipI > @base.palm:u4 ~twist:50 h:0.3 | B @neutral p:I f:U | key,keys | high
+ORDAIN | =COMMAND | ordain,ordained,prescribe | med
+ARGUMENT | =ARGUE | argument,arguments,dispute | high
+VEIL | =COVER | veil,partition,curtain | med
+PERMISSION | =ALLOW | permission | high
+
+# ---------- batch 11: Surahs 43-45 ----------
+THESE | =THEY | these | high
+ROOF | B @aboveHead:f8 p:D f:F > @aboveHead:o12f8 d:0.3 ;sym | roof,roofs,ceiling | high
+DISTANCE | =FAR | distance | med
+PLATE | =CUP | plate,plates,dish | low
+LANGUAGE | L @neutral:o4u4 p:D f:F > @neutral:o14u4 ~shake:1 d:0.35 ;sym | language,tongue,speech | high
+KNEEL | bentV @base.palm:u4 p:B f:D > @base.palm:u0 d:0.25 | B @neutral p:U f:FI | kneel,kneeling | high
 `;

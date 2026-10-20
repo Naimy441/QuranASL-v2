@@ -155,6 +155,11 @@ export function resolveTokens(tokens: GlossToken[], lex: Lexicon = getLexicon())
         tmp.add({ id: t.gloss, def: "=" + t.gloss });
         sign = tmp.compile(t.gloss);
         conf = parts.some((p) => lex.get(p)?.conf === "low") ? "low" : "med";
+      } else if (lex.byWord.has(t.gloss.toLowerCase().replace(/-/g, " "))) {
+        // a gloss written as an English word that the dictionary knows under another gloss
+        const id = lex.byWord.get(t.gloss.toLowerCase().replace(/-/g, " "))![0];
+        sign = lex.compile(id);
+        conf = lex.get(id)?.conf;
       } else {
         const word = t.gloss.split(/[.\-]/)[0].replace(/[^A-Z]/g, "");
         if (!word) return { ...t, status: "missing" as const, error: "unknown gloss" };
