@@ -208,4 +208,128 @@ ACCEPT | 5 @far:o6 p:D f:F > flatO @chest:f3o4 d:0.35 ;sym | accept,accepting,re
 BORN | B @stomach:f4 p:B f:I > @neutral:d4f12 p:U f:F d:0.35 | B @neutral:d4 p:U f:FI | born,birth,give birth,begotten | high
 KNOT | X @neutral:o2 p:I f:F ~circle:B3x1 > @neutral:o8 d:0.15 ;sym | knot,knots | med
 EXCEED | bentB @base.back:u3 p:D f:FI > @high:u4 ~arc:f4 d:0.4 | bentB @neutral:u4 p:D f:FO | exceed,excess,beyond limit,overstep | high
+
+# ---------- batch 2: frequent words across the whole Qur'an ----------
+CAUSE | =MAKE | cause,causes,caused,causing | med
+WRONGDOER | =EVIL+PERSON | wrongdoer,wrongdoers,criminal,criminals,corrupter,corrupters,evildoer,evildoers,doer of wrong | med
+TAKEN | =TAKE | taken | high
+SHIRK | =WORSHIP+OTHER+GOD | associate,associates,associated,associating,shirk,partners,partner,'partners' | low | associating partners with Allah
+POLYTHEIST | =WORSHIP+OTHER+GOD+PERSON | polytheist,polytheists,mushrik,mushrikun | low
+BESIDES | =OTHER | besides,other than,apart from | med
+TRUTHFUL | =TRUE | truthful,sincere,truly | high
+PROVIDE | =GIVE | provide,provided,provides,sustain,sustained,provision | med
+SEEK | C @face:o4f10 p:I f:U ~circle:F5x2 | seek,seeking,sought,look for,search | high
+BENEFIT | F @chestSide:u4 p:B f:U at:tipI > @chestSide:d2 at:tipI d:0.2 | benefit,benefits,beneficial,profit,useful | med
+BLAME | 10 @base.back:u2 p:D f:F > @far:u4 d:0.25 | 10 @neutral p:D f:FI | blame,blamed,blameworthy,accuse | high
+WRETCHED | =EVIL | wretched,miserable | med
+PROTECTOR | =PROTECT+PERSON | protector,guardian,ally,allies,wali,patron | med
+TERM | =TIME | term,period,appointed term | med
+MESSAGE | =NEWS | message,messages | med
+AUTHORITY | =POWER | authority,competent,able to do | med
+KNOWN | =KNOW | known,knows | high
+UNJUST | =NOT+EQUAL | unjust,injustice,unjustly,unfair,wrong,wronged,wronging | med
+ANYONE | =SOMETHING | anyone,anybody,everyone else | low
+COMMIT | =DO | commit,committed,commits,doers,practice | med
+DURING | 1 @neutral:o6 p:D f:F > @far:o6 d:0.4 ;sym | during,while,meanwhile | high
+GOAL | 1 @forehead:o4 p:B f:U at:tipI > @base.tipI at:tipI d:0.4 | 1 @high:f20 p:B f:U | goal,destination,aim,purpose | high
+APPOINT | =DECIDE | specified,appointed,appointment,determined | med
+WHEREIN | =IN | wherein,therein | med
+VISION | =SEE | vision,sight,perceive,perceived | med
+GENERATION | 5 @shoulder:f6 p:B f:U > @neutral:f14d6 ~arc:u4 d:0.45 ;sym | generation,generations,descendants,offspring,progeny | high
+PAYMENT | =PAY | payment,compensation,ransom,price | med
+ACCORDING | =FOLLOW | according,in accordance | low
+INSTEAD | =CHANGE | instead,in place of,replace,substitute | med
+WHEREVER | =WHERE | wherever | med
+SHARE | B @base.radial:u2 p:I f:F at:ulnar > @base.radial:u2o8 at:ulnar d:0.15 ;x2 | B @neutral p:U f:FI | share,portion,lot | high
+DOMINION | =KING+ALL | dominion,kingdom,sovereignty,mulk | med
+SUBJECT | =CONTROL | subjected,subjugate,made subservient | med
+RESIDENCE | =HOME | residence,settlement,dwelling,abode | med
+PRODUCE | =MAKE | produce,produced,brought forth | med
+POSSESSOR | =OWN | possessor,possessors,owner | med
+CHOSEN | =CHOOSE | chosen,chose,selected | high
+INTEND | =WANT | intend,intended,intends,intention | med
+PLACE | flatO @neutral:o6 p:D f:F > @neutral:o6d3 d:0.15 | place,position,location,station | med
+WAR | 4 @neutral:o8 p:B f:I > @neutral:i4 d:0.25 > @neutral:o8 d:0.25 ;sym | war,battle,fighting,combat | high
+SICK | open8 @forehead:o2 p:B f:U at:tipM | open8 @stomach p:B f:U at:tipM | ill,sick,sickness,disease,illness | high
+TOUCH | open8 @base.back:u4 p:D f:F at:tipM > @base.back:u0 at:tipM d:0.15 | B @neutral p:D f:FI | touch,touched,touches,afflicted | high
+DEFEAT | S @neutral:u6 p:D f:F > @neutral:u0 d:0.25 | S @neutral:d2 p:I f:F | defeat,overcome,overpower,conquer,prevail,victorious | high
+STATEMENT | =SAY | statement,saying,speech,claim,claimed,claims | med
+AVERT | =PREVENT | avert,averted,turn away from | med
+UNAWARE | =NOT-KNOW | unaware,heedless,ignorant | med
+USE | U @base.back:u2 p:D f:F ~circle:F4x2 | S @neutral p:D f:FI | use,used,utilize | high
+INVENT | 4 @forehead:o2 p:I f:U at:radial > @forehead:o2u10 at:radial d:0.3 | invent,invented,invents,fabricate,fabricated,devise | high
+DENIER | =DENY+PERSON | denier,deniers,rejecter,rejecters | med
+EXCHANGE | F @neutral:o6 p:I f:F > @neutral:o6f8 ~arc:u6 d:0.35 | F @neutral:o6f8 p:I f:F > @neutral:o6 ~arc:d6 d:0.35 | exchange,trade,barter,purchase,buy,sell,sold | med
+FULFILL | =KEEP | fulfill,fulfilled,fulfil,observe | med
+IMMORALITY | =SIN | immorality,indecency,misdeeds,misdeed,lewdness | med
+AVAIL | =HELP | avail,availed | med
+EXCELLENT | =GREAT | excellent,splendid | med
+EMINENT | =HONOR | eminent,distinguished,exalted in might | med
+CONFIRM | =PROVE | confirm,confirming,confirmation,verify | med
+DROWN | V @base.palm:u4 p:B f:D > @base.palm:d10 d:0.4 | 5 @neutral p:D f:FI | drown,drowned,sink,sank | high
+UNLESS | =ONLY | unless,except | med
+WORTHLESS | =NONE | worthless,useless,vain | low
+FOOT | 1 @neutral:f10 p:B f:D > @low:f10 d:0.3 | foot,feet | med
+COURSE | =PATH | course,orbit | med
+LETTERS | =fs:ALM | | low
+MASJID-HARAM | =HOLY+MOSQUE | al-masjid al-haram,sacred mosque | low
+ADORNMENT | =BEAUTIFUL | adornment,adorned,decoration,embellish | med
+UNGRATEFUL | =NOT+THANK | ungrateful,ingrate,ingratitude | high
+ALMOST | curvedB @base.back:f2 p:U f:F > @base.back:f6u8 d:0.2 | curvedB @neutral p:D f:F | almost,nearly | high
+COMMUNITY | =GROUP | community,faction,nation,ummah,party | med
+RETRIBUTION | =PUNISH | retribution,requital,vengeance | med
+BOY | flatO @forehead:u2 p:D f:F > @forehead:u2 d:0.1 ;x2 | boy,boys,young man,youth | high
+MISLEAD | =DECEIVE | mislead,misled,misguide | med
+ADVERSITY | =SUFFER | adversity,affliction,hardship,calamity,distress | med
+SPOUSE | =MARRY | mates,mate,spouse,spouses | med
+DEAF | 1 @ear:f2i2 p:F f:O at:tipI > @mouth:o3 at:tipI d:0.3 | deaf | high
+SUDDENLY | =SURPRISE | suddenly,unexpectedly,sudden | med
+EFFECT | =LAST | effect,outcome | low
+AROUND | =SURROUND | around | med
+IGNORANT | V @forehead:f2 p:B f:U at:back > @forehead:f1 at:back d:0.1 | ignorant,ignorance,jahiliyyah | high
+GUARDIAN | =PROTECT+PERSON | guardian,keeper,custodian | med
+TREATY | =PROMISE | treaty,covenant,pledge,agreement | med
+EXTEND | =GIVE | extend,extends,stretch | low
+THEREAFTER | =AFTER | thereafter,afterwards,later on | high
+FEARFUL | =AFRAID | fearful,frightened,terrified | high
+AWFUL | 8 @temple:f2 p:F f:U > 5 @temple:o6f6 d:0.15 ;sym face:browDown=0.5,frown=0.6 | terrible,awful,dreadful,horrible,grievous | high
+CONDITION | =THING | condition,state,situation | low
+HUMILIATE | =SHAME | humiliation,humiliated,disgraced,abased | med
+DETERMINE | =DECIDE | determination,determined,resolve | med
+FACT | =TRUE | fact,reality | med
+EXTREME | =VERY | extreme,extremely | low
+DISOBEDIENCE | =DISOBEY | disobedience,rebellion | high
+CROP | =PLANT | crops,crop,harvest,tilth | med
+EXPLAIN-DETAIL | =EXPLAIN | interpretation,detail,detailed,describe,description | med
+OBVIOUS | =CLEAR | obvious,apparent,manifest,evident | high
+INTERCEDE | =ASK+FOR | intercession,intercede,intercessor | low
+COW | Y @temple p:F f:U at:tipT ~twist:30 | cow,cows,calf,heifer,cattle | high
+MOUNT | =MOUNTAIN | mount | low
+PREVIOUS | =BEFORE | previous,preceding,earlier | high
+FOOTSTEPS | =FOLLOW | footsteps | low
+STOMACH | 1 @stomach:f3 p:I f:B at:tipI | stomach,belly,bellies,womb,wombs | high
+HEAD | bentB @temple:u2 p:B f:U at:tipM > @jaw at:tipM d:0.25 | head,heads | high
+EMIGRATE | =LEAVE+MOVE | emigrated,emigrate,emigrants,hijrah | low
+LOAN | V @nose:f2 p:I f:U at:tipI > @neutral:f12 d:0.3 | loan,lend,lent,borrow | med
+TRUSTWORTHY | =TRUST | trustworthy,faithful,reliable | med
+PERMITTED | =ALLOW | permitted,lawful,halal | med
+SUPPLICATE | =DUA | supplicate,supplicated,invoke,call upon | med
+EVERYONE | =EVERY+ONE | everyone,everybody,each one | high
+PERPETUAL | =FOREVER | perpetual,endless,lasting,permanent | high
+SUPPORT | S @base.radial:d4 p:I f:F > @base.radial:u2 d:0.3 | S @neutral p:I f:F | support,supporter,supporters,helpers | high
+ABUNDANCE | =MANY | abundance,abundant,plenty | med
+HUMBLY | =HUMBLE | humbly | med
+DEVOUT | =WORSHIP | devoutly,devout,devotion | low
+DISSENSION | =FIGHT | dissension,argument,argue,quarrel | med
+DISASSOCIATE | =LEAVE | disassociated,disown,dissociate | low
+BEHAVIOR | =DO | conduct,behavior,behaviour | med
+QUICK | 10 @neutral:u4 p:I f:F > 1 @neutral:u4f2 d:0.08 | swift,quick,quickly,fast,soon,hasten | high
+DIVORCE | D @neutral:o2 p:F f:U > @neutral:o14 p:B d:0.3 ;sym | divorce,divorced | high
+OBLIGATION | =MUST | obligation,obligatory,duty,prescribed,decreed | med
+BARREN | =NOT+CHILD | barren,infertile | low
+THROUGH | B @base.radial:o4 p:I f:F at:ulnar > @base.radial:i8 at:ulnar d:0.3 | V @neutral p:I f:F | through,throughout,via,by means of | med
+AWAY | =LEAVE | away | low
+ATTAINMENT | =WIN | attainment,achievement,triumph | med
+CALF | =COW | calf | med
+EXISTENCE | =LIFE | existence,being,beings | low
 `;

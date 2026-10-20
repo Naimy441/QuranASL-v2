@@ -14,6 +14,7 @@ const missing = new Map<string, number>();
 const fallback = new Map<string, string[]>();
 let totalAyat = 0, totalTokens = 0, okTokens = 0;
 const index: Record<number, { ayat: number; covered: number; source: string }> = {};
+const freq = new Map<string, number>();
 
 for (const f of fs.readdirSync(SRC).filter((f) => /^\d{3}\.txt$/.test(f)).sort()) {
   const n = parseInt(f);
@@ -29,6 +30,7 @@ for (const f of fs.readdirSync(SRC).filter((f) => /^\d{3}\.txt$/.test(f)).sort()
       if (t.status === "pause") continue;
       totalTokens++;
       if (t.status === "ok" || t.status === "fs") okTokens++;
+      if (t.status === "ok") freq.set(t.gloss, (freq.get(t.gloss) ?? 0) + 1);
       if (t.status === "fallback" || t.status === "missing") {
         missing.set(t.gloss, (missing.get(t.gloss) ?? 0) + 1);
         const refs = fallback.get(t.gloss) ?? [];
@@ -44,6 +46,7 @@ for (const f of fs.readdirSync(SRC).filter((f) => /^\d{3}\.txt$/.test(f)).sort()
   fs.writeFileSync(path.join(OUT, `${n}.json`), JSON.stringify({ surah: n, ayat }));
 }
 fs.writeFileSync(path.join(OUT, "index.json"), JSON.stringify(index));
+fs.writeFileSync(path.join(OUT, "freq.json"), JSON.stringify(Object.fromEntries([...freq.entries()].sort((a, b) => b[1] - a[1]))));
 console.log(`ayat=${totalAyat} tokens=${totalTokens} lexical=${okTokens} (${((okTokens / totalTokens) * 100).toFixed(1)}%)`);
 const sorted = [...missing.entries()].sort((a, b) => b[1] - a[1]);
 console.log(`missing glosses: ${sorted.length}`);

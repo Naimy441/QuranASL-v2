@@ -95,7 +95,7 @@ HIGHEST | bentB @neutral:u4 p:D f:F > @aboveHead:o4 d:0.4 ;face:browUp=0.6 | hig
 LOW | bentB @neutral p:D f:F > @low:d4 d:0.3 | low,lowest,lower | high
 FIRST | 1 @base.tipT:o3u3 p:I f:F > @base.tipT:o2 d:0.12 | 10 @neutral p:I f:F | first,former | high
 LAST | I @base.tipP:u6 p:I f:D > @base.tipP:d6 d:0.25 | I @neutral p:B f:F | last,final,latter,end | high
-FINISH | 5 @neutral:o4 p:B f:U > p:D f:FO d:0.2 ;sym | finish,done,complete,already,over | high
+FINISH | 5 @neutral:o4 p:B f:U > p:D f:FO d:0.2 ;sym | finish,complete,completed,already | high
 START | 1 @base.palm:o2 p:D f:FI ~twist:45 | B @neutral p:I f:F | start,begin,beginning | med
 AGAIN | bentB @neutral:u10 p:U f:F > @base.palm at:tipM p:D d:0.25 | B @neutral p:U f:FI | again,repeat,return | high
 CONTINUE | 10 @neutral:b4 p:D f:F > @far d:0.35 | 10 @neutral:b4d4 p:D f:F > @far:d4 d:0.35 | continue,keep,remain,persist | high
@@ -216,5 +216,5 @@ TRY | S @neutral:o8 p:I f:F > @far:o8 ~arc:d4 d:0.35 ;sym | try,strive,effort,at
 DECIDE | 1 @forehead:o4 p:B f:U at:tipI > F @neutral:o6 p:I f:F d:0.35 | F @neutral:u6 p:I f:F > @neutral:u0 d:0.35 | decide,decision,decree,determine | high
 CHOOSE | F @far p:D f:F > @neutral:b2 d:0.3 | choose,chose,select,prefer | high
 PROMISE | 1 @lips:f1 p:I f:U at:tipI > B @base.back:u2 p:D f:F d:0.35 | S @neutral p:I f:F | promise,promised,vow,covenant | high
-SWEAR | 1 @lips:f1 p:I f:U at:tipI > B @face:o14f6 p:F f:U d:0.35 | swear,oath,by | high | oath formula "By the ..."
+SWEAR | 1 @lips:f1 p:I f:U at:tipI > B @face:o14f6 p:F f:U d:0.35 | swear,oath | high | oath formula "By the ..."
 `;
