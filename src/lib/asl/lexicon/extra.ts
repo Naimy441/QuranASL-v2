@@ -462,4 +462,81 @@ SETTLED | =STAY | settled,settle,establishment,established | med
 IMMEDIATELY | =QUICK | immediately,instantly,at once | med
 SPERM | =SEED | sperm,sperm-drop,drop,fluid | med
 MERELY | =ONLY | merely,simply | high
+
+# ---------- batch 4: Juz 29 (67-68) ----------
+US | =WE | us | high
+WARNER | =WARN+PERSON | warner,warners | high
+WING | B @shoulder:o4f4 p:F f:O > @shoulder:o12u6 p:D d:0.2 ;sym x2 | wing,wings | med
+SOFT | curved5 @neutral:o6 p:U f:F > flatO @neutral:o6d2 d:0.15 ;sym x2 | soft,compromise,lenient,yield | high
+HARVEST | curvedB @base.wrist:o8 p:I f:U > S @base.wrist:o2 d:0.25 | 5 @neutral:u4 p:I f:U | harvest,reap,pluck | med
+EARLY | open8 @base.back:u2 p:D f:F at:tipM > @base.back:u2 at:tipM ~tap:1 | S @neutral p:D f:FI | early,at dawn,early morning | high
+PARTNER | =OTHER+GOD | partner,partners,associates | low
+CRACK | 1 @neutral:u8 p:B f:F > @neutral:d4o4 ~arc:o3 d:0.3 | crack,flaw,rift,breach | med
+DECORATE | flatO @neutral:o4u4 p:D f:F > @neutral:o4u4 ~circle:F5x1 ;sym | decorate,decorated,adorn,beautified | med
+DESTINATION | =GOAL | destination,end,journey's end | high
+ADMIT | B @chest:u2 p:B f:I > @neutral:f12 p:U f:F d:0.3 ;sym | admit,confess,acknowledge | high
+CHARACTER | C @heart p:I f:U ~circle:B4x1 | character,manners,morals,nature | high
+CRUEL | 1 @chin:o4 p:D f:I at:radial > @chin:i4 at:radial ~shake:1 d:0.3 ;face:browDown=0.6 | cruel,harsh,violent,brutal | med
+ILLEGITIMATE | =NOT+TRUE+FAMILY | illegitimate,base-born | low
+MARK | 1 @base.palm:u2 p:D f:D at:tipI > @base.palm:u2o4 ~arc:d1 d:0.3 | B @neutral p:U f:FI | mark,brand,sign | med
+NOSE | 1 @nose:f3 p:I f:B at:tipI | nose,snout | high
+TURN | 1 @neutral:u4 p:D f:F ~circle:U4x1 | turn,turned,turning | med
+BIGGER | =BIG+MORE | bigger,greater,larger | high
+STUDY | 5 @base.palm:u8 p:D f:D ~wiggle:15 | B @neutral p:U f:FI | study,studied,learn from | high
+WHATEVER | =ANY+THING | whatever | med
+SHIN | B @hip:f12d10 p:B f:D at:ulnar > @hip:f12d10 ~tap:1 | shin,shank,leg uncovered | low
+HEALTHY | 5 @chest:o6 p:B f:U > S @chest:o6f6 d:0.25 ;sym | healthy,health,sound,well | high
+DISTRESS | =WORRY | distress,anguish,grief | med
+SHORE | =EDGE+SEA | shore,coast,bank,open shore | low
+TRIP | V @base.palm:u2 p:B f:D > @base.palm:f8 p:U f:F ~arc:u3 d:0.3 | B @neutral p:U f:FI | trip,stumble,slip,make slip | med
+
+# ---------- batch 5: Baqarah 255/284-286, Ya-Sin ----------
+WALL | B @neutral:o2u6 p:F f:U > @neutral:o16u6 d:0.35 ;sym | wall,walls,barrier | high
+LUCK | 3 @temple:o2 p:F f:U at:tipM > @temple:o2u2 ~twist:20 h:0.2 | luck,omen,bad omen,lucky | low
+RIDE | bentV @base.radial:u3 p:D f:F at:tipI > @far:o4 d:0.4 | C @neutral p:I f:F > @far:i2 d:0.4 | ride,riding,mount | high
+ARGUE | 1 @neutral:o8u2 p:B f:I > @neutral:o4u2 d:0.12 ;alt x3 face:browDown=0.5 | argue,argument,dispute,disputant,adversary | high
+EXIST | =LIFE | exist,existence,sustainer,qayyum | low
+KNOWLEDGE | =KNOW | knowledge,learning,ilm | high
+MISTAKE | =WRONG | mistake,error,err | high
+PARDON | =FORGIVE | pardon,pardoned,overlook | high
+AWARE | =KNOW | aware,heedful | high
+CHIN | 1 @chin:f3 p:I f:B at:tipI | chin,chins | high
+BOTH | V @neutral:u2 p:B f:U > U @neutral:d4 d:0.3 | C @neutral:d2 p:B f:I | both,the two | high
+STRENGTHEN | =POWER+MORE | strengthen,reinforce,support | med
+ANYTHING | =SOMETHING | anything | high
+PALM | =fs:PALM | palm | low
+CATCH | 5 @neutral:o12u4 p:I f:F > S @neutral:o4 d:0.2 | catch,overtake,reach | high
+ORBIT | 1 @base.back:u5 p:D f:F ~circle:U8x1 | S @neutral p:D f:FI | orbit,course,circuit | med
+WHILE | =DURING | while,whilst | high
+RUSH | =HURRY | rush,hasten,rushing | high
+FORWARD | =AHEAD | forward,onward | high
+REVERSE | =OVERTURN | reverse,reversed,invert | med
+POETRY | P @neutral:o8u6 p:D f:F ~circle:B4x2 | poetry,poem,poems | med
+FITTING | =RIGHT | fitting,befitting,proper,appropriate | med
+
+# ---------- batch 6: Ar-Rahman, Al-Waqi'ah ----------
+CORAL | =fs:CORAL | coral,corals,marjan | low
+WELCOME | B @neutral:o14f10 p:U f:F > @neutral:o4f2 ~arc:d3 d:0.35 | welcome,hospitality,accommodation | high
+EXACT | =PERFECT | exact,precise,calculated | high
+FAIR | =EQUAL | fair,just,justice,equity | high
+POT | C @neutral:o6 p:I f:F > @neutral:o6d8 ~arc:o3 d:0.35 ;sym | pot,pottery,clay vessel | med
+BARRIER | =WALL | barrier,partition | high
+SAIL | =SHIP | sail,sailing,ships | med
+ATTEND | =ATTENTION | attend to,deal with | low
+OIL | F @base.ulnar:d2 p:B f:F at:tipI > @base.ulnar:d6 at:tipI d:0.15 ;x2 | B @neutral p:B f:FI | oil,murky oil | med
+RUBY | =RED+STONE | ruby,rubies | low
+POMEGRANATE | =fs:POMEGRANATE | pomegranate,pomegranates | low
+TENT | V @neutral:u10 p:F f:U > @neutral:o14d2 p:F d:0.35 ;sym | tent,tents,pavilion,pavilions | med
+EVENT | =HAPPEN | event,occurrence,inevitable | high
+LOWER | =DOWN | lower,bring low | high
+JUG | Y @neutral:u4o4 p:I f:U > p:D d:0.3 | jug,jugs,ewer,pitcher | low
+HEADACHE | 1 @forehead:o4f4 p:B f:I > @forehead:o4f4 ~twist:30 ;sym face:browInnerUp=0.5 | headache,headaches | high
+DRUNK | Y @chin:o2 p:I f:U at:tipT > @chin:i4 at:tipT ~arc:u2 d:0.3 | drunk,intoxicated,intoxication | high
+MEAT | F @base.radial:u2 p:B f:I at:tipI > @base.radial:u2 ~shake:1 h:0.3 | B @neutral p:B f:FI | meat,flesh | high
+BANANA | 1 @neutral:u6 p:B f:U | flatO @base.tipI:u2 p:D f:D > @base.tipI:d6 d:0.25 | banana,banana trees,talh | low
+VIRGIN | =PURE | virgin,virgins | low
+FILL | =FULL | fill,filled,filling | high
+SALTY | V @base.back:u2 p:D f:F > @base.back:u2 ~tap:1 | V @neutral p:D f:FI | salty,salt,bitter | med
+TRAVELER | =TRAVEL+PERSON | traveler,traveller,travelers,wayfarer | high
+BY | =WITH | by | low
 `;
