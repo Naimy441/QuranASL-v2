@@ -17,7 +17,7 @@ import { buildTimeline, type SeqUnit, type Timeline } from "./timeline";
  *   (text)                 translator note, ignored by the animator
  *
  * Non-manual tags: top yn wh rhq cond neg aff emph awe sad happy warn fear
- *                  mm cha oo puff th rs-a rs-b gaze-a gaze-b gaze-up
+ *                  mm cha oo puff th rs-a rs-b rs-c gaze-a gaze-b gaze-up
  */
 
 export interface GlossToken {
@@ -53,6 +53,7 @@ export const NMS: Record<string, Partial<FaceState>> = {
   th: { mouthOpen: 0.3, teeth: 0.5 },
   "rs-a": { torsoYaw: -0.22, headYaw: -0.18, gazeX: -0.3 },
   "rs-b": { torsoYaw: 0.22, headYaw: 0.18, gazeX: 0.3 },
+  "rs-c": { headPitch: -0.06, browUp: 0.3, torsoPitch: -0.03 },
   "gaze-a": { gazeX: -0.6, headYaw: -0.08 },
   "gaze-b": { gazeX: 0.6, headYaw: 0.08 },
   "gaze-up": { gazeY: 0.7, headPitch: -0.12 },

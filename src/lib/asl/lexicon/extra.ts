@@ -332,4 +332,134 @@ AWAY | =LEAVE | away | low
 ATTAINMENT | =WIN | attainment,achievement,triumph | med
 CALF | =COW | calf | med
 EXISTENCE | =LIFE | existence,being,beings | low
+
+# ---------- batch 3: Surahs 69-77 ----------
+SHADE | B @aboveHead:f8 p:D f:F > @high:f12 d:0.3 | B @neutral:u6 p:D f:FI | shade,shadow,shelter | med
+DEAD | =DIE | dead,lifeless | high
+DEATH | =DIE | death | high
+GUARD | =PROTECT | guard,guards,guardian,watcher | high
+EXCUSE | =FORGIVE | excuse,excuses,pardon | med
+SILK | flatO @base.back:u2 p:D f:F > @base.back:u2f6 ~wiggle:6 d:0.3 | B @neutral p:D f:FI | silk,brocade,satin,fine cloth | low
+SINNER | =SIN+PERSON | sinner,sinners | med
+SKIN | baby0 @cheek p:B f:U at:tipI > @cheek:o1 ~shake:1 h:0.25 | skin,skins,hide | high
+EAST | E @neutral:o2 p:F f:U > @neutral:o14 d:0.3 | east | high
+WEST | W @neutral:o2 p:F f:U > @neutral:i10 d:0.3 | west | high
+DELAY | F @neutral:b4 p:I f:F > @far:u2 ~arc:u4 d:0.4 ;sym | delay,postpone,defer,respite | high
+FINGER | 1 @base.tipI:o3 p:I f:FI at:tipI > @base.tipI:o1 at:tipI d:0.1 | 1 @neutral p:B f:U | finger,fingers,fingertip,fingertips | med
+REFUGE | =PROTECT | refuge,sanctuary,haven | med
+NUMBER | flatO @neutral:o2u2 p:B f:FI > @neutral:o2u2 p:F f:FO d:0.2 ;x2 | flatO @neutral:o2 p:F f:FI > @neutral:o2 p:B f:FO d:0.2 | number,numbers,count | high
+THIRD | 3 @neutral:u6 p:B f:U > @neutral:d2 d:0.25 | third,thirds | med
+AGAINST | 1 @base.palm:o12 p:I f:FI > @base.palm:o1 at:tipI d:0.2 | B @neutral p:I f:U | against,versus | high
+LEG | B @hip:f10 p:B f:D at:ulnar > @hip:f10 ~tap:2 | leg,legs,shin | med
+NOTHING | =NONE | nothing,naught | high
+GLASS | X @mouth:o2 p:B f:U at:knuckles > @mouth:o2 ~tap:1 | glass,crystal | med
+HUGE | =BIG | huge,enormous,mighty blast | high
+ANY | A @neutral:u4 p:B f:U > @neutral:u4 p:F ~twist:20 | any | med
+REMAIN | =STAY | remain,remains,remnant,survivor | high
+OVERTURN | B @neutral:u4 p:D f:F > @neutral:u4 p:U d:0.3 ;sym | overturn,overturned,upside down,overthrown | med
+LIFT | =RAISE | lift,lifted,carried up | high
+EDGE | B @base.radial:u2 p:D f:F at:ulnar > @base.radial:u2f8 at:ulnar d:0.25 | B @neutral p:D f:FI | edge,edges,border,side | med
+GONE | 5 @far:o4 p:B f:F > flatO @far:o4f6 d:0.3 | gone,vanished,lost | high
+ARM | B @base.wrist:b4 p:D f:F > @base.wrist:b20 d:0.3 | B @neutral p:D f:FI | arm,arms,cubit,cubits | med
+WASH | A @base.palm:u2 p:D f:F ~circle:U4x2 | B @neutral p:U f:FI | wash,washing,discharge | high
+FORTUNE-TELLER | =PREDICT+PERSON | soothsayer,fortune teller,fortune-teller,diviner | med
+VEIN | 1 @neck:o3 p:B f:U at:tipI > @neck:o3d4 at:tipI d:0.2 | vein,aorta,artery,jugular | low
+STAIRS | bentB @neutral:d4o6 p:D f:F > @neutral:u4o2 d:0.15 > @high:i2 d:0.15 | stairs,stairways,ladder,ascent | med
+GO-UP | 1 @neutral p:F f:U > @aboveHead:o4 d:0.4 | ascend,go up,rise up,ascending | high
+METAL | X @chin:d2 p:B f:I at:knuckles > @chin:d2 ~tap:1.5 | metal,brass,copper,iron | med
+MELT | flatO @neutral:o2 p:U f:F > 5 @neutral:o12d4 d:0.4 ;sym | melt,melted,molten,dissolve | high
+TEAR | F @neutral:o2 p:F f:U > @neutral:o14d2 p:D d:0.2 ;sym | tear,torn,rip,strip | high
+IMPATIENT | =NOT+PATIENT | impatient,anxious,fretful | high
+PRIVATE | A @lips p:I f:U at:tipT > @lips:f3 at:tipT d:0.1 ;x2 | private,private parts,chastity,modesty | low
+TESTIFY | =WITNESS | testify,testimony,bear witness | high
+PLEASURE | =ENJOY | pleasure,delight,bliss,blessing | high
+LOUD | 5 @ear:o4f2 p:B f:U > @neutral:o14u6f10 ~shake:1 d:0.3 ;sym | loud,loudly,publicly,aloud | high
+LAYER | B @base.back:u2 p:D f:F > @base.back:u6 d:0.15 > @base.back:u10 d:0.15 | B @neutral p:D f:FI | layer,layers,levels,one above another | med
+LAMP | =LIGHT | lamp,torch,burning lamp | med
+WIDE | B @neutral:o4 p:I f:F > @neutral:o20 d:0.35 ;sym | wide,broad,spacious | high
+WONDERFUL | =GREAT | wonderful,amazing,wondrous | high
+ARROGANT | =PROUD | arrogant,arrogance,insolent,haughty | med
+SHOOT | 1 @neutral:u4o4 p:I f:F > @far:u10 d:0.15 | shoot,shooting,meteor,flame shooting | med
+CROWD | 5 @far:o8 p:D f:F > @neutral:o2 d:0.4 ;sym | crowd,crowded,throng,swarm | high
+HARM | =PAIN | harm,hurt,damage | med
+FRONT | B @neutral:f6 p:B f:U > @neutral:f16 d:0.25 | front,before him,in front | high
+SLOW | B @base.back:b4 p:D f:F > @base.back:f8 d:0.6 | B @neutral p:D f:FI | slow,slowly,measured,careful | high
+DEVOTE | =WORSHIP | devote,devotion,dedicate | med
+CHOKE | C @neck:f2 p:B f:U > S @neck:f1 d:0.25 ;face:eyesWide=0.5 | choke,choking | high
+SAND | flatO @base.palm:u2 p:D f:F ~wiggle:12 | B @neutral p:U f:FI | sand,dune,heap of sand | med
+IDOL | =FALSE-GOD | idol,idols,statue,uncleanliness | med
+STUBBORN | B @temple p:F f:U at:heel > bentB d:0.15 | stubborn,obstinate,defiant,defiantly | high
+CLIMB | bentV @base.palm:d4 p:F f:U > @base.palm:u6 d:0.2 > @base.palm:u12 d:0.2 | B @neutral:i4 p:I f:U | climb,climbing,ascend steep | high
+IT | =IX-a | it | high
+ITS | =POSS-a | its | high
+MEAN | V @base.palm:u4 p:D f:D > @base.palm:u4 p:D f:D ~twist:40 | B @neutral p:U f:FI | mean,meaning,intend,purpose | high
+EXAMPLE | =SHOW | example,parable,similitude | high
+GO-AHEAD | =AHEAD | go ahead,advance,progress | high
+DESERVE | flatO @base.palm:u4 p:U f:F > @base.palm:u1 d:0.12 ;x2 | B @neutral p:U f:FI | deserve,deserving,worthy,entitled | low
+TIP | 1 @base.tipI:u3 p:D f:D at:tipI > @base.tipI:u1 at:tipI d:0.1 | 1 @neutral p:B f:U | tip,tips,end | med
+SHOCK | 5 @eyes:f6 p:B f:U > claw5 @eyes:f10 d:0.1 ;face:eyesWide=1,browUp=1,mouthOpen=0.4 | shock,shocked,dazzled,stunned,terror | high
+JOIN | F @neutral:o10 p:I f:F > @neutral:o2 d:0.3 ;sym | join,joined,unite,connect | high
+THROAT | G @neck:f2 p:B f:U at:tipI > @neck:d3f2 at:tipI d:0.2 | throat,collarbone,collar bones | high
+HEAL | =HELP | heal,cure,healer,curer | low
+DRIVE | S @neutral:o8u2 p:I f:F > @neutral:o8d2 d:0.2 ;alt x2 | drive,driven,herd,urge on | med
+MENTION | =SAY | mention,mentioned,thing worth mentioning | high
+RING | X @base.tipR:u2 p:D f:F ~circle:B2x1 | B @neutral p:D f:FI | ring,collar,iron collars,neck ring | low
+PRISONER | 4 @face:f4 p:B f:I | 4 @face:f8 p:B f:I | prisoner,captive,captives,prison,jail | med
+PERFECT | 9 @neutral:u4o6 p:I f:F > @neutral:u4o2 at:tipI d:0.25 | 9 @neutral:u2o2 p:I f:F | perfect,precise,exact | high
+YOUNG | bentB @chestSide:d2 p:B f:U at:tipM > @chestSide:u2 at:tipM d:0.15 ;sym x2 | young,youth,youthful | high
+PEARL | =fs:PEARL | pearl,pearls | low
+KINGDOM | =KING+ALL | kingdom,great dominion | med
+WEAR | =CLOTHES | wear,wearing,clothed,adorned with | med
+BRACELET | 1 @base.wrist:u2 p:D f:FI at:tipI ~circle:I3x1 | S @neutral p:D f:FI | bracelet,bracelets | med
+STORM | =WIND | storm,gale,raging | med
+
+SEPARATE | B @neutral:o2 p:B f:F at:back > @neutral:o14 d:0.3 ;sym | separate,separating,distinguish,sort | high
+FRESH | =NEW | fresh,sweet water | low
+BRANCH | 5 @base.tipI:u2 p:F f:U > @base.tipI:u2o10 ~arc:u4 d:0.3 | 1 @neutral:u4 p:B f:U | branch,branches,column of smoke | low
+COOL | 5 @face:o8f6 p:B f:U > @face:o8f6 ~wiggle:10 h:0.4 ;sym | cool,coolness,cooling | high
+UNQUESTIONABLY | =TRUE | unquestionably,undoubtedly,no doubt,certainly | med
+ACCEPTABLE | =ACCEPT | acceptable,approval,approved,accepted | med
+FULLY | =ALL | fully,completely,in full | med
+ASSUMPTION | =THINK | assumption,assume,conjecture,guess | med
+MARRIAGE | =MARRY | marriage,wedding | high
+NOTIFICATION | =NEWS | notification,proclamation,declaration | med
+FALLEN | =FALL | fallen | high
+BEYOND | =EXCEED | beyond | med
+STAFF | S @neutral:u6 p:I f:F | S @neutral:d4 p:I f:F | staff,rod,stick | med
+REPRIEVE | =DELAY | reprieved,reprieve,respited | med
+OFFER | B @neutral:b2 p:U f:F > @neutral:f8u4 d:0.3 ;sym | offer,present,proposal | high
+GRAZE | =EAT | grazing,graze,pasture | low
+OCCUR | =HAPPEN | occurred,occurs,befall,befell | high
+AFFECTION | =LOVE | affection,compassion,tenderness | med
+CONVERSATION | =TALK | conversation,private conversation,dialogue | med
+DESPAIR | =SAD+LOSE | despair,despairing,hopeless | med
+SWALLOW | 1 @chin:f4 p:B f:U at:tipI > @neck:d4 at:tipI d:0.3 | swallow,swallowed,gulp | high
+ABUSE | =OPPRESS | abuse,aggression,transgress against | med
+FORGOTTEN | =FORGET | forgotten | high
+FLESH | =BODY | flesh,meat | low
+BEQUEST | =GIVE | bequest,will | low
+DISTINCT | =DIFFERENT | distinct,distinguished,distinction | med
+EXPEL | =PUSH-AWAY | expel,expelled,evict,drive out | med
+FITNAH | =TEST | fitnah,trial,temptation,persecution | low
+ANIMOSITY | =HATE | animosity,enmity,hostility | med
+BEWARE | =WARN | beware,caution | high
+DOUBLE | V @neutral:u4 p:B f:U > p:F d:0.25 | double,twofold,multiply | high
+DEBT | 1 @base.palm:u2 p:D f:D at:tipI > @base.palm:u0 at:tipI d:0.12 ;x2 | B @neutral p:U f:FI | debt,owe,debtor | high
+MATURITY | =GROW+FINISH | maturity,full strength,adulthood | med
+UNTRUTH | =LIE | untruth,falsehood,lying | high
+INCLINE | =WANT | incline,inclination,inclinations,inclining,leaning | low
+DISLIKE | =NOT+LIKE | dislike,disliked,hate | high
+DESIST | =STOP | desist,cease,refrain | high
+LAW | L @base.palm:u4 p:I f:U at:radial > @base.palm:d4 at:radial d:0.25 | B @neutral p:I f:U | law,laws,legal,legislation,ruling | high
+CONVEY | =SEND | conveyed,convey,deliver,notify | med
+ENVELOP | =COVER | enveloped,envelop,overwhelmed | med
+AFTERNOON | B @neutral:u6o4 p:D f:FO > @neutral:u2o8 d:0.3 | B @neutral:d4 p:D f:FI | afternoon,asr | high
+SUCCESSOR | =FOLLOW+PERSON | successors,successor,vicegerent,khalifah | med
+RELATE | =STORY | relate,recount,narrate | med
+BEGIN | =START | began,begin,beginning,originate | high
+WONDER | 1 @forehead:o4 p:B f:U at:tipI ~circle:B3x2 | wonder,wondered,marvel | high
+SETTLED | =STAY | settled,settle,establishment,established | med
+IMMEDIATELY | =QUICK | immediately,instantly,at once | med
+SPERM | =SEED | sperm,sperm-drop,drop,fluid | med
+MERELY | =ONLY | merely,simply | high
 `;
