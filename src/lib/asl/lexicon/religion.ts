@@ -25,7 +25,7 @@ WORSHIP | A @neutral:f10u4 p:I f:F > @neutral:f4u4 d:0.4 | curvedB @neutral:f10u
 PROSTRATE | B @neutral:u6f6 p:D f:F > @low:f14 p:D f:F ~arc:u4 d:0.5 ;sym | prostrate,prostration,sujud,bow down | med
 BOW | B @neutral:u4f8 p:D f:F > @neutral:d4f10 d:0.3 | B @neutral:d4f6 p:D f:FI | bow,bowing,ruku | low
 ISLAM | =SUBMIT | islam | low | GDM has a distinct sign
-SUBMIT | B @chest:f4 p:B f:I > openB @neutral:o8f8 p:U f:F d:0.4 ;sym | submit,submission,surrender | med
+SUBMIT | B @chest:o6f4 p:B f:I > openB @neutral:o8f8 p:U f:F d:0.4 ;sym | submit,submission,surrender | med
 MUSLIM | =SUBMIT+PERSON | muslim,muslims | low | GDM has a distinct sign
 RELIGION | R @heart:f1 p:B f:U > @neutral:u2f14 p:D f:F ~arc:u3 d:0.35 | religion,deen,faith,way of life | med
 QURAN | Q @neutral:u6 p:D f:D > B @neutral:u2 p:I f:F d:0.3 > p:U d:0.2 | B @neutral:d2 p:I f:F > p:U d:0.25 | quran,koran,recitation | low | Q + BOOK draft
@@ -76,7 +76,7 @@ DISBELIEVE | =NOT+BELIEVE | disbelieve,disbelief,disbelieved,deny faith,kufr | h
 DISBELIEVER | =NOT+BELIEVE+PERSON | disbeliever,disbelievers,unbeliever,kafir | med
 BELIEVER | =BELIEVE+PERSON | believer,believers,mumin | high
 HYPOCRITE | =FALSE+BELIEVE+PERSON | hypocrite,hypocrites | med
-DENY | 10 @chin p:I f:F at:tipT > @neutral:f10 d:0.25 ;sym face:shake=0.12,browDown=0.5 | deny,denied,denial,reject,disbelieve | med
+DENY | 10 @chin:o4 p:I f:F at:tipT > @neutral:o8f10 d:0.25 ;sym face:shake=0.12,browDown=0.5 | deny,denied,denial,reject,disbelieve | med
 REJECT | B @base.palm:b6 p:D f:F > @base.palm:f14 p:D d:0.25 | B @neutral p:U f:FI | reject,refuse,turn away | high
 OBEY | A @forehead:o6 p:B f:U > openB @neutral:o10f8 p:U f:F d:0.4 ;sym | obey,obedient,obedience | high
 DISOBEY | A @temple:f2 p:B f:U > p:F d:0.2 ;face:browDown=0.4 | disobey,disobedient,rebel | high

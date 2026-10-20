@@ -191,10 +191,10 @@ LIKE | 5 @chest:f1 p:B f:U at:tipM > 8 @chest:f12 d:0.25 | like,enjoy,fond | hig
 HATE | 8 @neutral:o6f4 p:D f:F > 5 @neutral:o8f12 d:0.15 ;sym | hate,hatred,detest,despise | high
 HAPPY | B @chest:d4 p:B f:I > @chest:u6 ~arc:f3 d:0.15 ;x2 face:smile=0.8,browUp=0.3 | happy,glad,joy,joyful,rejoice,delight | high
 SAD | 5 @eyes:o5f8 p:B f:U > @chin:o6f8d8 d:0.45 ;sym face:browInnerUp=0.9,frown=0.6 | sad,grief,grieve,sorrow | high
-ANGRY | claw5 @stomach:f3 p:B f:I > @chestHigh:f4 d:0.35 ;sym face:browDown=1,squint=0.5,frown=0.6 | angry,anger,wrath,rage,furious | high
+ANGRY | claw5 @stomach:o7f3 p:B f:I > @chestHigh:o7f4 d:0.35 ;sym face:browDown=1,squint=0.5,frown=0.6 | angry,anger,wrath,rage,furious | high
 AFRAID | S @chestSide:f8 p:B f:I > 5 @chest:f8o2 d:0.12 ;sym face:eyesWide=0.8,browInnerUp=0.6 | afraid,fear,scared,terror,dread | high
 WORRY | B @face:o8f8 p:B f:I ~circle:B5x2 ;alt face:browInnerUp=0.6,browDown=0.3 | worry,anxious,anxiety | med
-PLEASED | B @chest:f6u6 p:D f:I > @chest:f6d2 d:0.3 ;sym face:smile=0.5 | pleased,satisfied,content,satisfaction | high
+PLEASED | B @chest:o4f6u6 p:D f:I > @chest:o4f6d2 d:0.3 ;sym face:smile=0.5 | pleased,satisfied,content,satisfaction | high
 ENJOY | B @chest p:B f:I ~circle:B5x2 ;face:smile=0.5 | enjoy,enjoyment,pleasure,please | high
 PATIENT | A @lips p:I f:U at:tipT > @chin:d4 at:tipT d:0.4 | patient,patience,steadfast,persevere,endure | high
 THANK | B @chin p:B f:U at:tipM > @neutral:f12 p:U f:F d:0.3 | thank,thanks,grateful,gratitude,thankful | high

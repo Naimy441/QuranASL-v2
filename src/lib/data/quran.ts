@@ -31,4 +31,4 @@ export async function loadGloss(n: number): Promise<GlossFile> {
   }
 }
 
-export const BISMILLAH_GLOSS = "[awe: [top: NAME ALLAH] , GRACIOUS , MERCIFUL] .";
+export const BISMILLAH_GLOSS = "[awe: BISMILLAH , GRACIOUS , MERCIFUL] .";

@@ -1,6 +1,6 @@
 # 1 Al-Fatihah — draft ASL gloss (needs Deaf Muslim review)
-1: [awe: [top: NAME ALLAH] , GRACIOUS , MERCIFUL] .
-2: [top: PRAISE ALL] , FOR ALLAH , LORD ALL WORLD .
+1: [awe: BISMILLAH , GRACIOUS , MERCIFUL] .
+2: [top: ALHAMDULILLAH] , LORD ALL WORLD .
 3: [awe: GRACIOUS , MERCIFUL] .
 4: [top: JUDGMENT-DAY] , ALLAH KING OWN .
 5: [top: YOU ONLY] , WE WORSHIP . [top: YOU ONLY] , WE ASK HELP .

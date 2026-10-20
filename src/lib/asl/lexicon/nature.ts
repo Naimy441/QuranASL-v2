@@ -1,6 +1,6 @@
 // Nature, cosmos, animals, plants, places and objects.
 export const LEX_NATURE = String.raw`
-SKY | B @aboveHead:i20f10 p:D f:FI > @aboveHead:o20f10 ~arc:u6 d:0.5 | sky,heaven,heavens,firmament | high
+SKY | B @high:i16u16 p:D f:FI > @high:o16u16 ~arc:u6 d:0.5 | sky,heaven,heavens,firmament | high
 SUN | 1 @aboveHead:o8 p:F f:U ~circle:F5x1 > 5 @high:o4f8 p:D f:F d:0.35 | sun | high
 MOON | smallC @eye:o4f2 p:I f:U at:radial > @aboveHead:o10 d:0.4 | moon | high
 STAR | 1 @high:o6 p:F f:U > @aboveHead:o6 d:0.15 ;alt x2 | star,stars,planet,planets | high
