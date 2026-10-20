@@ -10,13 +10,13 @@ The meanings of the Qur'an in American Sign Language, ayah by ayah, signed by a 
 | --- | --- |
 | `/` | All 114 surahs, with coverage badges (hand-glossed / automatic draft / human ASL or BSL video). |
 | `/surah/[n]` | Ayah-by-ayah viewer: 3D or 2D signer, speed control, scrubbing, gloss chips coloured by confidence, Arabic + word-by-word + roots, embedded human ASL (Global Deaf Muslim) and BSL videos, WebXR "View in VR/AR". |
-| `/dictionary` | ~1,100 signs, searchable by gloss or English, with previews and fingerspelling of any word. |
+| `/dictionary` | ~1,170 signs, searchable by gloss or English, with previews and fingerspelling of any word. |
 | `/practice` | Webcam practice with spaced repetition. MediaPipe Hand Landmarker runs in a Web Worker; joint angles (θ = arccos(u·v/‖u‖‖v‖)), palm normal (cross product) and wrist path (dynamic time warping) are compared to the avatar's sign. Video never leaves the browser. |
 | `/studio` | Gloss Studio: drag gloss chips to reorder, swap sign variants, set loci, toggle facial grammar, edit the sign definition itself — the avatar updates instantly. Edits stay in the browser; export them as JSON, or (in dev) write them straight into `data/gloss`. |
 
 ## Coverage
 
-- **Hand-glossed ASL (1,263 ayat):** Al-Fātiḥah, Surahs 67–114 (Juz 29–30), Yā-Sīn, Ar-Raḥmān, Al-Wāqi'ah, Āyat al-Kursī and Al-Baqarah 284–286. Every sign in these glosses exists in the dictionary.
+- **Hand-glossed ASL (1,400 ayat):** Al-Fātiḥah, Surahs 58–114 (Juz 28–30), Yā-Sīn, Ar-Raḥmān, Al-Wāqi'ah, Āyat al-Kursī and Al-Baqarah 284–286. Every sign in these glosses exists in the dictionary.
 - **Automatic draft (everything else):** a rule-based English→gloss converter (`src/lib/asl/autogloss.ts`); ~93% of its tokens map to real signs, the rest are fingerspelled and flagged amber in the UI.
 - **Motion-captured community signs (72):** Islamic terms from Global Deaf Muslim's "40 Islamic Signs" clips and the names of the 25 prophets, retargeted onto the avatar (see below). Where a capture exists it replaces the hand-built sign; the drawn version stays available as a `.drawn` variant.
 

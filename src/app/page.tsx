@@ -21,7 +21,7 @@ export default function Home() {
         <div className="rounded-2xl border border-line bg-panel p-4 text-sm">
           <h2 className="mb-2 font-semibold">Coverage</h2>
           <ul className="space-y-1.5 text-ink-2">
-            <li><span className="mr-2 inline-block h-2.5 w-2.5 rounded-full bg-ok" />Hand-glossed ASL: Al-Fātiḥah, Surahs 69–114</li>
+            <li><span className="mr-2 inline-block h-2.5 w-2.5 rounded-full bg-ok" />Hand-glossed ASL: Al-Fātiḥah, Juz 28–30 (58–114), Yā-Sīn, Ar-Raḥmān, Al-Wāqi'ah, Āyat al-Kursī</li>
             <li><span className="mr-2 inline-block h-2.5 w-2.5 rounded-full bg-accent" />Automatic draft gloss: all other surahs</li>
             <li><span className="mr-2 inline-block h-2.5 w-2.5 rounded-full bg-brand" />Human ASL video (Global Deaf Muslim): 1, 100–114</li>
             <li><span className="mr-2 inline-block h-2.5 w-2.5 rounded-full bg-ink-2" />Human BSL video: 1, 36, 67–114</li>

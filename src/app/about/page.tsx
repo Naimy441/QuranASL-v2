@@ -11,7 +11,7 @@ export default function About() {
       </p>
       <h2 className="mt-8 text-xl font-semibold">How it works</h2>
       <ol className="mt-2 list-decimal space-y-2 pl-6">
-        <li><strong>Gloss.</strong> Each ayah is written as an ASL gloss — ASL word order, topic–comment structure, spatial loci, role shift and non-manual markers (eyebrows, head shake, mouth morphemes). Al-Fātiḥah and Surahs 69–114 are hand-glossed drafts informed by tafsir; the rest are automatic drafts from the Saheeh International translation and are clearly labelled.</li>
+        <li><strong>Gloss.</strong> Each ayah is written as an ASL gloss — ASL word order, topic–comment structure, spatial loci, role shift and non-manual markers (eyebrows, head shake, mouth morphemes). Al-Fātiḥah, Juz 28–30, Yā-Sīn, Ar-Raḥmān, Al-Wāqi'ah and Āyat al-Kursī are hand-glossed drafts informed by tafsir; the rest are automatic drafts from the Saheeh International translation and are clearly labelled.</li>
         <li><strong>Signs.</strong> Every gloss maps to a dictionary entry describing handshape, location, palm orientation, movement and facial expression. Unknown words are fingerspelled and flagged as gaps.</li>
         <li><strong>Animation.</strong> Signs are joined into continuous signing with eased transitions (no drop to rest between signs), quaternion slerp for the hands, two-bone inverse kinematics for the arms, and blended facial grammar.</li>
         <li><strong>Review.</strong> In the Gloss Studio, a Deaf reviewer can reorder signs, swap variants, adjust facial grammar or edit the sign itself, and see the result instantly.</li>

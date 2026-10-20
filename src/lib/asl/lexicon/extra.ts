@@ -539,4 +539,67 @@ FILL | =FULL | fill,filled,filling | high
 SALTY | V @base.back:u2 p:D f:F > @base.back:u2 ~tap:1 | V @neutral p:D f:FI | salty,salt,bitter | med
 TRAVELER | =TRAVEL+PERSON | traveler,traveller,travelers,wayfarer | high
 BY | =WITH | by | low
+
+# ---------- batch 7: Juz 28 ----------
+OPPOSE | =OPPOSITE | oppose,opposed,opposition,defy | high
+SHE | =IX-a | she | high
+THAN | curvedB @neutral:o8 p:I f:U > @neutral:o8u3 d:0.15 ;alt x2 | than,compare,compared | med
+TRADE | =EXCHANGE | trade,commerce,business,merchandise | high
+WAITING | =WAIT | waiting,waiting period,iddah | med
+ROOM | B @neutral:o8 p:I f:F > @neutral:o8 p:B f:I d:0.3 ;sym | room,space,make room,spacious | high
+LIAR | =LIE+PERSON | liar,liars | high
+SEEN | =SEE | seen,witnessed,visible | high
+STRIVE | =TRY | strive,striving,struggle,jihad | med
+HELPER | =HELP+PERSON | helper,helpers,supporter,ansar | high
+GREET | =SALAM | greet,greeting,salute | med
+SHIELD | =PROTECT | shield,cover,screen | med
+LOSER | =LOSE+PERSON | loser,losers | high
+MARYAM | =fs:MARYAM | maryam,mary | med
+ISRAIL | =fs:ISRAIL | israel,israil | med
+DISCIPLE | =FOLLOW+PERSON | disciple,disciples,apostles,hawariyyun | med
+YET | =NOT+FINISH | yet,not yet | med
+LEAN | =FALL | lean,incline,propped | low
+CAREFUL | V @base.back:u4 p:D f:F at:knuckles > @base.back:u1 at:knuckles d:0.12 ;x2 | V @neutral p:D f:FI | careful,beware,cautious,caution | high
+NURSE | =FEED+BABY | nurse,breastfeed,suckle,wet nurse | low
+PHARAOH | =fs:FIRAWN | pharaoh,firawn | med
+COMPLAIN | claw5 @chest:u2 p:B f:U at:tipM > @chest:u2 ~tap:1.5 | complain,complaint,lament | high
+SIXTY | 6 @neutral:u8 p:B f:U > O d:0.2 | sixty | high
+FOURTH | 4 @neutral:u8 p:B f:U ~twist:30 | fourth | high
+SIXTH | 6 @neutral:u8 p:B f:U ~twist:30 | sixth | high
+ANYWHERE | =WHERE | anywhere,wherever | med
+MIGHTY | =POWER | mighty,exalted in might,aziz | high
+FORTRESS | =PROTECT+BUILDING | fortress,fortresses,stronghold | low
+FEAR | =AFRAID | fear,terror | high
+TOWARD | =TO | toward,towards | high
+TOGETHER | =WITH | together,united,jointly | high
+UNITED | =JOIN | united,unity | high
+RECENT | =PAST | recent,recently,just before | med
+TOMORROW | A @cheek:o4 p:I f:U at:tipT > @cheek:o4f8 at:tipT ~arc:u2 d:0.3 | tomorrow | high
+FAITH | =BELIEVE | faith | high
+GIVER | =GIVE+PERSON | giver,bestower,granter | med
+ASSOCIATE | =SHIRK | associate,associates | low
+DOWRY | =GIFT+MARRY | dowry,mahr,bridal gift | low
+STEAL | V @base.wrist:b4 p:D f:I > bentV @base.wrist:o8b6 d:0.2 | B @neutral p:D f:FI | steal,stole,theft,thief | high
+ADULTERY | =fs:ZINA | adultery,unlawful sexual intercourse,zina,fornication | low
+HURT | =PAIN | hurt,harm,annoy | high
+AHMAD | =fs:AHMAD | ahmad | med
+COMPLETE | =FINISH | complete,perfect,perfected,completion | high
+WISDOM | =WISE | wisdom,hikmah | high
+JEWISH | claw5 @chin p:B f:D at:tipM > @chin:d6 at:tipM d:0.25 | jewish,jew,jews,judaism | med
+WILL | =FUTURE | will | med
+TREASURE | =MONEY | treasure,treasures,depositories | low
+LOSS | =LOSE | loss,mutual loss | high
+GAIN | =WIN | gain,profit | med
+OVERLOOK | =FORGIVE | overlook,forbear | med
+WAY | =PATH | way,way out,means | high
+MONTHLY | =MONTH | monthly,menstruation,menses | low
+ANYMORE | =NOT+CONTINUE | anymore,no longer | med
+ABILITY | =CAN | ability,capacity,means | high
+DISCUSS | 1 @base.palm:u6 p:I f:F at:ulnar > @base.palm:u1 at:ulnar d:0.12 ;x2 | B @neutral p:U f:FI | discuss,consult,consultation,shura | high
+TERRIBLE | =AWFUL | terrible | high
+JIBRIL | =fs:JIBRIL | jibril,gabriel | med
+MARRIED | =MARRY | married,previously married | high
+FUEL | =WOOD | fuel | low
+BETRAY | =CHEAT | betray,betrayal,treachery,treacherous | med
+CHASTITY | =PRIVATE | chastity,chaste | low
 `;
