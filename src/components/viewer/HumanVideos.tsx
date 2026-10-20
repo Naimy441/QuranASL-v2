@@ -4,8 +4,9 @@ import { useState } from "react";
 import type { HumanVideo } from "@/lib/data/human-videos";
 
 /** Embedded human-signed reference videos (privacy-enhanced YouTube, loaded on demand). */
-export default function HumanVideos({ videos }: { videos: HumanVideo[] }) {
-  const [open, setOpen] = useState<string | null>(videos[0]?.id ?? null);
+export default function HumanVideos({ videos, seek }: { videos: HumanVideo[]; seek?: { id: string; start: number } }) {
+  const [open, setOpen] = useState<string | null>(seek?.id ?? videos[0]?.id ?? null);
+  const start = seek && seek.id === open ? Math.max(0, Math.floor(seek.start)) : 0;
   if (!videos.length)
     return (
       <div className="rounded-xl border border-line bg-panel p-4 text-sm text-ink-2">
@@ -33,9 +34,9 @@ export default function HumanVideos({ videos }: { videos: HumanVideo[] }) {
       {open && (
         <div className="aspect-video overflow-hidden rounded-xl border border-line bg-black">
           <iframe
-            key={open}
+            key={open + start}
             className="h-full w-full"
-            src={`https://www.youtube-nocookie.com/embed/${open}?rel=0`}
+            src={`https://www.youtube-nocookie.com/embed/${open}?rel=0${start ? `&start=${start}` : ""}`}
             title={videos.find((v) => v.id === open)?.title}
             allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen

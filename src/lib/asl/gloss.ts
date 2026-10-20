@@ -1,5 +1,4 @@
 import { getLexicon, type Lexicon } from "./lexicon";
-import { fingerspell } from "./fingerspell";
 import { LOCATIONS } from "./body";
 import type { CompiledSign, FaceState } from "./types";
 import { buildTimeline, type SeqUnit, type Timeline } from "./timeline";
@@ -141,7 +140,7 @@ export interface ResolvedToken extends GlossToken {
 export function resolveTokens(tokens: GlossToken[], lex: Lexicon = getLexicon()): ResolvedToken[] {
   return tokens.map((t) => {
     if (t.kind === "pause") return { ...t, status: "pause" as const };
-    if (t.kind === "fs") return { ...t, status: "fs" as const, sign: fingerspell(t.gloss), conf: "high" as const };
+    if (t.kind === "fs") return { ...t, status: "fs" as const, sign: lex.spell(t.gloss), conf: "high" as const };
     try {
       let sign: CompiledSign;
       let conf: ResolvedToken["conf"];
@@ -151,7 +150,7 @@ export function resolveTokens(tokens: GlossToken[], lex: Lexicon = getLexicon())
         conf = lex.get(t.gloss)?.conf;
       } else if (t.gloss.includes("+") && t.gloss.split("+").every((p) => lex.has(p))) {
         const parts = t.gloss.split("+");
-        const tmp = new (lex.constructor as typeof Lexicon)();
+        const tmp = new (lex.constructor as typeof Lexicon)([], lex.lang, lex.spell);
         for (const p of parts) tmp.add(lex.get(p)!);
         tmp.add({ id: t.gloss, def: "=" + t.gloss });
         sign = tmp.compile(t.gloss);
@@ -159,7 +158,7 @@ export function resolveTokens(tokens: GlossToken[], lex: Lexicon = getLexicon())
       } else {
         const word = t.gloss.split(/[.\-]/)[0].replace(/[^A-Z]/g, "");
         if (!word) return { ...t, status: "missing" as const, error: "unknown gloss" };
-        sign = fingerspell(word);
+        sign = lex.spell(word);
         status = "fallback";
         conf = "low";
       }

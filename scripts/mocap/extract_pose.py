@@ -72,8 +72,9 @@ def main():
             frames.append(f)
         cap.release()
         holistic.close()
-        with open(out, "w") as fh:
+        with open(out + ".tmp", "w") as fh:
             json.dump({"src": os.path.basename(path), "fps": fps / stride, "w": w, "h": h, "faceIdx": FACE_IDX, "frames": frames}, fh)
+        os.replace(out + ".tmp", out)  # atomic: readers never see a partial file
         print("done", stem, len(frames), "frames", flush=True)
 
 

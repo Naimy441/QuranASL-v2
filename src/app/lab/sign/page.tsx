@@ -5,6 +5,9 @@ import AvatarCanvas, { type PlaybackState } from "@/components/avatar/AvatarCanv
 import { buildTimeline, type SeqUnit } from "@/lib/asl/timeline";
 import { compileSign, validateDef } from "@/lib/asl/dsl";
 import { animateGloss } from "@/lib/asl/gloss";
+import { getBslLexicon } from "@/lib/bsl/lexicon";
+import { loadBslAyat, type BslAyahClip } from "@/lib/bsl/ayat";
+import { mocapSign } from "@/lib/asl/mocap";
 import { useClientQuery } from "@/lib/hooks/useClientQuery";
 import { useMocapReady } from "@/lib/hooks/useMocap";
 
@@ -25,14 +28,22 @@ function Lab({ q }: { q: URLSearchParams }) {
   const avatar = (q.get("avatar") as "amina" | "yusuf" | "sam") ?? "amina";
   const pb = useRef<PlaybackState>({ time: freeze ? parseFloat(freeze) : 0, playing: !freeze, rate: 1, loop: true });
   const mocapReady = useMocapReady();
+  const [bslClip, setBslClip] = useState<BslAyahClip | null>(null);
+  useEffect(() => {
+    const ref = q.get("bsl");
+    if (!ref) return;
+    const [s, a] = ref.split(":").map(Number);
+    loadBslAyat(s).then((d) => setBslClip(d?.[a] ?? null));
+  }, [q]);
   const err = validateDef(def);
   const tl = useMemo(() => {
     if (err) return null;
-    if (q.get("gloss")) return animateGloss(q.get("gloss")!).timeline;
+    if (bslClip) return buildTimeline([{ index: 0, label: "BSL", kind: "sign", sign: mocapSign(bslClip, 1) }]);
+    if (q.get("gloss")) return animateGloss(q.get("gloss")!, q.get("lang") === "bsl" ? getBslLexicon() : undefined).timeline;
     const units: SeqUnit[] = def.split("&&").map((d, i) => ({ index: i, label: "S" + i, kind: "sign", sign: compileSign("lab" + i, d.trim()) }));
     return buildTimeline(units);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [def, err, mocapReady]);
+  }, [def, err, mocapReady, bslClip]);
   const [t, setT] = useState(0);
   useEffect(() => {
     (window as unknown as { __pb: unknown; __tl: unknown }).__pb = pb.current;

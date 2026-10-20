@@ -4,13 +4,15 @@ import puppeteer from "puppeteer-core";
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-const [out, ...signs] = process.argv.slice(2);
+let [out, ...signs] = process.argv.slice(2);
+let lang = "asl";
+if (signs[0] === "--lang") { lang = signs[1]; signs = signs.slice(2); }
 const W = 300, H = 330;
 const browser = await puppeteer.launch({ executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: "new", args: ["--use-angle=metal", "--ignore-gpu-blocklist"] });
 const page = await browser.newPage();
 await page.setViewport({ width: W, height: H });
 const gloss = signs.join(" // ");
-await page.goto(`http://localhost:3000/lab/sign?bare=1&t=0&gloss=${encodeURIComponent(gloss)}`, { waitUntil: "networkidle2", timeout: 120000 });
+await page.goto(`http://localhost:3000/lab/sign?bare=1&t=0&lang=${lang}&gloss=${encodeURIComponent(gloss)}`, { waitUntil: "networkidle2", timeout: 120000 });
 await page.waitForFunction("window.__tl && window.__tl.items", { timeout: 60000 });
 await new Promise((r) => setTimeout(r, 2500)); // allow mocap to load
 const items = await page.evaluate(() => window.__tl.items.filter((i) => i.kind !== "pause").map((i) => ({ l: i.label, s: i.start, e: i.end })));

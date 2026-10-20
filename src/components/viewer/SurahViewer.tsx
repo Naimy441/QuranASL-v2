@@ -11,6 +11,11 @@ import GlossStrip from "./GlossStrip";
 import HumanVideos from "./HumanVideos";
 import { loadOverrides } from "@/lib/studio/overrides";
 import { useMocapReady } from "@/lib/hooks/useMocap";
+import { buildTimeline } from "@/lib/asl/timeline";
+import { mocapSign } from "@/lib/asl/mocap";
+import { autoGloss } from "@/lib/asl/autogloss";
+import { getBslLexicon, loadBslLexicon } from "@/lib/bsl/lexicon";
+import { loadBslAyat, type BslAyahClip } from "@/lib/bsl/ayat";
 
 const AvatarCanvas = dynamic(() => import("@/components/avatar/AvatarCanvas"), {
   ssr: false,
@@ -18,6 +23,7 @@ const AvatarCanvas = dynamic(() => import("@/components/avatar/AvatarCanvas"), {
 });
 
 type AvatarId = "amina" | "yusuf" | "sam";
+type Lang = "asl" | "bsl";
 
 export default function SurahViewer({ n }: { n: number }) {
   const [surah, setSurah] = useState<Surah | null>(null);
@@ -33,6 +39,9 @@ export default function SurahViewer({ n }: { n: number }) {
   const [loop, setLoop] = useState(false);
   const [tab, setTab] = useState<"ayat" | "human">("ayat");
   const [showWords, setShowWords] = useState(false);
+  const [lang, setLang] = useState<Lang>("asl");
+  const [bslAyat, setBslAyat] = useState<Record<string, BslAyahClip> | null>(null);
+  const [bslLexReady, setBslLexReady] = useState(false);
   const pb = useRef<PlaybackState>({ time: 0, playing: false, rate: 0.85, loop: false });
   const listRef = useRef<HTMLOListElement>(null);
   const mocapReady = useMocapReady();
@@ -50,6 +59,7 @@ export default function SurahViewer({ n }: { n: number }) {
       if (saved.avatar) setAvatar(saved.avatar);
       if (saved.rate) setRate(saved.rate);
       if (saved.mode) setMode(saved.mode);
+      if (saved.lang) setLang(saved.lang);
     } catch {}
     return () => {
       live = false;
@@ -58,9 +68,19 @@ export default function SurahViewer({ n }: { n: number }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem("qasl-viewer", JSON.stringify({ avatar, rate, mode }));
+      localStorage.setItem("qasl-viewer", JSON.stringify({ avatar, rate, mode, lang }));
     } catch {}
-  }, [avatar, rate, mode]);
+  }, [avatar, rate, mode, lang]);
+
+  useEffect(() => {
+    if (lang !== "bsl") return;
+    let live = true;
+    loadBslAyat(n).then((a) => live && setBslAyat(a));
+    loadBslLexicon().then(() => live && setBslLexReady(true));
+    return () => {
+      live = false;
+    };
+  }, [lang, n]);
 
   const hasBismillah = !!surah?.bismillah && n !== 1 && n !== 9;
   const items = useMemo(() => {
@@ -76,8 +96,22 @@ export default function SurahViewer({ n }: { n: number }) {
   }, [surah, gloss, overrides, hasBismillah, n]);
 
   const cur = items[idx];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const anim = useMemo(() => (cur?.gloss ? animateGloss(cur.gloss) : null), [cur?.gloss, mocapReady]);
+  const bslClip = lang === "bsl" && cur ? bslAyat?.[cur.ayah ?? 0] : undefined;
+  const anim = useMemo(() => {
+    if (!cur) return null;
+    if (lang === "bsl") {
+      if (bslClip) {
+        // the whole ayah as signed by a human BSL translator
+        const timeline = buildTimeline([{ index: 0, label: "BSL", kind: "sign", sign: mocapSign(bslClip, 1) }]);
+        const tokens = bslClip.gloss ? animateGloss(bslClip.gloss, getBslLexicon()).tokens : [];
+        return { timeline, tokens };
+      }
+      const g = autoGloss(cur.en, getBslLexicon(), { unknown: "drop" }).gloss;
+      return g ? animateGloss(g, getBslLexicon()) : null;
+    }
+    return cur.gloss ? animateGloss(cur.gloss) : null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cur, lang, bslClip, bslLexReady, mocapReady]);
 
   // keep playback ref in sync
   useEffect(() => {
@@ -162,7 +196,14 @@ export default function SurahViewer({ n }: { n: number }) {
             </h1>
             <p className="text-sm text-ink-2">{surah.meaning} · {surah.ayahs} ayat · {surah.place === "makkah" ? "Meccan" : "Medinan"}</p>
           </div>
-          <div className="text-right text-sm text-ink-2">
+          <div className="flex flex-col items-end gap-1 text-right text-sm text-ink-2">
+            <div role="group" aria-label="Sign language" className="flex rounded-lg border border-line bg-panel p-0.5 text-xs">
+              {(["asl", "bsl"] as Lang[]).map((l) => (
+                <button key={l} onClick={() => setLang(l)} aria-pressed={lang === l} className={`rounded-md px-2.5 py-1 font-semibold ${lang === l ? "bg-brand text-brand-ink" : "text-ink-2"}`}>
+                  {l.toUpperCase()}
+                </button>
+              ))}
+            </div>
             <span className="font-mono text-lg text-ink">{cur?.label}</span>
           </div>
         </div>
@@ -177,7 +218,7 @@ export default function SurahViewer({ n }: { n: number }) {
             mode={mode}
             avatar={avatar}
             xr
-            ariaLabel={`Avatar signing ${cur?.label ?? ""} in ASL`}
+            ariaLabel={`Avatar signing ${cur?.label ?? ""} in ${lang.toUpperCase()}`}
           />
           {/* caption */}
           <div aria-live="polite" className="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center">
@@ -187,9 +228,16 @@ export default function SurahViewer({ n }: { n: number }) {
               </span>
             )}
           </div>
-          {cur && cur.source === "auto" && (
+          {lang === "asl" && cur && cur.source === "auto" && (
             <div className="absolute left-3 top-3 rounded-md bg-accent/90 px-2 py-1 text-xs font-medium text-black">
               Automatic draft — not yet reviewed
+            </div>
+          )}
+          {lang === "bsl" && cur && (
+            <div className={`absolute left-3 top-3 max-w-[60%] rounded-md px-2 py-1 text-xs font-medium ${bslClip ? "bg-ok/90 text-white" : "bg-accent/90 text-black"}`}>
+              {bslClip
+                ? "BSL — signed by a human translator (Al Isharah BSL Qur'an Project), retargeted to the avatar"
+                : "BSL draft from learned signs — rough, many words missing"}
             </div>
           )}
           <div className="absolute right-3 top-3 flex gap-1">
@@ -268,7 +316,7 @@ export default function SurahViewer({ n }: { n: number }) {
           </Link>
         </div>
         {tab === "human" ? (
-          <HumanVideos videos={vids} />
+          <HumanVideos videos={vids} seek={bslClip ? { id: bslClip.video, start: bslClip.start } : undefined} />
         ) : (
           <ol ref={listRef} className="flex-1 space-y-2 overflow-y-auto pr-1 lg:max-h-[calc(100vh-8.5rem)]">
             {items.map((it, i) => (

@@ -19,7 +19,7 @@ REF = re.compile(r"(\d{1,3})\s*[:;.]\s*(\d{1,3})")
 with tempfile.TemporaryDirectory() as tmp:
     # right half of the frame (caption panel), grayscale, 2x upscale for small text
     subprocess.run([
-        "ffmpeg", "-v", "error", "-i", video, "-vf",
+        "ffmpeg", "-nostdin", "-v", "error", "-i", video, "-vf",
         f"fps={fps},crop=iw*0.5:ih:iw*0.5:0,scale=iw*2:-1,format=gray",
         os.path.join(tmp, "f%06d.png"),
     ], check=True)

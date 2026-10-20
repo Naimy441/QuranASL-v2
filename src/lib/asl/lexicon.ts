@@ -43,11 +43,18 @@ export function parseLexicon(src: string, cat: string): SignEntry[] {
   return out;
 }
 
+export type SignLang = "asl" | "bsl";
+
 export class Lexicon {
   entries = new Map<string, SignEntry>();
   byWord = new Map<string, string[]>();
+  lang: SignLang;
+  /** Fingerspelling for this language (ASL one-handed, BSL two-handed). */
+  spell: (word: string) => CompiledSign;
 
-  constructor(entries: SignEntry[] = []) {
+  constructor(entries: SignEntry[] = [], lang: SignLang = "asl", spell: (word: string) => CompiledSign = fingerspell) {
+    this.lang = lang;
+    this.spell = spell;
     for (const e of entries) this.add(e);
   }
 
@@ -88,7 +95,7 @@ export class Lexicon {
         .slice(1)
         .split("+")
         .map((p) => p.trim())
-        .map((p) => (p.startsWith("fs:") ? fingerspell(p.slice(3)) : this.compile(p, [...seen, id])));
+        .map((p) => (p.startsWith("fs:") ? this.spell(p.slice(3)) : this.compile(p, [...seen, id])));
       return combineSigns(id, parts);
     }
     return compileSign(id, e.def);

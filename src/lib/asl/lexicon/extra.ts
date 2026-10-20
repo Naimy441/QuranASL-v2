@@ -637,4 +637,47 @@ FARMER | =PLANT+PERSON | farmer,farmers,sower,tiller | med
 BOAST | =PROUD | boast,boastful,braggart | high
 FOLLOWER | =FOLLOW+PERSON | follower,followers | high
 MONK | =WORSHIP+ALONE+PERSON | monk,monks,monasticism | low
+
+# ---------- batch 9: Juz 26 ----------
+BEDOUIN | =DESERT+PEOPLE | bedouin,bedouins,desert arabs,arabs | low
+DESERT | =DRY+LAND | desert,wilderness | med
+SPOILS | =WIN+THING | spoils,booty,war gains | med
+VOICE | C @neck:f2 p:B f:U at:tipI > @neck:f6u4 d:0.25 | voice,voices,sound | high
+FIX | =CHANGE+GOOD | fix,amend,improve,set right | med
+STRONGER | =POWER+MORE | stronger,mightier | high
+THIRTY | 3 @neutral:u8 p:B f:U > O d:0.2 | thirty | high
+FORTY | 4 @neutral:u8 p:B f:U > O d:0.2 | forty | high
+UGH | 5 @neutral:u6 p:F f:U > @neutral:u8f6 d:0.15 ;face:frown=0.8,browDown=0.6 | uff,ugh,fie | med
+MILK | S @neutral:u2 p:I f:F > C d:0.12 ;x3 | milk | high
+WINE | W @cheek p:B f:U at:tipI ~circle:B2x2 | wine,intoxicant | high
+HONEY | open8 @chin:o2 p:B f:U at:tipM > @chin:o6 at:tipM d:0.2 ;face:smile=0.4 | honey | med
+JUST | =NOW | just now,just | med
+SIGN | =SIGN-PROOF | sign,signs,indication,portent | high
+FAINT | =FALL+SLEEP | faint,swoon,fainting | low
+MATTER | =THING | matter,case,affair | high
+LOCK | X @base.palm:u4 p:D f:F > @base.palm:u1 ~twist:60 d:0.25 | B @neutral p:U f:FI | lock,locked,locks | high
+PUSH | B @neutral:b2 p:F f:U > @neutral:f12 d:0.2 ;sym | push,press,pressure | high
+ADD | =MORE | add,added,increase | high
+LAME | =WALK+HARD | lame,disabled | low
+GUILTY | =SIN | guilty,guilt,blame | med
+DREAM | 1 @temple:f2 p:B f:IU at:tipI > X @temple:o14u8 ~wiggle:10 d:0.4 | dream,vision,dreamed | high
+SHAVE | Y @cheek:u2 p:B f:U at:tipT > @jaw:d2 at:tipT d:0.2 ;x2 | shave,shaved,shaving | high
+SHORT | H @base.pipI:u2 p:I f:FI > @base.pipI:u2b3 d:0.12 ;x2 | H @neutral p:I f:FO | short,shorten,shortened,trimmed | high
+SPROUT | =PLANT | sprout,shoot,shoots | med
+CHECK | V @eyes:f4 p:D f:F at:tipI > @base.palm:u4 d:0.3 | B @neutral p:U f:FI | check,verify,investigate,inspect | high
+INSULT | 1 @neutral:b2u4 p:D f:F > @far:u6 d:0.15 ;face:browDown=0.6 | insult,insults,defame | high
+SPY | =SECRET+LOOK | spy,spying | med
+NATION | =PEOPLE | nation,nations,peoples | high
+TRIBE | =GROUP | tribe,tribes,clan | med
+STRANGE | C @face:o4f8 p:I f:U > @face:i6f8 ~arc:d3 d:0.3 ;face:browDown=0.4 | strange,amazing,odd,weird | high
+CONFUSED | claw5 @forehead:f6 p:B f:U ~circle:F3x1 | claw5 @neutral:u6 p:U f:F ~circle:F3x1 | confused,confusion,perplexed | high
+FOREST | =TREE+MANY | forest,wood,thicket | med
+RECEIVE | =GET | receive,received,receivers | high
+DRIVER | =DRIVE+PERSON | driver | med
+SIGHT | =SEE | sight,vision | high
+SHARP | B @base.radial:u2 p:D f:F at:tipM > @base.radial:f4 at:tipM d:0.15 | B @neutral p:I f:FO | sharp,keen,acute | high
+SEARCH | =SEEK | search,searched,roam | high
+SUNRISE | =MORNING | sunrise,rising of the sun | high
+SUNSET | =EVENING | sunset,setting of the sun | high
+FORCE | C @neutral:u4 p:B f:U > @neutral:d4f6 p:D d:0.2 | force,compel,coerce | high
 `;

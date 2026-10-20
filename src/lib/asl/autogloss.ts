@@ -68,7 +68,7 @@ export interface AutoGlossResult {
   unknown: string[];
 }
 
-export function autoGloss(english: string, lex: Lexicon = getLexicon()): AutoGlossResult {
+export function autoGloss(english: string, lex: Lexicon = getLexicon(), opts: { unknown?: "keep" | "drop" } = {}): AutoGlossResult {
   const text = norm(english)
     .replace(/[\[\]]/g, "")
     .replace(/[“”"]/g, " ")
@@ -119,7 +119,7 @@ export function autoGloss(english: string, lex: Lexicon = getLexicon()): AutoGlo
       if (/^[A-Z]/.test(raw) && i > 0) { signs.push("fs:" + w.toUpperCase().replace(/[^A-Z]/g, "")); continue; }
       if (w.length <= 2) continue;
       unknown.push(w);
-      signs.push(w.toUpperCase().replace(/[^A-Z-]/g, ""));
+      if (opts.unknown !== "drop") signs.push(w.toUpperCase().replace(/[^A-Z-]/g, ""));
     }
     // collapse immediate duplicates
     const dedup = signs.filter((s, k) => s && s !== signs[k - 1]);
