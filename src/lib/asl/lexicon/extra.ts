@@ -602,4 +602,39 @@ MARRIED | =MARRY | married,previously married | high
 FUEL | =WOOD | fuel | low
 BETRAY | =CHEAT | betray,betrayal,treachery,treacherous | med
 CHASTITY | =PRIVATE | chastity,chaste | low
+
+# ---------- batch 8: Juz 27 ----------
+DESIRE | =WANT | desire,desires,whim,inclination,lust | high
+DAWN | =MORNING | dawn,daybreak,before dawn,sahar | high
+GUEST | =VISIT+PERSON | guest,guests,visitor | med
+CALLER | =CALL+PERSON | caller,summoner,herald | med
+FAT | claw5 @cheek:o4 p:B f:U > @cheek:o8 d:0.25 ;sym | fat,fattened,plump | high
+HIT | =STRIKE | hit,slap,struck | high
+BUSINESS | =WORK | business,errand,mission | med
+EXPAND | 5 @neutral:o4 p:I f:F > claw5 @neutral:o16 d:0.4 ;sym | expand,expanding,extend,enlarge | high
+LISTENER | =LISTEN+PERSON | listener,eavesdropper | med
+PIECE | =SOME | piece,fragment,part | med
+CLOSER | =NEAR+MORE | closer,nearer | high
+ANOTHER | =OTHER | another | high
+UNFAIR | =NOT+FAIR | unfair,unjust division | high
+CLAIM | =SAY | claim,boast of | med
+EMIT | =SPURT | emit,emitted,ejected | med
+CARE | V @neutral:u4 p:D f:F ~circle:U4x1 | V @neutral:d2 p:D f:F | care,heed,concern | high
+NAIL | 1 @base.back:u6 p:B f:D > @base.back:u1 d:0.1 ;x2 | B @neutral p:D f:FI | nail,nails,planks | low
+PULL | =DRAG | pull,pulled,uproot | high
+ROOT | =SEED+DOWN | root,roots,trunk | low
+STICK | =STAFF | stick,sticks,dry twigs,stubble | med
+WORSE | =BAD+MORE | worse,more grievous | high
+BITTER | =SALTY | bitter,more bitter | med
+BLINK | L @eye:f2 p:I f:U at:tipI > baby0 d:0.08 | blink,twinkling,glance | med
+HIDDEN | =HIDE | hidden,inward,batin | high
+HIGHER | =HIGH+MORE | higher,greater rank | high
+OUTSIDE | =OUT | outside,exterior | high
+DECEIVER | =DECEIVE+PERSON | deceiver,the deceiver | med
+RANSOM | =PAY | ransom | med
+AMUSEMENT | =PLAY | amusement,diversion | high
+FARMER | =PLANT+PERSON | farmer,farmers,sower,tiller | med
+BOAST | =PROUD | boast,boastful,braggart | high
+FOLLOWER | =FOLLOW+PERSON | follower,followers | high
+MONK | =WORSHIP+ALONE+PERSON | monk,monks,monasticism | low
 `;

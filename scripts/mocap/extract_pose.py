@@ -1,6 +1,7 @@
 """Extract MediaPipe Holistic landmarks from sign videos.
 
-usage: python3.12 -I scripts/mocap/extract_pose.py OUT_DIR VIDEO [VIDEO ...]
+usage: python3.12 -I scripts/mocap/extract_pose.py [--stride N] [--complexity 0-2] OUT_DIR VIDEO [VIDEO ...]
+--stride N keeps every Nth frame (fps in the output is divided accordingly).
 Writes OUT_DIR/<video-stem>.json with per-frame pose world landmarks, hand
 landmarks (image coords + z), a subset of face landmarks and frame size.
 """
@@ -19,24 +20,40 @@ def r(v, n=4):
 
 
 def main():
-    out_dir = sys.argv[1]
+    args = sys.argv[1:]
+    stride, complexity = 1, 2
+    while args and args[0].startswith("--"):
+        if args[0] == "--stride":
+            stride = int(args[1])
+        elif args[0] == "--complexity":
+            complexity = int(args[1])
+        args = args[2:]
+    out_dir, videos = args[0], args[1:]
     os.makedirs(out_dir, exist_ok=True)
-    holistic = mp.solutions.holistic.Holistic(
-        static_image_mode=False, model_complexity=2, smooth_landmarks=True,
-        refine_face_landmarks=False, min_detection_confidence=0.5, min_tracking_confidence=0.5)
-    for path in sys.argv[2:]:
+    for path in videos:
         stem = os.path.splitext(os.path.basename(path))[0]
         out = os.path.join(out_dir, stem + ".json")
         if os.path.exists(out):
             print("skip", stem)
             continue
+        # fresh tracker per video so state never leaks between clips
+        holistic = mp.solutions.holistic.Holistic(
+            static_image_mode=False, model_complexity=complexity, smooth_landmarks=True,
+            refine_face_landmarks=False, min_detection_confidence=0.5, min_tracking_confidence=0.5)
         cap = cv2.VideoCapture(path)
         fps = cap.get(cv2.CAP_PROP_FPS) or 30
         w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         frames = []
+        k = -1
         while True:
-            ok, img = cap.read()
+            ok = cap.grab()
+            if not ok:
+                break
+            k += 1
+            if k % stride:
+                continue
+            ok, img = cap.retrieve()
             if not ok:
                 break
             res = holistic.process(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
@@ -54,8 +71,9 @@ def main():
                 f["fc"] = [[r(lm[i].x), r(lm[i].y), r(lm[i].z)] for i in FACE_IDX]
             frames.append(f)
         cap.release()
+        holistic.close()
         with open(out, "w") as fh:
-            json.dump({"src": os.path.basename(path), "fps": fps, "w": w, "h": h, "faceIdx": FACE_IDX, "frames": frames}, fh)
+            json.dump({"src": os.path.basename(path), "fps": fps / stride, "w": w, "h": h, "faceIdx": FACE_IDX, "frames": frames}, fh)
         print("done", stem, len(frames), "frames", flush=True)
 
 
