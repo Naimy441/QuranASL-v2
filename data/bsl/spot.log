@@ -1,0 +1,326 @@
+features -7oq9952LYo (1164, 28)
+features -nO1JkSU5e0 (1465, 28)
+features 03qd7ynrvcA (4868, 28)
+features 2L7rgCsmHB0 (7821, 28)
+features 4RW-fR5LQJU (1936, 28)
+features 4f_AhyPgHqI (5478, 28)
+features 4n8pBxHU_Vk (1561, 28)
+features 6N3592ecNEI (2752, 28)
+features 6lYZOF_i2vs (6350, 28)
+features 6nQdGtQ9wLk (6029, 28)
+features 6uSTVBd5GfQ (1812, 28)
+features BL7IVCOhI_k (4616, 28)
+features DsDfKg4aB6c (912, 28)
+features Jml8EVJbdUc (1953, 28)
+features K15kZp34XkY (2875, 28)
+features LzmqNY5lLrM (1319, 28)
+features M2mxtlj4f0g (1221, 28)
+features MXJMXzPvJ50 (724, 28)
+features O0E_NDfHUQE (2479, 28)
+features O1LGk7umhIk (7535, 28)
+features PYCpXHAvxhI (5921, 28)
+features PyskYlgP9rA (3008, 28)
+features RaF1xGeM8GQ (2523, 28)
+features THnIZ3e0mZE (5547, 28)
+features TbxUZcppvXQ (3953, 28)
+features V-G9dBQeksU (5743, 28)
+features VreLW5eMY-s (1066, 28)
+features W19vpdJkTCI (1502, 28)
+features XQGhjqtwtRo (1523, 28)
+features Y_ZYp00Z7fg (2581, 28)
+features Z7yTaBup7lA (1055, 28)
+features _tnzvKbvOHw (4318, 28)
+features ab35b8fAFBY (1754, 28)
+features fc0QXDUGysE (10992, 28)
+features hXcrpj9Pb1A (3037, 28)
+features j5SgkQe9ezM (6330, 28)
+features kk5DAficNVQ (1915, 28)
+features kpoHidP9bzo (5234, 28)
+features livEzMpVUEc (3089, 28)
+features mLgR69NWsUU (2847, 28)
+features mYdJibJJwD0 (1358, 28)
+features or3VZvb_CQM (5886, 28)
+features psv4H-HiZNA (7829, 28)
+features sROx7aJES_g (6218, 28)
+features ucRkZIm3QH4 (20406, 28)
+features uje7XqZgCOc (804, 28)
+features w9IcV0Co8jc (2060, 28)
+ayat: 997
+vocab: 276
+[1/276] inde           support=126 auc=0.869 recall=0.79
+[2/276] lord           support= 94 auc=0.938 recall=0.9
+[3/276] day            support= 85 auc=0.937 recall=0.87
+[4/276] allah          support= 65 auc=0.859 recall=0.8
+[5/276] know           support= 41 auc=0.893 recall=0.83
+[6/276] except         support= 38 auc=0.912 recall=0.79
+[7/276] creat          support= 32 auc=0.926 recall=0.9
+[8/276] earth          support= 29 auc=0.842 recall=0.64
+[9/276] man            support= 27 auc=0.835 recall=0.65
+[10/276] muhammad       support= 24 auc=0.702 recall=0.48
+[11/276] see            support= 22 auc=0.820 recall=0.71
+[12/276] deny           support= 22 auc=0.937 recall=0.81
+[13/276] night          support= 22 auc=0.983 recall=0.95
+[14/276] disbeliever    support= 21 auc=0.911 recall=0.75
+[15/276] return         support= 21 auc=0.731 recall=0.4
+[16/276] people         support= 20 auc=0.807 recall=0.68
+[17/276] therein        support= 20 auc=0.796 recall=0.68
+[18/276] punishment     support= 20 auc=0.982 recall=1.0
+[19/276] fear           support= 19 auc=0.959 recall=0.94
+[20/276] give           support= 19 auc=0.775 recall=0.5
+[21/276] woe            support= 17 auc=0.996 recall=1.0
+[22/276] righteou       support= 17 auc=0.892 recall=0.75
+[23/276] messenger      support= 17 auc=0.978 recall=1.0
+[24/276] quran          support= 17 auc=0.835 recall=0.75
+[25/276] heaven         support= 16 auc=0.935 recall=0.93
+[26/276] enter          support= 16 auc=0.829 recall=0.73
+[27/276] reward         support= 16 auc=0.963 recall=0.93
+[28/276] life           support= 16 auc=0.908 recall=0.87
+[29/276] merciful       support= 15 auc=0.986 recall=1.0
+[30/276] burn           support= 15 auc=0.814 recall=0.71
+[31/276] believ         support= 15 auc=0.955 recall=0.86
+[32/276] used           support= 15 auc=0.826 recall=0.64
+[33/276] ask            support= 14 auc=0.846 recall=0.69
+[34/276] mankind        support= 14 auc=0.772 recall=0.62
+[35/276] fire           support= 14 auc=0.910 recall=0.77
+[36/276] exalt          support= 14 auc=0.862 recall=0.77
+[37/276] clear          support= 14 auc=0.877 recall=0.69
+[38/276] garden         support= 14 auc=0.936 recall=0.92
+[39/276] sent           support= 13 auc=0.783 recall=0.5
+[40/276] denier         support= 13 auc=1.000 recall=1.0
+[41/276] worship        support= 12 auc=0.806 recall=0.64
+[42/276] away           support= 12 auc=0.924 recall=0.82
+[43/276] companion      support= 12 auc=0.667 recall=0.36
+[44/276] time           support= 12 auc=0.833 recall=0.73
+[45/276] turn           support= 12 auc=0.800 recall=0.73
+[46/276] warn           support= 12 auc=0.958 recall=0.91
+[47/276] soul           support= 12 auc=0.839 recall=0.73
+[48/276] drink          support= 12 auc=0.936 recall=1.0
+[49/276] put            support= 12 auc=0.818 recall=0.45
+[50/276] recompense     support= 11 auc=0.917 recall=0.9
+[51/276] evil           support= 11 auc=0.863 recall=0.7
+[52/276] wealth         support= 11 auc=0.907 recall=0.9
+[53/276] come           support= 11 auc=0.753 recall=0.5
+[54/276] angel          support= 11 auc=0.937 recall=0.9
+[55/276] leave          support= 11 auc=0.913 recall=0.8
+[56/276] sky            support= 11 auc=1.000 recall=1.0
+[57/276] never          support= 11 auc=0.843 recall=0.7
+[58/276] right          support= 11 auc=0.877 recall=0.7
+[59/276] able           support= 11 auc=0.863 recall=0.8
+[60/276] hand           support= 10 auc=0.859 recall=0.78
+[61/276] consider       support= 10 auc=0.822 recall=0.67
+[62/276] purify         support= 10 auc=0.826 recall=0.67
+[63/276] given          support= 10 auc=0.793 recall=0.78
+[64/276] matter         support= 10 auc=0.844 recall=0.67
+[65/276] cover          support= 10 auc=0.789 recall=0.56
+[66/276] forth          support= 10 auc=0.881 recall=0.67
+[67/276] reminder       support= 10 auc=0.967 recall=0.89
+[68/276] great          support=  9 auc=0.829 recall=0.62
+[69/276] refuge         support=  9 auc=0.679 recall=0.38
+[70/276] good           support=  9 auc=0.988 recall=1.0
+[71/276] hell           support=  9 auc=0.896 recall=0.88
+[72/276] near           support=  9 auc=0.717 recall=0.25
+[73/276] toward         support=  9 auc=0.838 recall=0.75
+[74/276] follow         support=  9 auc=0.779 recall=0.5
+[75/276] mountain       support=  9 auc=1.000 recall=1.0
+[76/276] promis         support=  9 auc=0.967 recall=1.0
+[77/276] record         support=  9 auc=0.958 recall=0.88
+[78/276] world          support=  8 auc=0.886 recall=0.43
+[79/276] knowledge      support=  8 auc=0.795 recall=0.71
+[80/276] prayer         support=  8 auc=0.881 recall=0.86
+[81/276] pleasure       support=  8 auc=0.819 recall=0.57
+[82/276] believe        support=  8 auc=0.919 recall=1.0
+[83/276] back           support=  8 auc=0.695 recall=0.29
+[84/276] anyone         support=  8 auc=0.924 recall=0.86
+[85/276] moon           support=  8 auc=0.933 recall=1.0
+[86/276] spread         support=  8 auc=0.824 recall=0.57
+[87/276] brought        support=  8 auc=0.795 recall=0.43
+[88/276] paradise       support=  8 auc=0.910 recall=0.86
+[89/276] fac            support=  8 auc=0.990 recall=1.0
+[90/276] creation       support=  8 auc=0.967 recall=1.0
+[91/276] behind         support=  8 auc=0.848 recall=0.57
+[92/276] word           support=  8 auc=0.857 recall=0.71
+[93/276] children       support=  8 auc=0.957 recall=1.0
+[94/276] favor          support=  7 auc=0.822 recall=0.67
+[95/276] pray           support=  7 auc=0.944 recall=0.83
+[96/276] deed           support=  7 auc=0.928 recall=0.83
+[97/276] increase       support=  7 auc=0.967 recall=1.0
+[98/276] surely         support=  7 auc=0.872 recall=0.67
+[99/276] hellfire       support=  7 auc=1.000 recall=1.0
+[100/276] disbeliev      support=  7 auc=0.956 recall=1.0
+[101/276] came           support=  7 auc=0.850 recall=0.83
+[102/276] better         support=  7 auc=0.983 recall=1.0
+[103/276] himself        support=  7 auc=0.844 recall=0.5
+[104/276] call           support=  7 auc=0.783 recall=0.67
+[105/276] ease           support=  7 auc=1.000 recall=1.0
+[106/276] guid           support=  7 auc=0.950 recall=0.83
+[107/276] think          support=  7 auc=0.900 recall=0.67
+[108/276] provision      support=  7 auc=0.983 recall=1.0
+[109/276] wish           support=  7 auc=0.944 recall=1.0
+[110/276] hear           support=  7 auc=1.000 recall=1.0
+[111/276] star           support=  7 auc=1.000 recall=1.0
+[112/276] send           support=  7 auc=0.894 recall=0.67
+[113/276] disbelieve     support=  7 auc=0.994 recall=1.0
+[114/276] themselv       support=  7 auc=0.961 recall=1.0
+[115/276] take           support=  7 auc=0.883 recall=0.5
+[116/276] way            support=  7 auc=0.939 recall=0.83
+[117/276] fruit          support=  7 auc=0.889 recall=0.83
+[118/276] name           support=  6 auc=0.993 recall=1.0
+[119/276] ever           support=  6 auc=0.947 recall=1.0
+[120/276] forgiveness    support=  6 auc=1.000 recall=1.0
+[121/276] seen           support=  6 auc=1.000 recall=1.0
+[122/276] orphan         support=  6 auc=0.927 recall=0.8
+[123/276] feed           support=  6 auc=0.860 recall=0.6
+[124/276] become         support=  6 auc=0.940 recall=1.0
+[125/276] gabriel        support=  6 auc=0.933 recall=0.6
+[126/276] servant        support=  6 auc=0.887 recall=0.6
+[127/276] obey           support=  6 auc=0.940 recall=0.8
+[128/276] morn           support=  6 auc=0.893 recall=0.8
+[129/276] hereafter      support=  6 auc=1.000 recall=1.0
+[130/276] none           support=  6 auc=1.000 recall=1.0
+[131/276] sun            support=  6 auc=0.993 recall=1.0
+[132/276] proportion     support=  6 auc=0.867 recall=0.6
+[133/276] swear          support=  6 auc=0.987 recall=1.0
+[134/276] eyes           support=  6 auc=1.000 recall=1.0
+[135/276] two            support=  6 auc=0.920 recall=0.6
+[136/276] sign           support=  6 auc=0.993 recall=1.0
+[137/276] pharaoh        support=  6 auc=0.960 recall=1.0
+[138/276] honor          support=  6 auc=0.940 recall=1.0
+[139/276] remember       support=  6 auc=1.000 recall=1.0
+[140/276] reach          support=  6 auc=0.920 recall=0.8
+[141/276] place          support=  6 auc=0.813 recall=0.6
+[142/276] former         support=  6 auc=0.827 recall=0.4
+[143/276] witness        support=  6 auc=0.913 recall=0.8
+[144/276] destroy        support=  6 auc=1.000 recall=1.0
+[145/276] full           support=  6 auc=0.787 recall=0.4
+[146/276] listen         support=  6 auc=0.913 recall=0.8
+[147/276] heart          support=  6 auc=0.927 recall=0.8
+[148/276] set            support=  6 auc=0.827 recall=0.6
+[149/276] water          support=  6 auc=0.940 recall=0.8
+[150/276] criminal       support=  6 auc=1.000 recall=1.0
+[151/276] eat            support=  6 auc=0.940 recall=0.8
+[152/276] present        support=  6 auc=0.940 recall=0.8
+[153/276] invit          support=  6 auc=0.980 recall=1.0
+[154/276] path           support=  5 auc=0.917 recall=1.0
+[155/276] high           support=  5 auc=1.000 recall=1.0
+[156/276] seek           support=  5 auc=0.892 recall=0.75
+[157/276] avail          support=  5 auc=0.958 recall=1.0
+[158/276] flame          support=  5 auc=0.892 recall=0.5
+[159/276] grant          support=  5 auc=0.967 recall=1.0
+[160/276] poor           support=  5 auc=1.000 recall=1.0
+[161/276] plan           support=  5 auc=1.000 recall=1.0
+[162/276] truth          support=  5 auc=1.000 recall=1.0
+[163/276] burden         support=  5 auc=1.000 recall=1.0
+[164/276] command        support=  5 auc=0.992 recall=1.0
+[165/276] scripture      support=  5 auc=0.925 recall=0.75
+[166/276] recit          support=  5 auc=0.900 recall=0.5
+[167/276] best           support=  5 auc=0.967 recall=1.0
+[168/276] decree         support=  5 auc=0.925 recall=1.0
+[169/276] recite         support=  5 auc=1.000 recall=1.0
+[170/276] transgress     support=  5 auc=0.883 recall=1.0
+[171/276] city           support=  5 auc=0.892 recall=0.75
+[172/276] caus           support=  5 auc=0.883 recall=0.75
+[173/276] rais           support=  5 auc=0.942 recall=1.0
+[174/276] stand          support=  5 auc=0.975 recall=1.0
+[175/276] find           support=  5 auc=0.950 recall=1.0
+[176/276] prophet        support=  5 auc=0.950 recall=1.0
+[177/276] sin            support=  5 auc=0.967 recall=1.0
+[178/276] left           support=  5 auc=0.892 recall=0.75
+[179/276] owner          support=  5 auc=0.917 recall=0.75
+[180/276] humbl          support=  5 auc=0.967 recall=1.0
+[181/276] speech         support=  5 auc=0.967 recall=1.0
+[182/276] couch          support=  5 auc=0.983 recall=1.0
+[183/276] look           support=  5 auc=0.958 recall=1.0
+[184/276] remind         support=  5 auc=0.967 recall=1.0
+[185/276] greatest       support=  5 auc=0.858 recall=0.5
+[186/276] mention        support=  5 auc=0.983 recall=1.0
+[187/276] intend         support=  5 auc=1.000 recall=1.0
+[188/276] blaze          support=  5 auc=1.000 recall=1.0
+[189/276] painful        support=  5 auc=0.975 recall=1.0
+[190/276] cause          support=  5 auc=0.992 recall=1.0
+[191/276] vers           support=  5 auc=0.883 recall=0.75
+[192/276] rather         support=  5 auc=0.800 recall=0.75
+[193/276] adorn          support=  5 auc=1.000 recall=1.0
+[194/276] today          support=  5 auc=0.933 recall=0.75
+[195/276] possess        support=  5 auc=0.958 recall=1.0
+[196/276] position       support=  5 auc=0.883 recall=0.75
+[197/276] already        support=  5 auc=0.967 recall=1.0
+[198/276] unseen         support=  5 auc=0.850 recall=0.75
+[199/276] course         support=  5 auc=0.983 recall=1.0
+[200/276] com            support=  5 auc=0.967 recall=1.0
+[201/276] disobey        support=  5 auc=1.000 recall=1.0
+[202/276] warner         support=  5 auc=0.983 recall=1.0
+[203/276] above          support=  5 auc=1.000 recall=1.0
+[204/276] judgement      support=  5 auc=0.992 recall=1.0
+[205/276] plac           support=  5 auc=0.983 recall=1.0
+[206/276] little         support=  5 auc=0.933 recall=1.0
+[207/276] patient        support=  5 auc=1.000 recall=1.0
+[208/276] mercy          support=  5 auc=0.942 recall=0.75
+[209/276] resurrection   support=  5 auc=0.942 recall=0.75
+[210/276] recitation     support=  5 auc=1.000 recall=1.0
+[211/276] error          support=  5 auc=0.883 recall=0.5
+[212/276] entirely       support=  4 auc=0.767 recall=0.67
+[213/276] due            support=  4 auc=0.822 recall=0.67
+[214/276] astray         support=  4 auc=0.989 recall=1.0
+[215/276] earn           support=  4 auc=0.956 recall=1.0
+[216/276] neither        support=  4 auc=0.822 recall=0.33
+[217/276] deity          support=  4 auc=1.000 recall=1.0
+[218/276] breast         support=  4 auc=0.833 recall=0.33
+[219/276] jinn           support=  4 auc=1.000 recall=1.0
+[220/276] wife           support=  4 auc=0.967 recall=1.0
+[221/276] certainty      support=  4 auc=0.900 recall=0.67
+[222/276] knew           support=  4 auc=1.000 recall=1.0
+[223/276] scriptur       support=  4 auc=0.956 recall=1.0
+[224/276] generou        support=  4 auc=1.000 recall=1.0
+[225/276] secure         support=  4 auc=1.000 recall=1.0
+[226/276] certainly      support=  4 auc=0.956 recall=1.0
+[227/276] long           support=  4 auc=0.956 recall=1.0
+[228/276] first          support=  4 auc=0.956 recall=1.0
+[229/276] found          support=  4 auc=1.000 recall=1.0
+[230/276] wretch         support=  4 auc=0.911 recall=1.0
+[231/276] avoid          support=  4 auc=0.944 recall=1.0
+[232/276] camel          support=  4 auc=0.889 recall=0.67
+[233/276] difficult      support=  4 auc=0.978 recall=1.0
+[234/276] pass           support=  4 auc=0.911 recall=1.0
+[235/276] break          support=  4 auc=0.956 recall=1.0
+[236/276] person         support=  4 auc=0.967 recall=1.0
+[237/276] number         support=  4 auc=0.978 recall=1.0
+[238/276] pour           support=  4 auc=0.956 recall=1.0
+[239/276] thus           support=  4 auc=0.967 recall=1.0
+[240/276] try            support=  4 auc=1.000 recall=1.0
+[241/276] love           support=  4 auc=0.956 recall=1.0
+[242/276] spr            support=  4 auc=1.000 recall=1.0
+[243/276] account        support=  4 auc=0.978 recall=1.0
+[244/276] benefit        support=  4 auc=0.989 recall=1.0
+[245/276] power          support=  4 auc=0.933 recall=1.0
+[246/276] soldier        support=  4 auc=0.978 recall=1.0
+[247/276] open           support=  4 auc=0.956 recall=1.0
+[248/276] once           support=  4 auc=1.000 recall=1.0
+[249/276] thought        support=  4 auc=1.000 recall=1.0
+[250/276] yes            support=  4 auc=0.956 recall=1.0
+[251/276] wick           support=  4 auc=1.000 recall=1.0
+[252/276] transgressor   support=  4 auc=0.944 recall=1.0
+[253/276] peopl          support=  4 auc=0.878 recall=0.67
+[254/276] mixture        support=  4 auc=1.000 recall=1.0
+[255/276] noble          support=  4 auc=1.000 recall=1.0
+[256/276] perhap         support=  4 auc=0.878 recall=0.67
+[257/276] sperm          support=  4 auc=1.000 recall=1.0
+[258/276] death          support=  4 auc=0.956 recall=1.0
+[259/276] blast          support=  4 auc=0.933 recall=1.0
+[260/276] extract        support=  4 auc=0.933 recall=1.0
+[261/276] bon            support=  4 auc=0.900 recall=1.0
+[262/276] remain         support=  4 auc=0.944 recall=1.0
+[263/276] blown          support=  4 auc=0.922 recall=1.0
+[264/276] speak          support=  4 auc=1.000 recall=1.0
+[265/276] message        support=  4 auc=0.978 recall=1.0
+[266/276] determin       support=  4 auc=0.978 recall=1.0
+[267/276] dead           support=  4 auc=0.978 recall=1.0
+[268/276] proce          support=  4 auc=0.944 recall=0.67
+[269/276] grateful       support=  4 auc=0.956 recall=1.0
+[270/276] wrongdoer      support=  4 auc=1.000 recall=1.0
+[271/276] vision         support=  4 auc=1.000 recall=1.0
+[272/276] hasten         support=  4 auc=0.978 recall=1.0
+[273/276] almost         support=  4 auc=0.978 recall=1.0
+[274/276] reveal         support=  4 auc=0.956 recall=1.0
+[275/276] straight       support=  4 auc=1.000 recall=1.0
+[276/276] thrown         support=  4 auc=1.000 recall=1.0
+learned 276

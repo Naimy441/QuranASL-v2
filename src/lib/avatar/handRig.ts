@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import type { Handshape, HandPoint, HandSide } from "../asl/types";
+import { handSkinGeometry } from "./skinnedHand";
 
 // Hand-local frame: origin at the wrist, +Y = finger direction, +Z = palm normal.
 // Right hand: thumb on +X. Left hand: mirrored (thumb on -X). X = Y × Z for both,
@@ -31,7 +32,11 @@ export interface HandRig {
   joints: { mcp: THREE.Object3D; pip: THREE.Object3D; dip: THREE.Object3D; tip: THREE.Object3D }[];
 }
 
-export interface RigMaterials { skin: THREE.Material; nail?: THREE.Material }
+export interface RigMaterials {
+  skin: THREE.Material;
+  nail?: THREE.Material;
+  mode?: "skinned" | "capsule";
+}
 
 function capsule(len: number, r: number, mat: THREE.Material) {
   const g = new THREE.CapsuleGeometry(r, Math.max(0.001, len - r * 0.6), 6, 12);
@@ -41,13 +46,27 @@ function capsule(len: number, r: number, mat: THREE.Material) {
   return m;
 }
 
+/** Pose the skin is bound in: fingers straight and fanned, thumb out, so no surfaces touch. */
+const REST: Handshape = { i: [0, 0, 0, 8], m: [0, 0, 0, 0], r: [0, 0, 0, 6], p: [0, 0, 0, 13], t: [30, 32, 0, 8, 4] };
+
+function nail(r: number, len: number, mat: THREE.Material) {
+  const m = new THREE.Mesh(new THREE.SphereGeometry(r * 0.66, 12, 6), mat);
+  m.scale.set(0.95, 1.25, 0.22);
+  m.position.set(0, len - r * 0.95, -r * 0.6);
+  m.rotation.x = 0.12;
+  return m;
+}
+
 export function buildHandRig(side: HandSide, mats?: RigMaterials): HandRig {
   const s = side === "R" ? 1 : -1;
   const root = new THREE.Group();
   root.name = `hand-${side}`;
   const D = HAND_DIMS;
 
-  if (mats) {
+  const rootBone = new THREE.Bone();
+  root.add(rootBone);
+
+  if (mats?.mode === "capsule") {
     // Palm: a rounded slab, slightly tapered toward the wrist.
     const palmShape = new THREE.Shape();
     const w = D.palmWidth / 2, l = D.palmLen;
@@ -87,57 +106,47 @@ export function buildHandRig(side: HandSide, mats?: RigMaterials): HandRig {
 
   (Object.keys(D.fingers) as FingerKey[]).forEach((k) => {
     const f = D.fingers[k];
-    const mcp = new THREE.Object3D();
+    const mcp = new THREE.Bone();
     mcp.position.set(s * f.x, f.y, 0);
-    const pip = new THREE.Object3D();
+    const pip = new THREE.Bone();
     pip.position.set(0, f.len[0], 0);
-    const dip = new THREE.Object3D();
+    const dip = new THREE.Bone();
     dip.position.set(0, f.len[1], 0);
     const tip = new THREE.Object3D();
     tip.position.set(0, f.len[2], 0);
     mcp.add(pip);
     pip.add(dip);
     dip.add(tip);
-    root.add(mcp);
-    if (mats) {
+    rootBone.add(mcp);
+    if (mats?.mode === "capsule") {
       mcp.add(capsule(f.len[0], f.r, mats.skin));
       pip.add(capsule(f.len[1], f.r * 0.93, mats.skin));
       dip.add(capsule(f.len[2], f.r * 0.86, mats.skin));
-      if (mats.nail) {
-        const nail = new THREE.Mesh(new THREE.SphereGeometry(f.r * 0.75, 10, 6), mats.nail);
-        nail.scale.set(0.95, 1.2, 0.35);
-        nail.position.set(0, f.len[2] - f.r * 0.9, -f.r * 0.62);
-        dip.add(nail);
-      }
     }
+    if (mats?.nail) dip.add(nail(f.r, f.len[2], mats.nail));
     fingerNodes[k] = { mcp, pip, dip, tip };
     joints.push(fingerNodes[k]);
   });
 
   // Thumb: CMC node oriented from (radial abd, palmar abd, roll); MCP/IP flex about local X.
-  const cmc = new THREE.Object3D();
+  const cmc = new THREE.Bone();
   cmc.position.set(s * D.thumb.base[0], D.thumb.base[1], D.thumb.base[2]);
-  const tmcp = new THREE.Object3D();
+  const tmcp = new THREE.Bone();
   tmcp.position.set(0, D.thumb.len[0], 0);
-  const tip_ = new THREE.Object3D();
+  const tip_ = new THREE.Bone();
   tip_.position.set(0, D.thumb.len[1], 0);
   const ttip = new THREE.Object3D();
   ttip.position.set(0, D.thumb.len[2], 0);
   cmc.add(tmcp);
   tmcp.add(tip_);
   tip_.add(ttip);
-  root.add(cmc);
-  if (mats) {
+  rootBone.add(cmc);
+  if (mats?.mode === "capsule") {
     cmc.add(capsule(D.thumb.len[0], D.thumb.r * 1.15, mats.skin));
     tmcp.add(capsule(D.thumb.len[1], D.thumb.r, mats.skin));
     tip_.add(capsule(D.thumb.len[2], D.thumb.r * 0.92, mats.skin));
-    if (mats.nail) {
-      const nail = new THREE.Mesh(new THREE.SphereGeometry(D.thumb.r * 0.72, 10, 6), mats.nail);
-      nail.scale.set(0.95, 1.2, 0.35);
-      nail.position.set(0, D.thumb.len[2] - D.thumb.r * 0.95, -D.thumb.r * 0.62);
-      tip_.add(nail);
-    }
   }
+  if (mats?.nail) tip_.add(nail(D.thumb.r, D.thumb.len[2], mats.nail));
   joints.push({ mcp: cmc, pip: tmcp, dip: tip_, tip: ttip });
 
   // Reference markers
@@ -200,6 +209,18 @@ export function buildHandRig(side: HandSide, mats?: RigMaterials): HandRig {
     root.updateMatrixWorld(true);
     inv.copy(root.matrixWorld).invert();
     return mk.getWorldPosition(out).applyMatrix4(inv);
+  }
+
+  if (mats && mats.mode !== "capsule") {
+    // One continuous skin, bound to the joints in the REST pose.
+    const bones = [rootBone, ...(["i", "m", "r", "p"] as FingerKey[]).flatMap((k) => [fingerNodes[k].mcp, fingerNodes[k].pip, fingerNodes[k].dip]), cmc, tmcp, tip_] as THREE.Bone[];
+    setShape(REST);
+    root.updateMatrixWorld(true);
+    const skin = new THREE.SkinnedMesh(handSkinGeometry(side, bones.map((b) => b.matrixWorld.clone())), mats.skin);
+    skin.castShadow = true;
+    skin.frustumCulled = false;
+    root.add(skin);
+    skin.bind(new THREE.Skeleton(bones));
   }
 
   return { side, root, setShape, point, joints };

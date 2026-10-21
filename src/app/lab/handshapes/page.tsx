@@ -16,29 +16,38 @@ const VIEW_ROT: Record<string, [number, number, number]> = {
   top: [Math.PI / 2, 0, 0],
 };
 
-function Hand({ name, x, y, view }: { name: string; x: number; y: number; view: string }) {
+function Hand({ name, x, y, view, mode }: { name: string; x: number; y: number; view: string; mode?: "skinned" | "capsule" }) {
   const rig = useMemo(() => {
     const r = buildHandRig("R", {
       skin: new THREE.MeshStandardMaterial({ color: "#c58c67", roughness: 0.55 }),
       nail: new THREE.MeshStandardMaterial({ color: "#f0d0c0", roughness: 0.35 }),
+      mode,
     });
     r.setShape(HANDSHAPES[name]);
     r.root.rotation.set(...(VIEW_ROT[view] ?? VIEW_ROT.palm));
     r.root.position.set(x, y, 0);
     return r;
-  }, [name, x, y, view]);
+  }, [name, x, y, view, mode]);
   return <primitive object={rig.root} />;
 }
 
-/** /lab/handshapes?names=A,B,S&views=palm,side  — rows = names, columns = views */
+/** /lab/handshapes?names=A,B,S&views=palm,side&mode=compare|capsule|skinned */
 export default function HandshapeLab() {
   const q = useClientQuery();
   if (!q) return null;
   const names = (q.get("names")?.split(",") ?? Object.keys(HANDSHAPES)).filter((n) => HANDSHAPES[n]);
   const views = q.get("views")?.split(",") ?? ["palm"];
-  const cols = views.length > 1 ? views.length : Math.min(10, names.length);
-  const cells: { name: string; view: string }[] = [];
-  for (const n of names) for (const v of views) cells.push({ name: n, view: v });
+  const modeParam = q.get("mode") ?? "skinned";
+  const modes: ("capsule" | "skinned")[] = modeParam === "compare" ? ["capsule", "skinned"] : [modeParam as "capsule" | "skinned"];
+  const cols = views.length > 1 ? views.length * modes.length : Math.min(10, names.length);
+  const cells: { name: string; view: string; mode: "capsule" | "skinned" }[] = [];
+  for (const n of names) {
+    for (const v of views) {
+      for (const m of modes) {
+        cells.push({ name: n, view: v, mode: m });
+      }
+    }
+  }
   const rows = Math.ceil(cells.length / cols);
   const W = cols * 0.2, Hh = rows * 0.22;
   const tan = Math.tan((17.5 * Math.PI) / 180);
@@ -47,6 +56,7 @@ export default function HandshapeLab() {
   return (
     <div style={{ position: "fixed", inset: 0, background: "#202830" }}>
       <div style={{ position: "absolute", top: 4, left: 8, color: "#ddd", font: "12px monospace", zIndex: 2 }}>
+        {modeParam === "compare" ? "[Before: Capsule  |  After: Skinned Hand]  " : `[Mode: ${modeParam}]  `}
         {views.length > 1 ? names.join(" · ") + "  |  " + views.join(", ") : cells.map((c) => c.name).join(" ")}
       </div>
       <Canvas camera={{ position: [W / 2 - 0.1, -Hh / 2 + 0.16, dist], fov: 35 }}>
@@ -54,7 +64,7 @@ export default function HandshapeLab() {
         <directionalLight position={[1, 2, 3]} intensity={1.6} />
         <directionalLight position={[-2, 1, 1]} intensity={0.5} />
         {cells.map((c, k) => (
-          <Hand key={c.name + c.view} name={c.name} view={c.view} x={(k % cols) * 0.2} y={-Math.floor(k / cols) * 0.22} />
+          <Hand key={c.name + c.view + c.mode} name={c.name} view={c.view} mode={c.mode} x={(k % cols) * 0.2} y={-Math.floor(k / cols) * 0.22} />
         ))}
         <OrbitControls target={[W / 2 - 0.1, -Hh / 2 + 0.16, 0]} />
       </Canvas>
