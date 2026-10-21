@@ -19,7 +19,7 @@ import { getBslLexicon, loadBslLexicon } from "@/lib/bsl/lexicon";
 import { loadBslAyat, type BslAyahClip } from "@/lib/bsl/ayat";
 import { readViewerPrefs, writeLastRead, writeViewerPrefs, type AvatarId, type SignLang } from "@/lib/prefs";
 import { loadSurahTajweed, loadBismillahTajweed, TAJWEED_LEGEND, type TajweedSegment } from "@/lib/tajweed";
-import { InteractiveAyah, TajweedAyah, TajweedWord } from "@/components/quran/TajweedText";
+import { TajweedAyah, TajweedWord } from "@/components/quran/TajweedText";
 import {
   ArrowLeftIcon, ArrowRightIcon, ContinueIcon, CubeIcon, EditIcon, ExpandIcon, InfoIcon, NextIcon, PauseIcon, PlayIcon, PrevIcon,
   RepeatIcon, ShrinkIcon, SquareIcon, VideoIcon, TextIcon,
@@ -51,13 +51,6 @@ function IconToggle({ on, onClick, label, children }: { on: boolean; onClick: ()
   );
 }
 
-const BISMILLAH_WORDS: Word[] = [
-  { ar: "بِسْمِ", tr: "bis'mi", en: "In the name" },
-  { ar: "ٱللَّهِ", tr: "l-lāhi", en: "of Allah" },
-  { ar: "ٱلرَّحْمَـٰنِ", tr: "al-raḥmāni", en: "the Most Gracious" },
-  { ar: "ٱلرَّحِيمِ", tr: "al-raḥīmi", en: "the Most Merciful" },
-];
-
 interface AyahCardProps {
   it: { key: string; label: string; ar: string; en: string; gloss: string; source: string; ayah?: number };
   index: number;
@@ -66,7 +59,6 @@ interface AyahCardProps {
   progress: number;
   tajweed: boolean;
   tajweedWords?: TajweedSegment[][];
-  words?: Word[];
   cardGloss?: { human: boolean; text: string };
   onSelect: (index: number) => void;
 }
@@ -79,7 +71,6 @@ const AyahCard = memo(function AyahCard({
   progress,
   tajweed,
   tajweedWords,
-  words,
   cardGloss,
   onSelect,
 }: AyahCardProps) {
@@ -119,10 +110,9 @@ const AyahCard = memo(function AyahCard({
             </span>
           )}
         </div>
-        <p className="arabic text-right text-[1.7rem] text-ink leading-[2.5]" lang="ar">
-          <InteractiveAyah
-            words={words}
-            tajweedWords={tajweedWords}
+        <p className="arabic text-right text-[1.65rem] text-ink leading-relaxed" lang="ar">
+          <TajweedAyah
+            words={tajweedWords}
             tajweed={tajweed}
             fallbackText={it.ar}
           />
@@ -652,7 +642,6 @@ export default function SurahViewer({ n }: { n: number }) {
                     progress={active ? progress : 0}
                     tajweed={tajweed}
                     tajweedWords={it.key === "b" ? (bismillahTajweed ?? undefined) : ayahIndex >= 0 ? tajweedData?.[ayahIndex] : undefined}
-                    words={it.key === "b" ? BISMILLAH_WORDS : ayahIndex >= 0 && surah ? surah.ayat[ayahIndex]?.w : undefined}
                     cardGloss={cardGloss ? cardGloss[i] : undefined}
                     onSelect={go}
                   />
