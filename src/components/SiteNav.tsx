@@ -157,8 +157,8 @@ export default function SiteNav() {
             className="group flex items-center gap-2.5 font-semibold text-ink"
             aria-label="QuranASL home"
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-line bg-panel-2 transition-transform duration-300 group-hover:scale-105">
-              <LogoMark size={20} className="text-brand transition-transform duration-500 group-hover:rotate-45" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-line bg-panel transition-all duration-300 group-hover:border-brand/40 group-hover:bg-brand-soft/30 group-hover:scale-105 shadow-xs">
+              <LogoMark size={20} className="text-brand transition-transform duration-300 group-hover:scale-110" />
             </div>
             <div className="flex items-center gap-2">
               <span className="text-[15px] font-semibold tracking-tight text-ink">

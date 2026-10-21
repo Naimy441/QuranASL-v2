@@ -57,23 +57,51 @@ export const LayersIcon = (p: P) => <I {...p}><path d="M12 3l9 5-9 5-9-5z" /><pa
 export const TextIcon = (p: P) => <I {...p}><path d="M4 6h16M4 12h10M4 18h13" /></I>;
 export const FaceIcon = (p: P) => <I {...p}><circle cx="12" cy="12" r="9" /><path d="M9 10v.01M15 10v.01M8.5 15a4.5 4.5 0 0 0 7 0" /></I>;
 
-/** The QuranASL mark: an open hand inside an eight-point star. */
-export function LogoMark({ size = 34, className = "" }: { size?: number; className?: string }) {
+/** The QuranASL modern emblem: open Qur'an pages forming elevated signing hands with celestial spark. */
+export function LogoMark({ size = 32, className = "" }: { size?: number; className?: string }) {
   return (
-    <svg viewBox="0 0 40 40" width={size} height={size} aria-hidden className={className}>
+    <svg viewBox="0 0 32 32" width={size} height={size} fill="none" aria-hidden className={className}>
       <defs>
-        <linearGradient id="qasl-logo-g" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="var(--brand)" />
+        <linearGradient id="qasl-logo-grad" x1="6" y1="4" x2="26" y2="28" gradientUnits="userSpaceOnUse">
+          <stop stopColor="var(--brand)" />
           <stop offset="1" stopColor="var(--brand-2)" />
         </linearGradient>
+        <linearGradient id="qasl-logo-glow" x1="16" y1="6" x2="16" y2="25" gradientUnits="userSpaceOnUse">
+          <stop stopColor="var(--brand)" stopOpacity="0.25" />
+          <stop offset="1" stopColor="var(--brand)" stopOpacity="0.02" />
+        </linearGradient>
       </defs>
+
+      {/* Left Wing / Open Mushaf Page */}
       <path
-        d="M20 1.5l5.4 5.6 7.7-.2-.2 7.7 5.6 5.4-5.6 5.4.2 7.7-7.7-.2L20 38.5l-5.4-5.6-7.7.2.2-7.7L1.5 20l5.6-5.4-.2-7.7 7.7.2z"
-        fill="url(#qasl-logo-g)"
+        d="M15.5 24C12 21 7 18.5 7 12.5C7 8.5 10.5 7 14.5 8.8L15.5 24Z"
+        fill="url(#qasl-logo-glow)"
+        stroke="url(#qasl-logo-grad)"
+        strokeWidth="1.7"
+        strokeLinejoin="round"
       />
+
+      {/* Right Wing / Open Mushaf Page */}
       <path
-        fill="var(--brand-ink)"
-        d="M16.6 28.5v-5.7l-2.2-3a1 1 0 0 1 1.6-1.2l1.3 1.6v-7.6a.95.95 0 0 1 1.9 0v5.6h.4v-7a.95.95 0 0 1 1.9 0v7h.4v-6a.95.95 0 0 1 1.9 0v6h.4v-4a.95.95 0 0 1 1.9 0v8.7a5.6 5.6 0 0 1-5.6 5.6z"
+        d="M16.5 24C20 21 25 18.5 25 12.5C25 8.5 21.5 7 17.5 8.8L16.5 24Z"
+        fill="url(#qasl-logo-glow)"
+        stroke="url(#qasl-logo-grad)"
+        strokeWidth="1.7"
+        strokeLinejoin="round"
+      />
+
+      {/* Center Spine */}
+      <path
+        d="M16 8.5V24.5"
+        stroke="url(#qasl-logo-grad)"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
+
+      {/* Zenith Celestial Spark (✦) */}
+      <path
+        d="M16 4L16.7 5.5L18.2 6.2L16.7 6.9L16 8.4L15.3 6.9L13.8 6.2L15.3 5.5Z"
+        fill="var(--brand)"
       />
     </svg>
   );

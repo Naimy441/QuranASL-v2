@@ -1,16 +1,51 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="512" height="512">
   <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#14858d" />
-      <stop offset="100%" stop-color="#084246" />
+    <linearGradient id="qasl-app-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b" />
+      <stop offset="100%" stop-color="#09090b" />
+    </linearGradient>
+    <linearGradient id="qasl-app-stroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2dd4bf" />
+      <stop offset="100%" stop-color="#0d9488" />
+    </linearGradient>
+    <linearGradient id="qasl-app-fill" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#0d9488" stop-opacity="0.05" />
     </linearGradient>
   </defs>
-  <!-- Full squircle badge (edge-to-edge for bold tab visibility) -->
-  <rect x="0" y="0" width="32" height="32" rx="7" fill="url(#g)" />
-  <!-- Islamic geometric 8-point star pattern -->
-  <path d="M16 1.8 L19.8 5.6 L25.4 5.2 L25 10.8 L29.8 14.6 L26 18.4 L26.4 24 L20.8 23.6 L17 28.4 L13.2 24.6 L7.6 25 L8 19.4 L3.2 15.6 L7 11.8 L6.6 6.2 L12.2 6.6 Z" fill="none" stroke="#dfba74" stroke-width="1.0" stroke-opacity="0.55" />
-  <!-- Bold, thick, high-contrast Signing Hand -->
-  <g transform="translate(16, 16.5) scale(1.62) translate(-21.25, -20.0)">
-    <path fill="#ffffff" stroke="#ffffff" stroke-width="0.6" stroke-linejoin="round" d="M16.6 28.5v-5.7l-2.2-3a1 1 0 0 1 1.6-1.2l1.3 1.6v-7.6a.95.95 0 0 1 1.9 0v5.6h.4v-7a.95.95 0 0 1 1.9 0v7h.4v-6a.95.95 0 0 1 1.9 0v6h.4v-4a.95.95 0 0 1 1.9 0v8.7a5.6 5.6 0 0 1-5.6 5.6z" />
-  </g>
+
+  <!-- Squircle App Badge -->
+  <rect width="32" height="32" rx="7.5" fill="url(#qasl-app-bg)" stroke="#27272a" stroke-width="1" />
+
+  <!-- Left Mushaf Page / Signing Hand -->
+  <path
+    d="M15.5 24C12 21 7 18.5 7 12.5C7 8.5 10.5 7 14.5 8.8L15.5 24Z"
+    fill="url(#qasl-app-fill)"
+    stroke="url(#qasl-app-stroke)"
+    stroke-width="1.6"
+    stroke-linejoin="round"
+  />
+
+  <!-- Right Mushaf Page / Signing Hand -->
+  <path
+    d="M16.5 24C20 21 25 18.5 25 12.5C25 8.5 21.5 7 17.5 8.8L16.5 24Z"
+    fill="url(#qasl-app-fill)"
+    stroke="url(#qasl-app-stroke)"
+    stroke-width="1.6"
+    stroke-linejoin="round"
+  />
+
+  <!-- Sacred Spine -->
+  <path
+    d="M16 8.5V24.5"
+    stroke="url(#qasl-app-stroke)"
+    stroke-width="1.6"
+    stroke-linecap="round"
+  />
+
+  <!-- Zenith Celestial Spark (✦) -->
+  <path
+    d="M16 4L16.7 5.5L18.2 6.2L16.7 6.9L16 8.4L15.3 6.9L13.8 6.2L15.3 5.5Z"
+    fill="#2dd4bf"
+  />
 </svg>
