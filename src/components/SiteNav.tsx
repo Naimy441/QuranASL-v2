@@ -14,6 +14,7 @@ const LINKS = [
   { href: "/#methodology", label: "Methodology" },
   { href: "/practice", label: "Practice Lab" },
   { href: "/studio", label: "Gloss Studio" },
+  { href: "/review", label: "Review" },
   { href: "/about", label: "Documentation" },
 ];
 

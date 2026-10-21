@@ -33,13 +33,13 @@ DATE-PALM | =fs:PALM+TREE | palm tree,palm trees,date palm | low
 FIG | =fs:FIG | fig | low
 OLIVE | =fs:OLIVE | olive,olives | low
 ANIMAL | bent5 @chestSide p:B f:I at:tipM > @chestSide:o3 at:tipM d:0.12 ;sym x2 | animal,animals,beast,beasts,cattle,livestock | high
-HORSE | U @temple:f2 p:F f:U at:tipT > bentH d:0.1 ;x2 | horse,horses,steed | high
+HORSE | U @temple:u2 p:F f:UO at:tipT > bentH d:0.1 ;x2 | horse,horses,steed | high
 CAMEL | =fs:CAMEL | camel,camels,she-camel | low
 ELEPHANT | bentB @nose:f2 p:D f:F at:back > @neutral:d4f18 p:D f:FD ~arc:f6 d:0.45 | elephant | high
 BIRD | G @mouth:f2 p:I f:F at:tipI > baby0 d:0.1 ;x2 | bird,birds | high
 FISH | B @neutral p:I f:F > @neutral:f6 ~twist:30 d:0.4 | fish,whale | high
 INSECT | =fs:BUG | insect,moth,moths | low
-DONKEY | B @temple p:F f:U at:heel > bentB d:0.12 ;x2 | donkey,donkeys,ass | high
+DONKEY | B @temple:u2 p:F f:UO at:radial > bentB d:0.12 ;x2 | donkey,donkeys,ass | high
 LION | claw5 @forehead:u4 p:D f:F > @headTop:b8 d:0.4 | lion | high
 STONE | S @base.back:u3 p:D f:F > @base.back d:0.1 ;x2 | S @neutral p:D f:FI | stone,stones,rock,rocks | high
 IRON | =fs:IRON | iron | low
@@ -71,7 +71,7 @@ CHAIN | F @neutral:o2 p:I f:F > @neutral:o8 d:0.15 ;sym x2 | chain,chains,shackl
 FOOD | flatO @lips:f2 p:B f:U at:tipM > @lips at:tipM d:0.12 ;x2 | food,eat,ate,meal,provision | high
 EAT | =FOOD | eat,ate,eating,consume | high
 FEED | flatO @neutral:u8 p:U f:F > @far:u8 d:0.2 ;sym x2 | feed,fed,nourish | high
-DRINK | C @chin:f6 p:I f:U > @chin:f3 p:I f:UB d:0.25 | drink,drank,drinking,beverage | high
+DRINK | C @mouth:f5 p:I f:U > @mouth:f3 p:I f:UB d:0.25 | drink,drank,drinking,beverage | high
 HUNGRY | C @chest:u4 p:B f:I > @chest:d6 d:0.3 | hunger,hungry,starvation | high
 THIRSTY | 1 @neck:u2 p:B f:U at:tipI > @neck:d4 at:tipI d:0.3 | thirst,thirsty | high
 MONEY | flatO @base.palm:u4 p:U f:F > @base.palm:u1 d:0.12 ;x2 | B @neutral p:U f:FI | money,wealth,riches,property,possessions | high
@@ -88,7 +88,7 @@ GREEN | G @neutral:u6 p:B f:U ~twist:35 | green | high
 YELLOW | Y @neutral:u6 p:B f:U ~twist:35 | yellow | high
 BLOOD | =RED+FLOW | blood | high
 BODY | B @chestSide p:B f:I > @stomach:o8 d:0.3 ;sym | body,bodies | high
-FACE | 1 @face:f-8 p:B f:U ~circle:F7x1 | face,faces | high
+FACE | 1 @face:f-4 p:B f:U ~circle:F6x1 | face,faces | high
 EYE | 1 @eye:f3 p:I f:B at:tipI | eye,eyes,sight | high
 EAR | 1 @ear:f3i2 p:F f:O at:tipI | ear,ears | high
 MOUTH | 1 @mouth:f3 p:I f:B at:tipI ~circle:F2x1 | mouth,lips,tongue | high

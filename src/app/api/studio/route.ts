@@ -1,28 +1,41 @@
-import fs from "node:fs/promises";
-import path from "node:path";
+import { normalizeBundle } from "@/lib/review/bundle";
+import { applyMerge, planMerge, renderDiff } from "@/lib/review/merge";
+import { BUNDLE_FORMAT, BUNDLE_VERSION, type ContributionBundle } from "@/lib/review/types";
 
-// Development-only: lets maintainers write Studio edits straight into data/gloss/*.txt
-// and data/lexicon-overrides.json. Disabled in production builds.
+// Development-only: lets maintainers merge Studio contributions straight into the
+// repository (data/gloss, the lexicon, public/data/reviews.json, data/contrib).
+// Same validation as scripts/merge-contributions.ts. Disabled in production builds.
+//
+//   { action: "merge", bundle, dryRun?, force? }   validate (+ write unless dryRun)
+//   { surah, ayah, gloss }                          legacy single-gloss write
 export async function POST(req: Request) {
   if (process.env.NODE_ENV !== "development") return new Response("disabled", { status: 403 });
-  const { surah, ayah, gloss, signs } = await req.json();
-  const n = Number(surah), a = Number(ayah);
-  if (!(n >= 1 && n <= 114 && a >= 1) || typeof gloss !== "string" || /\n/.test(gloss)) return new Response("bad request", { status: 400 });
-  const file = path.join(process.cwd(), "data/gloss", `${String(n).padStart(3, "0")}.txt`);
-  let text = "";
+  const body = (await req.json().catch(() => null)) as Record<string, unknown> | null;
+  if (!body) return Response.json({ ok: false, errors: ["bad JSON"] }, { status: 400 });
+
+  let bundle: ContributionBundle;
   try {
-    text = await fs.readFile(file, "utf8");
-  } catch {
-    text = `# ${n}\n`;
+    if (body.action === "merge") bundle = normalizeBundle(body.bundle);
+    else {
+      const n = Number(body.surah), a = Number(body.ayah);
+      if (!(n >= 1 && n <= 114 && a >= 1) || typeof body.gloss !== "string") return Response.json({ ok: false, errors: ["bad request"] }, { status: 400 });
+      const at = new Date().toISOString();
+      bundle = { format: BUNDLE_FORMAT, version: BUNDLE_VERSION, exportedAt: at, reviewer: "", glosses: [{ surah: n, ayah: a, gloss: body.gloss, base: null, at }], signs: [], reviews: [], recordings: [] };
+    }
+  } catch (e) {
+    return Response.json({ ok: false, errors: [(e as Error).message] }, { status: 400 });
   }
-  const lines = text.split("\n");
-  const i = lines.findIndex((l) => l.startsWith(`${a}:`));
-  if (i >= 0) lines[i] = `${a}: ${gloss}`;
-  else lines.push(`${a}: ${gloss}`);
-  const sorted = [...lines.filter((l) => !/^\d+:/.test(l) && l.trim()), ...lines.filter((l) => /^\d+:/.test(l)).sort((x, y) => parseInt(x) - parseInt(y))];
-  await fs.writeFile(file, sorted.join("\n") + "\n");
-  if (signs && typeof signs === "object") {
-    await fs.writeFile(path.join(process.cwd(), "data/lexicon-overrides.json"), JSON.stringify(signs, null, 2));
-  }
-  return Response.json({ ok: true });
+
+  const plan = planMerge(bundle, { force: body.force === true });
+  const dryRun = body.dryRun === true;
+  if (!dryRun) applyMerge(plan);
+  return Response.json({
+    ok: plan.errors.length === 0,
+    applied: !dryRun && plan.changes.length > 0,
+    errors: plan.errors,
+    warnings: plan.warnings,
+    summary: plan.summary,
+    files: plan.changes.map((c) => c.file),
+    diff: renderDiff(plan),
+  });
 }

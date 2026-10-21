@@ -7,13 +7,14 @@ import { compileSign, validateDef } from "@/lib/asl/dsl";
 import { animateGloss } from "@/lib/asl/gloss";
 import { getBslLexicon } from "@/lib/bsl/lexicon";
 import { loadBslAyat, type BslAyahClip } from "@/lib/bsl/ayat";
-import { mocapSign } from "@/lib/asl/mocap";
+import { mocapSign, type MocapClip } from "@/lib/asl/mocap";
 import { useClientQuery } from "@/lib/hooks/useClientQuery";
 import { useMocapReady } from "@/lib/hooks/useMocap";
 
 /**
  * Dev lab: /lab/sign?def=<dsl>&t=<seconds>  (t freezes playback at that time)
  *          /lab/sign?gloss=ALLAH,MERCY       (uses the lexicon)
+ *          /lab/sign?clip=/data/_qa/x.json   (any retargeted clip, for side-by-side QA)
  */
 export default function SignLab() {
   const q = useClientQuery();
@@ -35,6 +36,11 @@ function Lab({ q }: { q: URLSearchParams }) {
     const [s, a] = ref.split(":").map(Number);
     loadBslAyat(s).then((d) => setBslClip(d?.[a] ?? null));
   }, [q]);
+  useEffect(() => {
+    const url = q.get("clip");
+    if (!url) return;
+    fetch(url).then((r) => r.json()).then((c: MocapClip) => setBslClip(c as BslAyahClip));
+  }, [q]);
   const err = validateDef(def);
   const tl = useMemo(() => {
     if (err) return null;
@@ -50,7 +56,7 @@ function Lab({ q }: { q: URLSearchParams }) {
     (window as unknown as { __tl: unknown }).__tl = tl;
   }, [tl]);
   return (
-    <div style={{ position: "fixed", inset: 0, display: "flex", flexDirection: "column", background: "linear-gradient(#dfe5ec, #c3ccd6)", color: "#222", fontFamily: "monospace" }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", flexDirection: "column", background: "linear-gradient(#dfe5ec, #c3ccd6)", color: "#222", fontFamily: "monospace" }}>
       <div style={{ flex: 1, minHeight: 0 }}>
         <AvatarCanvas className="h-full w-full" timeline={tl} playback={pb} onTime={setT} mode={view} avatar={avatar} framing={q.get("framing") === "face" ? "face" : "body"} />
       </div>

@@ -1,0 +1,1 @@
+{"1":{"cov":1,"missing":[],"n":5,"flags":["sign-fix"],"signs":["QURAN"]},"2":{"cov":1,"missing":[],"n":5,"flags":[]},"3":{"cov":1,"missing":[],"n":5,"flags":[]},"4":{"cov":0.71,"missing":["gabriel","matter"],"n":8,"flags":[]},"5":{"cov":0.75,"missing":["emergence"],"n":3,"flags":[]}}

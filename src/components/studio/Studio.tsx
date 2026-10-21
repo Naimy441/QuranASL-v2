@@ -1,481 +1,626 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { BookOpen, ChevronLeft, ChevronRight, Hand, Keyboard, ListChecks, Pause, Play, Plus, Redo2, RotateCcw, SkipForward, Type, Undo2, Video } from "lucide-react";
 import type { PlaybackState } from "@/components/avatar/AvatarCanvas";
-import { animateGloss, NMS, parseGloss, type GlossToken } from "@/lib/asl/gloss";
-import { getLexicon, overrideEntries } from "@/lib/asl/lexicon";
+import HumanVideos from "@/components/viewer/HumanVideos";
+import { animateGloss } from "@/lib/asl/gloss";
+import { compileSign } from "@/lib/asl/dsl";
+import { getLexicon, Lexicon, overrideEntries } from "@/lib/asl/lexicon";
+import { buildTimeline, type Timeline } from "@/lib/asl/timeline";
+import type { SignEntry } from "@/lib/asl/types";
 import { validateDef } from "@/lib/asl/dsl";
+import { loadBslAyat, type BslAyahClip } from "@/lib/bsl/ayat";
 import { loadGloss, loadSurah, loadSurahList, type GlossFile, type Surah, type SurahMeta } from "@/lib/data/quran";
-import { allOverrides, loadOverrides, saveOverride } from "@/lib/studio/overrides";
-import { loadSignOverrides, saveSignOverride, loadReviews, saveReview } from "@/lib/studio/signOverrides";
-import GlossStrip from "@/components/viewer/GlossStrip";
+import { humanVideos } from "@/lib/data/human-videos";
 import { useMocapReady } from "@/lib/hooks/useMocap";
+import { useAllEvents } from "@/lib/review/client";
+import { ayahKey, ReviewIndex } from "@/lib/review/status";
+import { addReview, dropGlossDraft, dropSignDraft, getLocalReview, saveGlossDraft, saveSignDraft, useLocalReview } from "@/lib/review/store";
+import type { ReviewStatus } from "@/lib/review/types";
+import { loadSignOverrides } from "@/lib/studio/signOverrides";
+import ChipEditor from "./ChipEditor";
+import ChipTimeline from "./ChipTimeline";
+import { newKey, toChips, toGloss, useChipHistory, type Chip } from "./chips";
+import Contributions from "./Contributions";
+import ReviewPanel from "./ReviewPanel";
+import SignPanel from "./SignPanel";
+import SignPicker from "./SignPicker";
+import { Btn, IconBtn, Panel } from "./ui";
 
 const AvatarCanvas = dynamic(() => import("@/components/avatar/AvatarCanvas"), { ssr: false });
 
-type Chip = Pick<GlossToken, "kind" | "gloss" | "locus" | "repeat" | "tags"> & { key: number; raw?: string };
-const TAGS = Object.keys(NMS);
-const LOCI = ["", "a", "b", "c", "up"];
-let keySeq = 1;
+interface QueueItem { s: number; a: number; flags: string[] }
+interface SignRow { id: string; uses: number; key: number; path: number; conf?: string }
+type PickFor = { mode: "replace" | "before" | "after" | "append" | "sign"; at: number };
 
-function toChips(src: string): Chip[] {
-  return parseGloss(src).map((t) => ({ key: keySeq++, kind: t.kind, gloss: t.kind === "pause" ? t.raw : t.gloss, locus: t.locus, repeat: t.repeat, tags: [...t.tags] }));
+/** Dictionary entries as the repository has them, before this browser's drafts are applied. */
+const originals = new Map<string, SignEntry | null>();
+function applyDrafts() {
+  const lex = getLexicon();
+  const drafts = Object.values(loadSignOverrides());
+  for (const d of drafts) if (!originals.has(d.id)) originals.set(d.id, lex.get(d.id) ?? null);
+  overrideEntries(drafts);
 }
 
-function chipText(c: Chip) {
-  if (c.kind === "pause") return c.gloss;
-  if (c.kind === "fs") return "fs:" + c.gloss;
-  return c.gloss + (c.locus ? ":" + c.locus : "") + (c.repeat ? "+" : "");
+const jsonP = new Map<string, Promise<unknown>>();
+function getJSON<T>(u: string, d: T): Promise<T> {
+  if (!jsonP.has(u)) jsonP.set(u, fetch(u).then((r) => (r.ok ? r.json() : d)).catch(() => d));
+  return jsonP.get(u) as Promise<T>;
 }
 
-/** Serialise chips back to gloss notation, grouping runs that share facial grammar. */
-function toGloss(chips: Chip[]): string {
-  const out: string[] = [];
-  let i = 0;
-  while (i < chips.length) {
-    const key = chips[i].tags.join(" ");
-    let j = i;
-    while (j < chips.length && chips[j].tags.join(" ") === key) j++;
-    // trailing pauses stay outside the bracket
-    let k = j;
-    while (k > i && chips[k - 1].kind === "pause" && key) k--;
-    const body = chips.slice(i, k).map(chipText).join(" ");
-    if (key && body) out.push(`[${[...new Set(chips[i].tags)].join(" ")}: ${body}]`);
-    else if (body) out.push(body);
-    out.push(...chips.slice(k, j).map(chipText));
-    i = j;
-  }
-  return out.join(" ").replace(/\s+([,.?!])/g, " $1");
+/** Where to start, from the address (this component only renders in the browser). */
+function fromUrl() {
+  const q = new URLSearchParams(window.location.search);
+  const sign = q.get("sign")?.toUpperCase() ?? "";
+  return {
+    mode: (sign ? "sign" : "ayah") as "ayah" | "sign",
+    n: Math.max(1, Math.min(114, +(q.get("surah") ?? 1) || 1)),
+    ayah: Math.max(1, +(q.get("ayah") ?? 1) || 1),
+    sign,
+    queue: { flag: q.get("flag") ?? undefined, surah: q.get("qs") ? +q.get("qs")! : undefined },
+  };
 }
 
 export default function Studio() {
-  const [list, setList] = useState<SurahMeta[]>([]);
-  const [n, setN] = useState(1);
-  const [ayah, setAyah] = useState(1);
-  const [surah, setSurah] = useState<Surah | null>(null);
-  const [gfile, setGfile] = useState<GlossFile | null>(null);
-  const [chips, setChips] = useState<Chip[]>([]);
-  const [text, setText] = useState("");
-  const [sel, setSel] = useState<number | null>(null);
-  const [dirty, setDirty] = useState(false);
-  const [tab, setTab] = useState<"gloss" | "sign">("gloss");
-  const [signId, setSignId] = useState("");
-  const [signDef, setSignDef] = useState("");
-  const [reviewer, setReviewer] = useState("");
-  const [msg, setMsg] = useState("");
-  const [time, setTime] = useState(0);
-  const [lexVer, setLexVer] = useState(0);
-  const pb = useRef<PlaybackState>({ time: 0, playing: false, rate: 0.85, loop: false });
-  const dragFrom = useRef<number | null>(null);
+  const [init] = useState(fromUrl);
+  const local = useLocalReview();
+  const events = useAllEvents(local.events);
+  const index = useMemo(() => new ReviewIndex(events), [events]);
   const mocapReady = useMocapReady();
 
-  // initial selection from the URL, sign overrides from storage
-  useEffect(() => {
-    const q = new URLSearchParams(window.location.search);
-    if (q.get("surah")) setN(+q.get("surah")!);
-    if (q.get("ayah")) setAyah(+q.get("ayah")!);
-    if (q.get("sign")) {
-      setTab("sign");
-      setSignId(q.get("sign")!);
-    }
-    overrideEntries(Object.values(loadSignOverrides()));
-    setLexVer((v) => v + 1);
-    loadSurahList().then(setList);
-    try {
-      setReviewer(localStorage.getItem("qasl-reviewer") ?? "");
-    } catch {}
-  }, []);
+  const [mode, setMode] = useState<"ayah" | "sign">(init.mode);
+  const [list, setList] = useState<SurahMeta[]>([]);
+  const [n, setN] = useState(init.n);
+  const [ayah, setAyah] = useState(init.ayah);
+  const [surah, setSurah] = useState<Surah | null>(null);
+  const [gfile, setGfile] = useState<GlossFile | null>(null);
+  const [bsl, setBsl] = useState<Record<string, BslAyahClip> | null>(null);
+  const hist = useChipHistory();
+  const { chips } = hist;
+  const [sel, setSel] = useState<number | null>(null);
+  const [showText, setShowText] = useState(false);
+  const [text, setText] = useState("");
+  const [picker, setPicker] = useState<PickFor | null>(null);
+  const [signId, setSignId] = useState(init.sign);
+  const [signDef, setSignDef] = useState("");
+  const [lexVer, setLexVer] = useState(0);
+  const [time, setTime] = useState(0);
+  const [playing, setPlaying] = useState(true);
+  const [rate, setRate] = useState(0.85);
+  const [msg, setMsg] = useState("");
+  const queueFilter = init.queue;
+  const pb = useRef<PlaybackState>({ time: 0, playing: true, rate: 0.85, loop: false });
+  const loadedKey = useRef("");
 
   useEffect(() => {
+    applyDrafts();
+    setLexVer((v) => v + 1);
+    loadSurahList().then(setList);
+  }, []);
+
+  // keep the address bar in step so a link or reload returns here
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    for (const k of ["surah", "ayah", "sign"]) q.delete(k);
+    if (mode === "sign" && signId) q.set("sign", signId);
+    else {
+      q.set("surah", String(n));
+      q.set("ayah", String(ayah));
+    }
+    window.history.replaceState(null, "", `${window.location.pathname}?${q}`);
+  }, [mode, n, ayah, signId]);
+
+  useEffect(() => {
+    let live = true;
     Promise.all([loadSurah(n), loadGloss(n)]).then(([s, g]) => {
+      if (!live) return;
       setSurah(s);
       setGfile(g);
     });
+    loadBslAyat(n).then((b) => live && setBsl(b));
+    return () => {
+      live = false;
+    };
   }, [n]);
 
-  const original = gfile?.ayat[ayah];
+  // ---- ayah gloss ----
+  const base = gfile?.ayat[ayah]?.gloss ?? "";
+  const key = ayahKey(n, ayah);
+  const draft = local.glosses[key];
   useEffect(() => {
-    if (!gfile) return;
-    const ov = loadOverrides(n)[ayah];
-    const src = ov ?? gfile.ayat[ayah]?.gloss ?? "";
-    setChips(toChips(src));
+    if (!gfile || gfile.surah !== n) return;
+    if (loadedKey.current === key) return;
+    loadedKey.current = key;
+    // a draft that now matches the published gloss has been merged
+    const canon = toGloss(toChips(base));
+    if (draft && (draft.gloss.trim() === base.trim() || draft.gloss === canon)) dropGlossDraft(n, ayah);
+    const src = draft && draft.gloss.trim() !== base.trim() && draft.gloss !== canon ? draft.gloss : base;
+    hist.reset(toChips(src));
     setText(src);
-    setDirty(false);
     setSel(null);
-  }, [gfile, n, ayah]);
+  }, [gfile, n, ayah, key, base, draft, hist]);
 
   const gloss = useMemo(() => toGloss(chips), [chips]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const anim = useMemo(() => (gloss ? animateGloss(gloss) : null), [gloss, lexVer, mocapReady]);
+  // the published gloss as the chip editor writes it (spacing / bracket grouping normalised)
+  const baseCanon = useMemo(() => toGloss(toChips(base)), [base]);
+  const edited = gloss !== baseCanon;
+  const fromText = useRef(false);
+  const commit = useCallback((next: Chip[], coalesce?: string) => hist.set(next, coalesce), [hist]);
+  // every change (edit, undo, redo) is kept as this browser's draft of the ayah
   useEffect(() => {
-    pb.current.time = 0;
-    pb.current.playing = true;
-  }, [anim]);
+    if (loadedKey.current !== key || !gfile) return;
+    if (!fromText.current) setText(gloss);
+    fromText.current = false;
+    const d = getLocalReview().glosses[key];
+    if (gloss === baseCanon) d && dropGlossDraft(n, ayah);
+    else if (d?.gloss !== gloss) saveGlossDraft(n, ayah, gloss, base);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gloss]);
 
-  const update = (next: Chip[]) => {
-    setChips(next);
-    setText(toGloss(next));
-    setDirty(true);
-  };
-  const patch = (i: number, p: Partial<Chip>) => update(chips.map((c, k) => (k === i ? { ...c, ...p } : c)));
   const move = (from: number, to: number) => {
     if (to < 0 || to >= chips.length || from === to) return;
     const next = [...chips];
     const [c] = next.splice(from, 1);
     next.splice(to, 0, c);
-    update(next);
+    commit(next);
     setSel(to);
   };
-
-  const lex = getLexicon();
-  const allIds = useMemo(() => [...lex.entries.keys()].sort(), [lex, lexVer]);
-  const a = surah?.ayat[ayah - 1];
-  const reviews = loadReviews();
-  const reviewKey = `${n}:${ayah}`;
-
-  const save = () => {
-    saveOverride(n, ayah, gloss);
-    setDirty(false);
-    setMsg("Saved in this browser. Export to share with the project.");
+  const patch = (i: number, p: Partial<Chip>) => commit(chips.map((c, k) => (k === i ? { ...c, ...p } : c)));
+  const del = (i: number) => {
+    commit(chips.filter((_, k) => k !== i));
+    setSel(null);
   };
-  const revert = () => {
-    saveOverride(n, ayah, null);
-    const src = gfile?.ayat[ayah]?.gloss ?? "";
-    setChips(toChips(src));
-    setText(src);
-    setDirty(false);
-  };
-  const exportAll = () => {
-    const data = { exportedAt: new Date().toISOString(), reviewer, glosses: allOverrides(), signs: loadSignOverrides(), reviews: loadReviews() };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const el = document.createElement("a");
-    el.href = url;
-    el.download = `quranasl-contributions-${Date.now()}.json`;
-    el.click();
-    URL.revokeObjectURL(url);
-  };
-  const saveToRepo = async () => {
-    const r = await fetch("/api/studio", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ surah: n, ayah, gloss, signs: loadSignOverrides() }) });
-    setMsg(r.ok ? "Written to data/gloss — rebuild to publish." : `Repo save unavailable (${r.status}).`);
-  };
-  const markReviewed = () => {
-    if (!reviewer.trim()) {
-      setMsg("Enter your name to sign off a review.");
+  const onPicked = (r: { kind: "sign" | "fs"; gloss: string }) => {
+    const p = picker;
+    setPicker(null);
+    if (!p) return;
+    if (p.mode === "sign") {
+      setSignId(r.gloss);
       return;
     }
-    try {
-      localStorage.setItem("qasl-reviewer", reviewer);
-    } catch {}
-    saveReview(reviewKey, { by: reviewer, at: new Date().toISOString(), gloss });
-    setMsg(`Marked ${reviewKey} as reviewed by ${reviewer}.`);
+    const chip: Chip = { key: newKey(), kind: r.kind, gloss: r.gloss, tags: p.mode === "append" ? [] : [...(chips[p.at]?.tags ?? [])] };
+    if (p.mode === "replace") {
+      patch(p.at, { kind: r.kind, gloss: r.gloss });
+      return;
+    }
+    // "Add sign" goes before a closing . or ?
+    const end = chips.length && chips[chips.length - 1].kind === "pause" && chips[chips.length - 1].gloss !== "," ? chips.length - 1 : chips.length;
+    const at = p.mode === "before" ? p.at : p.mode === "after" ? p.at + 1 : end;
+    const next = [...chips];
+    next.splice(at, 0, chip);
+    commit(next);
+    setSel(at);
   };
 
   // ---- sign editor ----
+  const lex = getLexicon();
+  const repoDef = signId ? (local.signs[signId]?.base ?? (originals.has(signId) ? (originals.get(signId)?.def ?? null) : (lex.get(signId)?.def ?? null))) : null;
   useEffect(() => {
     if (!signId) return;
-    const e = lex.get(signId);
-    setSignDef(e?.def ?? "");
-  }, [signId, lex, lexVer]);
-  const signErr = signDef ? (signDef.startsWith("=") ? null : validateDef(signDef)) : "empty";
-  const signAnim = useMemo(() => {
-    if (tab !== "sign" || !signId || signErr) return null;
-    const tmp = getLexicon();
-    const prev = tmp.get(signId);
-    tmp.add({ ...(prev ?? { id: signId, en: [] }), id: signId, def: signDef });
+    setSignDef(local.signs[signId]?.def ?? lex.get(signId)?.def ?? "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signId]);
+  const signErr = useMemo(() => {
+    if (!signDef.trim()) return "Write a definition";
+    if (signDef.startsWith("=")) {
+      const bad = signDef.slice(1).split("+").map((p) => p.trim()).filter((p) => !p || (!p.startsWith("fs:") && !lex.has(p)));
+      return bad.length ? `Unknown sign${bad.length > 1 ? "s" : ""} in compound: ${bad.join(", ")}` : null;
+    }
+    return validateDef(signDef);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signDef, lexVer]);
+  const signTimeline = useMemo<Timeline | null>(() => {
+    if (mode !== "sign" || !signId || signErr) return null;
     try {
-      return animateGloss(signId);
+      const sign = signDef.startsWith("=")
+        ? (() => {
+            const tmp = new Lexicon([...lex.entries.values()], lex.lang, lex.spell);
+            tmp.add({ id: signId, def: signDef, en: [] });
+            return tmp.compile(signId);
+          })()
+        : compileSign(signId, signDef);
+      return buildTimeline([{ index: 0, label: signId, kind: "sign", sign }]);
     } catch {
       return null;
-    } finally {
-      if (prev) tmp.add(prev);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab, signId, signDef, signErr, mocapReady]);
+  }, [mode, signId, signDef, signErr, lexVer, mocapReady]);
+
   const saveSign = () => {
-    const prev = lex.get(signId);
-    const entry = { ...(prev ?? { id: signId, en: [], conf: "low" as const }), id: signId, def: signDef, src: `studio:${reviewer || "anon"}` };
-    saveSignOverride(entry);
-    overrideEntries([entry]);
+    const cur = lex.get(signId);
+    if (!originals.has(signId)) originals.set(signId, cur ?? null);
+    const orig = originals.get(signId);
+    saveSignDraft({ id: signId, def: signDef, en: cur?.en, conf: cur?.conf ?? "low", note: cur?.note, base: orig?.def ?? null });
+    overrideEntries([{ ...(cur ?? { id: signId, en: [], conf: "low" as const }), id: signId, def: signDef }]);
     setLexVer((v) => v + 1);
     setMsg(`Sign ${signId} saved in this browser.`);
   };
+  const revertSign = () => {
+    dropSignDraft(signId);
+    const orig = originals.get(signId);
+    if (orig) overrideEntries([orig]);
+    else if (orig === null) lex.entries.delete(signId);
+    setSignDef(orig?.def ?? lex.get(signId)?.def ?? "");
+    setLexVer((v) => v + 1);
+    setMsg(`Sign ${signId} is back to the dictionary version.`);
+  };
 
-  const shown = tab === "sign" ? signAnim : anim;
-  const activeTok = useMemo(() => {
-    const it = shown?.timeline.items.find((x) => time >= x.start && time <= x.end && x.kind !== "pause");
-    return it?.index ?? -1;
-  }, [shown, time]);
-
+  // ---- playback ----
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const anim = useMemo(() => (mode === "ayah" && gloss ? animateGloss(gloss) : null), [mode, gloss, lexVer, mocapReady]);
+  const timeline = mode === "sign" ? signTimeline : (anim?.timeline ?? null);
+  useEffect(() => {
+    pb.current.time = 0;
+    pb.current.playing = true;
+    setPlaying(true);
+  }, [timeline]);
+  useEffect(() => {
+    pb.current.rate = rate;
+  }, [rate]);
+  // a single sign loops so it can be watched again and again while fixing it
+  useEffect(() => {
+    pb.current.loop = mode === "sign";
+  }, [mode]);
   const replay = useCallback(() => {
     pb.current.time = 0;
     pb.current.playing = true;
+    setPlaying(true);
+  }, []);
+  const togglePlay = () => {
+    pb.current.playing = !pb.current.playing;
+    setPlaying(pb.current.playing);
+  };
+  const activeTok = useMemo(() => {
+    const it = anim?.timeline.items.find((x) => time >= x.start && time <= x.end && x.kind !== "pause");
+    return it?.index ?? -1;
+  }, [anim, time]);
+  const seekChip = (i: number) => {
+    const it = anim?.timeline.items.find((x) => x.index === i);
+    if (it) {
+      pb.current.time = Math.max(0, it.start - 0.15);
+      pb.current.playing = true;
+      setPlaying(true);
+    }
+  };
+
+  // ---- review decisions ----
+  const decideAyah = (status: ReviewStatus, comment: string) => {
+    addReview("ayah", key, status, { gloss, comment });
+    setMsg(status === "approved" ? `${key} approved.` : `${key} marked: needs changes.`);
+  };
+  const decideSign = (status: ReviewStatus, comment: string) => {
+    addReview("sign", signId, status, { def: signDef, comment });
+    setMsg(status === "approved" ? `${signId} approved.` : `${signId} marked: needs changes.`);
+  };
+
+  // ---- queue ----
+  const [queue, setQueue] = useState<QueueItem[]>([]);
+  const [signRows, setSignRows] = useState<SignRow[]>([]);
+  const [freq, setFreq] = useState<Record<string, number>>({});
+  useEffect(() => {
+    getJSON<QueueItem[]>("/data/audit/queue.json", []).then(setQueue);
+    getJSON<SignRow[]>("/data/audit/signs.json", []).then(setSignRows);
+    getJSON<Record<string, number>>("/data/gloss/freq.json", {}).then(setFreq);
+  }, []);
+  const nextAyah = () => {
+    const nc = [...index.all("ayah")].filter(([, s]) => s.status === "needs-changes").map(([k]) => k);
+    const flagged = queue.filter((q) => (!queueFilter.flag || q.flags.includes(queueFilter.flag)) && (!queueFilter.surah || q.s === queueFilter.surah)).map((q) => ayahKey(q.s, q.a));
+    const order = [...new Set([...nc, ...flagged])];
+    const pick = nextIn(order, key, (k) => index.get("ayah", k).status !== "approved");
+    if (!pick) return setMsg("Nothing left in the queue.");
+    const [s, a] = pick.split(":").map(Number);
+    setMode("ayah");
+    setN(s);
+    setAyah(a);
+    setMsg(`Next in queue: ${pick}`);
+  };
+  const nextSign = () => {
+    const nc = [...index.all("sign")].filter(([, s]) => s.status === "needs-changes").map(([k]) => k);
+    const rows = signRows.filter((r) => !r.id.endsWith(".drawn"));
+    const bad = rows.filter((r) => Math.max(r.key, r.path) > 0.02).sort((a, b) => b.uses - a.uses).map((r) => r.id);
+    const low = rows.filter((r) => r.conf === "low").sort((a, b) => b.uses - a.uses).map((r) => r.id);
+    const pick = nextIn([...new Set([...nc, ...bad, ...low])], signId, (k) => index.get("sign", k).status !== "approved");
+    if (!pick) return setMsg("No more signs to review.");
+    setSignId(pick);
+    setMsg(`Next sign: ${pick}`);
+  };
+  const ayahCount = surah?.ayahs ?? list.find((s) => s.n === n)?.ayahs ?? 1;
+  const step = (d: number) => {
+    if (ayah + d >= 1 && ayah + d <= ayahCount) return setAyah(ayah + d);
+    const m = list.find((s) => s.n === n + d);
+    if (!m) return;
+    setN(m.n);
+    setAyah(d > 0 ? 1 : m.ayahs);
+  };
+
+  // ---- keyboard ----
+  const keyRef = useRef<(e: KeyboardEvent) => void>(() => {});
+  useEffect(() => {
+    keyRef.current = (e: KeyboardEvent) => {
+      if (e.defaultPrevented || picker) return;
+      const t = e.target as HTMLElement;
+      const typing = t.closest("input, textarea, select, [contenteditable]");
+      const mod = e.ctrlKey || e.metaKey;
+      if (mode === "ayah" && mod && !typing && e.code === "KeyZ") {
+        e.preventDefault();
+        (e.shiftKey ? hist.redo : hist.undo)();
+      } else if (mode === "ayah" && mod && !typing && e.code === "KeyY") {
+        e.preventDefault();
+        hist.redo();
+      } else if (e.altKey && e.code === "ArrowRight" && !typing) {
+        e.preventDefault();
+        (mode === "ayah" ? nextAyah : nextSign)();
+      } else if (!typing && !mod && !e.altKey && e.key === " " && t.tagName !== "BUTTON") {
+        e.preventDefault();
+        replay();
+      }
+    };
+  });
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => keyRef.current(e);
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
   }, []);
 
+  const a = surah?.ayat[ayah - 1];
+  const vids = humanVideos(n);
+  const bslClip = bsl?.[String(ayah)];
+  const seek = bslClip ? { id: bslClip.video, start: bslClip.start } : undefined;
+  const tabCls = (on: boolean) => `inline-flex min-h-12 items-center gap-2 rounded-xl px-4 text-base font-semibold ${on ? "bg-brand text-brand-ink" : "text-ink-2 hover:bg-panel-2"}`;
+
   return (
-    <div className="mx-auto grid w-full max-w-7xl gap-4 px-4 py-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
-      <section className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <h1 className="mr-auto text-2xl font-semibold">Gloss Studio</h1>
-          <div role="tablist" className="flex rounded-lg border border-line bg-panel p-0.5 text-sm">
-            {(["gloss", "sign"] as const).map((t) => (
-              <button key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)} className={`rounded-md px-3 py-1.5 ${tab === t ? "bg-brand text-brand-ink" : "text-ink-2"}`}>
-                {t === "gloss" ? "Ayah gloss" : "Sign editor"}
-              </button>
-            ))}
-          </div>
+    <div className="mx-auto w-full max-w-7xl px-4 py-5">
+      <header className="mb-4 flex flex-wrap items-center gap-3">
+        <h1 className="mr-auto text-2xl font-semibold text-ink">Studio</h1>
+        <div role="tablist" aria-label="What to review" className="flex gap-1 rounded-2xl border border-line bg-panel p-1">
+          <button role="tab" type="button" aria-selected={mode === "ayah"} onClick={() => setMode("ayah")} className={tabCls(mode === "ayah")}>
+            <BookOpen aria-hidden className="size-5" /> Ayah
+          </button>
+          <button role="tab" type="button" aria-selected={mode === "sign"} onClick={() => setMode("sign")} className={tabCls(mode === "sign")}>
+            <Hand aria-hidden className="size-5" /> Sign
+          </button>
         </div>
-        <div className="stage relative aspect-[4/3.3] overflow-hidden rounded-2xl border border-line">
-          <AvatarCanvas className="absolute inset-0" timeline={shown?.timeline ?? null} playback={pb} onTime={setTime} />
-          <button onClick={replay} className="absolute bottom-3 right-3 rounded-lg bg-brand px-3 py-1.5 text-sm text-brand-ink">Replay</button>
-        </div>
-        {shown && <GlossStrip tokens={shown.tokens} items={shown.timeline.items} active={activeTok} onSeek={(t) => { pb.current.time = t; pb.current.playing = true; }} />}
-        <p className="text-xs text-ink-2">Edits update the animation instantly — no re-filming needed. Speed:
-          <input type="range" min={0.25} max={1.5} step={0.05} defaultValue={0.85} onChange={(e) => (pb.current.rate = +e.target.value)} className="ml-2 align-middle" />
-        </p>
-      </section>
+        <Link href={mode === "sign" ? "/review?tab=signs" : "/review"} className="inline-flex min-h-12 items-center gap-2 rounded-xl border-2 border-line-2 px-4 font-semibold text-ink hover:bg-panel-2">
+          <ListChecks aria-hidden className="size-5" /> Queue
+        </Link>
+      </header>
 
-      {tab === "gloss" ? (
-        <section className="flex flex-col gap-3">
-          <div className="flex flex-wrap items-center gap-2">
-            <select aria-label="Surah" value={n} onChange={(e) => { setN(+e.target.value); setAyah(1); }} className="rounded-md border border-line bg-panel px-2 py-1.5">
-              {list.map((s) => (
-                <option key={s.n} value={s.n}>{s.n}. {s.name}</option>
-              ))}
-            </select>
-            <button onClick={() => setAyah((x) => Math.max(1, x - 1))} className="rounded-md border border-line px-2 py-1.5" aria-label="Previous ayah">←</button>
-            <label className="text-sm">Ayah <input type="number" min={1} max={surah?.ayahs ?? 1} value={ayah} onChange={(e) => setAyah(Math.max(1, Math.min(surah?.ayahs ?? 1, +e.target.value)))} className="w-16 rounded-md border border-line bg-panel px-2 py-1" /></label>
-            <button onClick={() => setAyah((x) => Math.min(surah?.ayahs ?? 1, x + 1))} className="rounded-md border border-line px-2 py-1.5" aria-label="Next ayah">→</button>
-            <span className={`ml-auto rounded px-2 py-0.5 text-xs ${original?.source === "curated" ? "bg-ok/15 text-ok" : "bg-accent/15 text-accent"}`}>
-              base: {original?.source ?? "none"}{reviews[reviewKey] ? ` · reviewed by ${reviews[reviewKey].by}` : ""}
-            </span>
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+        {/* ---------- stage ---------- */}
+        <div className="flex flex-col gap-3 lg:sticky lg:top-20 lg:self-start">
+          <div className="stage relative aspect-[4/3.2] max-h-[52vh] w-full overflow-hidden rounded-2xl border border-line lg:max-h-none">
+            <AvatarCanvas className="absolute inset-0" timeline={timeline} playback={pb} onTime={setTime} onEnd={() => setPlaying(false)} ariaLabel={mode === "sign" ? `Avatar signing ${signId}` : `Avatar signing ayah ${key}`} />
           </div>
-          {a && (
-            <div className="rounded-xl border border-line bg-panel p-3">
-              <p className="arabic text-right text-2xl" lang="ar">{a.ar}</p>
-              <p className="mt-1 text-sm">{a.en}</p>
-              <details className="mt-1 text-xs text-ink-2">
-                <summary className="cursor-pointer">Word by word</summary>
-                <div className="arabic mt-1 flex flex-wrap gap-2" dir="rtl">
-                  {a.w.map((w, k) => (
-                    <span key={k} className="inline-flex flex-col items-center rounded bg-panel-2 px-1.5">
-                      <span className="text-base" lang="ar">{w.ar}</span>
-                      <span dir="ltr" className="font-sans">{w.en}</span>
-                      {w.root && <span className="text-accent">{w.root}</span>}
-                    </span>
+          <div className="flex flex-wrap items-center gap-2">
+            <Btn tone="primary" size="lg" icon={RotateCcw} onClick={replay} title="Play from the start (Space)">
+              Replay
+            </Btn>
+            <IconBtn icon={playing ? Pause : Play} label={playing ? "Pause" : "Play"} onClick={togglePlay} className="size-14" />
+            <label className="flex min-h-14 flex-1 items-center gap-3 rounded-xl border-2 border-line-2 bg-panel px-3 text-sm text-ink-2">
+              <span aria-hidden>🐢</span>
+              <input type="range" min={0.25} max={1.5} step={0.05} value={rate} onChange={(e) => setRate(+e.target.value)} aria-label="Speed" aria-valuetext={`${Math.round(rate * 100)}%`} className="h-8 min-w-0 flex-1 accent-[var(--brand)]" />
+              <span aria-hidden>🐇</span>
+              <span className="w-10 text-right font-mono tabular-nums text-ink">{Math.round(rate * 100)}%</span>
+            </label>
+          </div>
+          {mode === "ayah" && (
+            <details className="group rounded-2xl border border-line bg-panel p-3" open={vids.length > 0}>
+              <summary className="flex min-h-11 cursor-pointer items-center gap-2 font-semibold text-ink">
+                <Video aria-hidden className="size-5 text-ink-2" /> Human signer {vids.length ? `(${vids.length})` : ""}
+              </summary>
+              <div className="mt-2">
+                <HumanVideos videos={vids} seek={seek} />
+              </div>
+            </details>
+          )}
+        </div>
+
+        {/* ---------- editor ---------- */}
+        <div className="flex min-w-0 flex-col gap-3">
+          {mode === "ayah" ? (
+            <>
+              <div className="flex flex-wrap items-center gap-2">
+                <IconBtn icon={ChevronLeft} label="Previous ayah" onClick={() => step(-1)} disabled={n === 1 && ayah === 1} className="size-12" />
+                <select aria-label="Surah" value={n} onChange={(e) => (setN(+e.target.value), setAyah(1))} className="min-h-12 min-w-40 flex-1 rounded-xl border-2 border-line-2 bg-panel px-3 text-base">
+                  {list.map((s) => (
+                    <option key={s.n} value={s.n}>
+                      {s.n}. {s.name}
+                    </option>
                   ))}
+                </select>
+                <label className="flex min-h-12 items-center gap-2 rounded-xl border-2 border-line-2 bg-panel px-3 text-base">
+                  <span className="text-ink-2">Ayah</span>
+                  <input type="number" min={1} max={ayahCount} value={ayah} onChange={(e) => setAyah(Math.max(1, Math.min(ayahCount, +e.target.value || 1)))} className="w-16 bg-transparent font-mono" />
+                  <span className="text-ink-3">/ {ayahCount}</span>
+                </label>
+                <IconBtn icon={ChevronRight} label="Next ayah" onClick={() => step(1)} disabled={n === 114 && ayah === ayahCount} className="size-12" />
+                <Btn tone="primary" size="lg" icon={SkipForward} onClick={nextAyah} title="Next ayah that needs review (Alt+→)" className="basis-full xl:basis-auto">
+                  Next in queue
+                </Btn>
+              </div>
+
+              {a && (
+                <Panel>
+                  <p className="arabic text-right text-2xl leading-loose" lang="ar" dir="rtl">
+                    {a.ar}
+                  </p>
+                  <p className="mt-1 text-base text-ink">{a.en}</p>
+                  <details className="mt-1 text-sm text-ink-2">
+                    <summary className="min-h-9 cursor-pointer">Word by word</summary>
+                    <div className="arabic mt-1 flex flex-wrap gap-2" dir="rtl">
+                      {a.w.map((w, k) => (
+                        <span key={k} className="inline-flex flex-col items-center rounded-lg bg-panel-2 px-2 py-1">
+                          <span className="text-lg" lang="ar">
+                            {w.ar}
+                          </span>
+                          <span dir="ltr" className="font-sans text-xs">
+                            {w.en}
+                          </span>
+                        </span>
+                      ))}
+                    </div>
+                  </details>
+                </Panel>
+              )}
+
+              <Panel
+                title="Signs"
+                actions={
+                  <>
+                    <IconBtn icon={Undo2} label="Undo (Ctrl+Z)" onClick={hist.undo} disabled={!hist.canUndo} />
+                    <IconBtn icon={Redo2} label="Redo (Ctrl+Shift+Z)" onClick={hist.redo} disabled={!hist.canRedo} />
+                    <IconBtn icon={Type} label={showText ? "Hide gloss text" : "Edit as text"} onClick={() => setShowText((v) => !v)} aria-pressed={showText} />
+                  </>
+                }
+              >
+                <ChipTimeline chips={chips} sel={sel} active={activeTok} onSelect={(i) => (setSel(i), i !== null && seekChip(i))} onMove={move} onDelete={del} />
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <Btn icon={Plus} onClick={() => setPicker({ mode: "append", at: chips.length })}>
+                    Add sign
+                  </Btn>
+                  <Btn onClick={() => commit([...chips, { key: newKey(), kind: "pause", gloss: ",", tags: [] }])}>+ Pause</Btn>
+                  {edited && (
+                    <Btn icon={RotateCcw} tone="ghost" onClick={() => commit(toChips(base))}>
+                      Back to original
+                    </Btn>
+                  )}
+                  {edited && <span className="self-center text-sm text-ink-2">Edited · saved in this browser</span>}
                 </div>
-              </details>
-            </div>
-          )}
-
-          {/* chip timeline */}
-          <div className="rounded-xl border border-line bg-panel p-3">
-            <div className="mb-2 flex items-center gap-2 text-sm">
-              <strong>Timeline</strong>
-              <span className="text-ink-2">drag chips to reorder · click to edit</span>
-              <button className="ml-auto rounded-md border border-line px-2 py-0.5" onClick={() => { update([...chips, { key: keySeq++, kind: "sign", gloss: "ALLAH", tags: [] }]); setSel(chips.length); }}>+ Sign</button>
-              <button className="rounded-md border border-line px-2 py-0.5" onClick={() => update([...chips, { key: keySeq++, kind: "pause", gloss: ",", tags: [] }])}>+ Pause</button>
-            </div>
-            <ol className="flex flex-wrap gap-1.5">
-              {chips.map((c, i) => {
-                const known = c.kind !== "sign" || lex.has(c.gloss) || c.gloss.split("+").every((p) => lex.has(p));
-                return (
-                  <li
-                    key={c.key}
-                    draggable
-                    onDragStart={() => (dragFrom.current = i)}
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={() => dragFrom.current !== null && move(dragFrom.current, i)}
-                  >
-                    <button
-                      onClick={() => setSel(i === sel ? null : i)}
-                      onKeyDown={(e) => {
-                        if (e.altKey && e.key === "ArrowLeft") move(i, i - 1);
-                        if (e.altKey && e.key === "ArrowRight") move(i, i + 1);
+                {sel !== null && chips[sel] && (
+                  <ChipEditor
+                    chip={chips[sel]}
+                    index={sel}
+                    count={chips.length}
+                    onChange={(p) => patch(sel, p)}
+                    onDelete={() => del(sel)}
+                    onMove={(d) => move(sel, sel + d)}
+                    onReplace={() => setPicker({ mode: "replace", at: sel })}
+                    onInsert={(w) => setPicker({ mode: w, at: sel })}
+                    onEditSign={(id) => {
+                      setSignId(id);
+                      setMode("sign");
+                    }}
+                  />
+                )}
+                {showText && (
+                  <label className="mt-3 block text-sm font-medium text-ink">
+                    Gloss text
+                    <textarea
+                      value={text}
+                      onChange={(e) => {
+                        setText(e.target.value);
+                        fromText.current = true;
+                        commit(toChips(e.target.value), "text");
                       }}
-                      className={`rounded-md border px-2 py-1 font-mono text-xs ${sel === i ? "border-brand ring-2 ring-brand" : known ? "border-line" : "border-warn text-warn"} ${c.tags.length ? "bg-accent/10" : "bg-panel-2"}`}
-                      title={c.tags.length ? c.tags.join(", ") : undefined}
-                    >
-                      {chipText(c)}
-                      {c.tags.length > 0 && <sup className="ml-0.5 text-accent">{c.tags.join("+")}</sup>}
-                    </button>
-                  </li>
-                );
-              })}
-            </ol>
-            {sel !== null && chips[sel] && (
-              <ChipEditor
-                chip={chips[sel]}
-                ids={allIds}
-                onChange={(p) => patch(sel, p)}
-                onDelete={() => { update(chips.filter((_, k) => k !== sel)); setSel(null); }}
-                onMove={(d) => move(sel, sel + d)}
-                onEditSign={(id) => { setSignId(id); setTab("sign"); }}
-              />
-            )}
-          </div>
+                      rows={3}
+                      spellCheck={false}
+                      className="mt-1 w-full rounded-xl border-2 border-line-2 bg-panel p-3 font-mono text-[15px]"
+                    />
+                  </label>
+                )}
+                {showText && <NotationHelp />}
+              </Panel>
 
-          <label className="text-sm">
-            Gloss text
-            <textarea
-              value={text}
-              onChange={(e) => { setText(e.target.value); setChips(toChips(e.target.value)); setDirty(true); }}
-              rows={3}
-              className="mt-1 w-full rounded-lg border border-line bg-panel p-2 font-mono text-sm"
-              spellCheck={false}
+              <ReviewPanel what="ayah" state={index.get("ayah", key)} current={gloss} onDecide={decideAyah} />
+            </>
+          ) : (
+            <SignPanel
+              signId={signId}
+              def={signDef}
+              setDef={setSignDef}
+              repoDef={repoDef}
+              draft={!!local.signs[signId]}
+              error={signErr}
+              timeline={signTimeline}
+              uses={freq[signId] ?? 0}
+              review={index.get("sign", signId)}
+              onDecide={decideSign}
+              onPick={() => setPicker({ mode: "sign", at: 0 })}
+              onSave={saveSign}
+              onRevert={revertSign}
+              onNext={nextSign}
+              onSeek={(u) => {
+                const it = signTimeline?.items[0];
+                if (it) pb.current.time = it.start + u * (it.end - it.start);
+              }}
             />
-          </label>
-          <div className="flex flex-wrap items-center gap-2">
-            <button onClick={save} disabled={!dirty} className="rounded-lg bg-brand px-3 py-1.5 text-brand-ink disabled:opacity-50">Save edit</button>
-            <button onClick={revert} className="rounded-lg border border-line px-3 py-1.5">Revert to base</button>
-            <button onClick={exportAll} className="rounded-lg border border-line px-3 py-1.5">Export contributions</button>
-            {process.env.NODE_ENV === "development" && <button onClick={saveToRepo} className="rounded-lg border border-line px-3 py-1.5">Write to repo (dev)</button>}
-          </div>
-          <div className="flex flex-wrap items-center gap-2 rounded-xl border border-line bg-panel p-3 text-sm">
-            <label>Reviewer <input value={reviewer} onChange={(e) => setReviewer(e.target.value)} className="ml-1 rounded-md border border-line bg-panel px-2 py-1" placeholder="Your name" /></label>
-            <button onClick={markReviewed} className="rounded-lg border border-ok px-3 py-1.5 text-ok">Sign off this ayah</button>
-          </div>
-          {msg && <p className="text-sm text-ink-2" role="status">{msg}</p>}
-          <NotationHelp />
-        </section>
-      ) : (
-        <section className="flex flex-col gap-3">
-          <label className="text-sm">
-            Sign
-            <input list="sign-ids" value={signId} onChange={(e) => setSignId(e.target.value.toUpperCase())} className="ml-2 rounded-md border border-line bg-panel px-2 py-1 font-mono" />
-            <datalist id="sign-ids">{allIds.map((x) => <option key={x} value={x} />)}</datalist>
-          </label>
-          {lex.get(signId) && (
-            <p className="text-sm text-ink-2">
-              English: {lex.get(signId)!.en?.join(", ")} · confidence: {lex.get(signId)!.conf} {lex.get(signId)!.note ? `· ${lex.get(signId)!.note}` : ""}
-            </p>
           )}
-          <label className="text-sm">
-            Definition (parametric sign notation)
-            <textarea value={signDef} onChange={(e) => setSignDef(e.target.value)} rows={5} spellCheck={false} className="mt-1 w-full rounded-lg border border-line bg-panel p-2 font-mono text-sm" />
-          </label>
-          <p className={`text-sm ${signErr ? "text-bad" : "text-ok"}`}>{signErr ? `⚠ ${signErr}` : "✓ valid"}</p>
-          <div className="flex gap-2">
-            <button onClick={saveSign} disabled={!!signErr || !signId} className="rounded-lg bg-brand px-3 py-1.5 text-brand-ink disabled:opacity-50">Save sign</button>
-            <button onClick={replay} className="rounded-lg border border-line px-3 py-1.5">Replay</button>
-          </div>
-          {msg && <p className="text-sm text-ink-2" role="status">{msg}</p>}
-          <SignHelp />
-        </section>
-      )}
+
+          <p role="status" aria-live="polite" className="min-h-6 text-sm font-medium text-ink">
+            {msg}
+          </p>
+          <Contributions />
+          <KeyHelp />
+        </div>
+      </div>
+
+      <SignPicker
+        open={!!picker}
+        title={picker?.mode === "replace" ? "Change sign" : picker?.mode === "sign" ? "Choose a sign to review" : "Add a sign"}
+        initial={picker?.mode === "replace" ? (chips[picker.at]?.gloss.split(".")[0] ?? "") : ""}
+        onPick={onPicked}
+        onClose={() => setPicker(null)}
+      />
     </div>
   );
 }
 
-function ChipEditor({ chip, ids, onChange, onDelete, onMove, onEditSign }: {
-  chip: Chip; ids: string[]; onChange: (p: Partial<Chip>) => void; onDelete: () => void; onMove: (d: number) => void; onEditSign: (id: string) => void;
-}) {
-  const lex = getLexicon();
-  const variants = chip.kind === "sign" ? lex.variants(chip.gloss) : [];
+/** First item after `cur` in `order` (wrapping) that passes `ok`, never `cur` itself. */
+function nextIn(order: string[], cur: string, ok: (k: string) => boolean): string | null {
+  if (!order.length) return null;
+  const i = order.indexOf(cur);
+  for (let k = 1; k <= order.length; k++) {
+    const c = order[(Math.max(i, -1) + k + order.length) % order.length];
+    if (c !== cur && ok(c)) return c;
+  }
+  return null;
+}
+
+function KeyHelp() {
   return (
-    <div className="mt-3 grid gap-2 rounded-lg border border-line bg-panel-2 p-3 text-sm sm:grid-cols-2">
-      {chip.kind !== "pause" ? (
-        <label>
-          {chip.kind === "fs" ? "Fingerspelled word" : "Sign"}
-          <input
-            list="chip-ids"
-            value={chip.gloss}
-            onChange={(e) => onChange({ gloss: e.target.value.toUpperCase() })}
-            className="mt-0.5 w-full rounded-md border border-line bg-panel px-2 py-1 font-mono"
-          />
-          <datalist id="chip-ids">{ids.map((x) => <option key={x} value={x} />)}</datalist>
-        </label>
-      ) : (
-        <label>
-          Pause
-          <select value={chip.gloss} onChange={(e) => onChange({ gloss: e.target.value })} className="mt-0.5 w-full rounded-md border border-line bg-panel px-2 py-1">
-            <option value=",">short ,</option>
-            <option value=".">sentence .</option>
-            <option value="?">question ?</option>
-          </select>
-        </label>
-      )}
-      {chip.kind !== "pause" && (
-        <div className="flex items-end gap-2">
-          <label className="flex-1">
-            Type
-            <select value={chip.kind} onChange={(e) => onChange({ kind: e.target.value as Chip["kind"] })} className="mt-0.5 w-full rounded-md border border-line bg-panel px-2 py-1">
-              <option value="sign">sign</option>
-              <option value="fs">fingerspell</option>
-            </select>
-          </label>
-          <label className="flex-1">
-            Locus
-            <select value={chip.locus ?? ""} onChange={(e) => onChange({ locus: e.target.value || undefined })} className="mt-0.5 w-full rounded-md border border-line bg-panel px-2 py-1">
-              {LOCI.map((l) => <option key={l} value={l}>{l || "—"}</option>)}
-            </select>
-          </label>
-          <label className="flex items-center gap-1 pb-1.5">
-            <input type="checkbox" checked={!!chip.repeat} onChange={(e) => onChange({ repeat: e.target.checked })} /> repeat
-          </label>
-        </div>
-      )}
-      {variants.length > 1 && (
-        <div className="sm:col-span-2">
-          Variants:{" "}
-          {variants.map((v) => (
-            <button key={v.id} onClick={() => onChange({ gloss: v.id })} className={`mr-1 rounded border px-1.5 font-mono text-xs ${v.id === chip.gloss ? "border-brand" : "border-line"}`}>{v.id}</button>
-          ))}
-        </div>
-      )}
-      <fieldset className="sm:col-span-2">
-        <legend>Facial grammar / non-manual signals</legend>
-        <div className="mt-1 flex flex-wrap gap-1">
-          {TAGS.map((t) => {
-            const on = chip.tags.includes(t);
-            return (
-              <button key={t} onClick={() => onChange({ tags: on ? chip.tags.filter((x) => x !== t) : [...chip.tags, t] })} aria-pressed={on} className={`rounded border px-1.5 py-0.5 font-mono text-xs ${on ? "border-accent bg-accent/20" : "border-line"}`}>
-                {t}
-              </button>
-            );
-          })}
-        </div>
-      </fieldset>
-      <div className="flex gap-2 sm:col-span-2">
-        <button onClick={() => onMove(-1)} className="rounded border border-line px-2 py-0.5">← Move</button>
-        <button onClick={() => onMove(1)} className="rounded border border-line px-2 py-0.5">Move →</button>
-        {chip.kind === "sign" && <button onClick={() => onEditSign(chip.gloss.split("+")[0])} className="rounded border border-line px-2 py-0.5">Edit this sign</button>}
-        <button onClick={onDelete} className="ml-auto rounded border border-bad px-2 py-0.5 text-bad">Delete</button>
-      </div>
-    </div>
+    <details className="rounded-2xl border border-line bg-panel p-3 text-sm text-ink-2">
+      <summary className="flex min-h-11 cursor-pointer items-center gap-2 font-medium text-ink">
+        <Keyboard aria-hidden className="size-5" /> Keyboard
+      </summary>
+      <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5">
+        {[
+          ["Tab", "move between controls"],
+          ["← →", "move between signs"],
+          ["Alt + ← →", "move the selected sign"],
+          ["Enter", "open a sign to edit"],
+          ["Delete", "remove the sign"],
+          ["Ctrl + Z / Ctrl + Shift + Z", "undo / redo"],
+          ["Alt + A", "approve"],
+          ["Alt + N", "needs changes"],
+          ["Alt + →", "next in queue"],
+          ["Space", "replay"],
+        ].map(([k, v]) => (
+          <div key={k} className="contents">
+            <dt>
+              <kbd className="rounded border border-line-2 bg-panel-2 px-1.5 py-0.5 font-mono text-xs text-ink">{k}</kbd>
+            </dt>
+            <dd>{v}</dd>
+          </div>
+        ))}
+      </dl>
+    </details>
   );
 }
 
 function NotationHelp() {
   return (
-    <details className="rounded-xl border border-line bg-panel p-3 text-sm text-ink-2">
-      <summary className="cursor-pointer text-ink">Gloss notation</summary>
+    <details className="mt-2 rounded-xl border border-line p-3 text-sm text-ink-2">
+      <summary className="min-h-8 cursor-pointer font-medium text-ink">Gloss notation</summary>
       <ul className="mt-2 list-disc space-y-1 pl-5">
         <li><code>ALLAH MERCY</code> — signs from the dictionary (variants: <code>ALLAH.2</code>)</li>
         <li><code>fs:MUSA</code> — fingerspelling</li>
         <li><code>HOUSE:a</code> — place the sign at locus a (signer&apos;s right), b (left), c (centre), up</li>
         <li><code>WORK+</code> — repeat; <code>DAY+JUDGE</code> — compound</li>
-        <li><code>[top: NAME ALLAH]</code> — facial grammar over a span. Tags: {Object.keys(NMS).join(", ")}</li>
+        <li><code>[top: NAME ALLAH]</code> — facial grammar over a span</li>
         <li><code>,</code> short pause · <code>.</code> sentence end · <code>?</code> question · <code>(note)</code> ignored</li>
-      </ul>
-    </details>
-  );
-}
-
-function SignHelp() {
-  return (
-    <details open className="rounded-xl border border-line bg-panel p-3 text-sm text-ink-2">
-      <summary className="cursor-pointer text-ink">Sign notation</summary>
-      <p className="mt-2">Keyframes separated by <code>&gt;</code>; the non-dominant hand after <code>|</code>; flags after <code>;</code>.</p>
-      <ul className="mt-1 list-disc space-y-1 pl-5">
-        <li>Handshape: A B C D E F G H I K L M N O P Q R S T U V W X Y 1 3 4 5 6 7 8 9 10 bentB openB flatB curvedB bent5 claw5 curved5 flatO smallC bentV bentL bentH open8 ILY baby0 flatF closedX thumb</li>
-        <li>Location: <code>@chin</code>, <code>@neutral:f5u3</code> (offset cm: f b u d i o), <code>@^shoulder</code> (other side), <code>@base.palm</code> (other hand)</li>
-        <li>Palm / fingers: <code>p:F f:U</code> — U up, D down, F forward, B toward body, I toward midline, O outward (combine: <code>FU</code>)</li>
-        <li>Contact point: <code>at:tipI</code> (palm, back, tipT, tipI, tipM, tipP, knuckles, heel, radial, ulnar)</li>
-        <li>Timing: <code>d:0.3</code> move time, <code>h:0.2</code> hold. Motion: <code>~arc:u4 ~circle:F5x2 ~wiggle ~twist:30 ~shake ~tap</code></li>
-        <li>Flags: <code>;sym</code> both hands mirror, <code>;alt</code> alternate, <code>;x2</code> repeat, <code>;face:browUp=.6</code></li>
       </ul>
     </details>
   );

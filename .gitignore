@@ -45,3 +45,7 @@ next-env.d.ts
 /data/video/
 /data/pose/
 /.venv-mocap/
+
+# QA scratch clips
+/public/data/_qa/
+*.log

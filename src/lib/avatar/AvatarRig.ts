@@ -1,6 +1,8 @@
 import * as THREE from "three";
-import { BODY } from "../asl/body";
+import { BODY, TORSO_PROFILE, TORSO_DEPTH, drapeFront } from "../asl/body";
 import { buildHandRig, type HandRig } from "./handRig";
+import { bodyModel, bodySDF, solveHands, type BodyModel } from "../asl/physical";
+import { angleDiff, elbowSwivel, learnedSwivel, swivelDir } from "./elbow";
 import type { Pose } from "../asl/timeline";
 import type { FaceState, HandSide } from "../asl/types";
 
@@ -34,8 +36,10 @@ export const AVATAR_PRESETS: Record<string, AvatarStyle> = {
 const UP = new THREE.Vector3(0, 1, 0);
 const v1 = new THREE.Vector3(), v2 = new THREE.Vector3(), v3 = new THREE.Vector3(), v4 = new THREE.Vector3();
 const scratchS = new THREE.Vector3(), scratchW = new THREE.Vector3(), scratchPole = new THREE.Vector3();
-const scratchE = new THREE.Vector3(), scratchFdir = new THREE.Vector3(), scratchCuff = new THREE.Vector3();
+const scratchE = new THREE.Vector3(), scratchFdir = new THREE.Vector3(), scratchCuff = new THREE.Vector3(), scratchSw = new THREE.Vector3();
 const qTmp = new THREE.Quaternion();
+const armP = new THREE.Vector3(), armN = new THREE.Vector3();
+const corrTmp = { R: new THREE.Vector3(), L: new THREE.Vector3(), d: new THREE.Vector3(), x: new THREE.Vector3(), y: new THREE.Vector3() };
 
 /** Two-bone IK: returns elbow position. */
 function solveElbow(S: THREE.Vector3, W: THREE.Vector3, pole: THREE.Vector3, l1: number, l2: number, out: THREE.Vector3) {
@@ -56,23 +60,6 @@ function solveElbow(S: THREE.Vector3, W: THREE.Vector3, pole: THREE.Vector3, l1:
   if (perp.lengthSq() < 1e-8) perp.set(0, -1, 0);
   perp.normalize();
   return out.copy(S).addScaledVector(dir, l1 * cosA).addScaledVector(perp, l1 * sinA);
-}
-
-/** Torso lathe profile: (radius, height above the hips). */
-const TORSO_PROFILE: [number, number][] = [
-  [0.0, -0.03], [0.15, -0.03], [0.162, 0.04], [0.156, 0.12], [0.15, 0.2], [0.157, 0.28], [0.168, 0.34], [0.177, 0.39],
-  [0.178, 0.425], [0.162, 0.455], [0.125, 0.474], [0.075, 0.484], [0.0, 0.488],
-];
-const TORSO_DEPTH = 0.62;
-/** z of the front of the torso at height h above the hips. */
-function torsoFront(h: number) {
-  const P = TORSO_PROFILE;
-  if (h <= P[1][1]) return P[1][0] * TORSO_DEPTH;
-  for (let i = 1; i < P.length - 1; i++) {
-    const [r0, y0] = P[i], [r1, y1] = P[i + 1];
-    if (h <= y1) return (r0 + ((r1 - r0) * (h - y0)) / (y1 - y0)) * TORSO_DEPTH;
-  }
-  return 0;
 }
 
 const gauss = (dx: number, dy: number, s: number) => Math.exp(-(dx * dx + dy * dy) / (2 * s * s));
@@ -277,9 +264,17 @@ export class AvatarRig {
   private blinkPhase = Math.random() * 3;
   private saccade = { x: 0, y: 0, next: 0 };
   style: AvatarStyle;
+  /** Collision model matching this signer's body and headwear. */
+  readonly body: BodyModel;
+  /** Keep hands out of the body and each other (on by default). */
+  physics = true;
+  /** Torso without the hijab drape (which hangs over the upper arms) for arm clearance. */
+  private armBody: BodyModel;
 
   constructor(style: AvatarStyle = AVATAR_PRESETS.amina) {
     this.style = style;
+    this.body = bodyModel(style.headwear);
+    this.armBody = { ...bodyModel("none"), drape: false };
     const skinCol = new THREE.Color(style.skin);
     const skin = new THREE.MeshPhysicalMaterial({
       color: skinCol,
@@ -665,11 +660,9 @@ export class AvatarRig {
         const front = Math.abs(z) / (Math.hypot(x, z * 1.3) || 1);
         y -= Math.pow(front, 1.6) * (-y - 0.02) * 1.25;
       }
-      // lie on the chest so hands touching it stay in front of the fabric
-      if (baseY + y < 0.42) {
-        const limit = torsoFront(baseY + y) + 0.01 - baseZ;
-        if (z > limit) z = limit + (z - limit) * 0.12;
-      }
+      // lie on the chest and around the neck (as a khimar falls) so hands touching it stay in front of the fabric
+      const limit = drapeFront(baseY + y) - baseZ;
+      if (z > limit) z = limit + (z - limit) * 0.12;
       pa.setXYZ(i, x, y, z);
     }
     drapeGeo.computeVertexNormals();
@@ -759,6 +752,7 @@ export class AvatarRig {
     const shake = f.shake ? Math.sin(time * Math.PI * 2 * 2.6) * f.shake : 0;
     this.headPivot.rotation.set(f.headPitch + nod + Math.sin(time * 0.7) * 0.012, f.headYaw + shake + Math.sin(time * 0.43) * 0.015, f.headRoll);
     this.applyFace(f, time);
+    if (this.physics) this.resolveContacts(p, time);
 
     for (const s of ["R", "L"] as HandSide[]) {
       const hp = p[s];
@@ -776,7 +770,22 @@ export class AvatarRig {
         S.y - 0.55 - face * 0.15,
         S.z - 0.2 + face * 0.45 + cross * 0.3 + Math.max(0, W.z - 0.25) * 0.25,
       );
-      const E = solveElbow(S, W, pole, BODY.upperArm, BODY.forearm, scratchE);
+      let E = solveElbow(S, W, pole, BODY.upperArm, BODY.forearm, scratchE);
+      // Elbow swivel: the rig's pole gives a sensible default; human signers hold the elbow
+      // a little differently (learned from captures), and captured signs carry their own.
+      const own = elbowSwivel(S, E, W);
+      const inSpace = Math.min(1, Math.max(0, (W.y - 1.0) / 0.12));
+      let phi = own + angleDiff(own, learnedSwivel(s, S, W)) * 0.7 * inSpace;
+      if (hp.swW) phi += angleDiff(phi, hp.sw ?? 0) * hp.swW;
+      E = this.elbowFor(S, W, phi, pole);
+      // never let the arm pass through the torso: swing the elbow out until it clears
+      if (this.physics && !this.armClear(S, E, W)) {
+        const dir = this.outward(S, W, phi);
+        for (let k = 1; k <= 14; k++) {
+          E = this.elbowFor(S, W, phi + dir * k * 0.06, pole);
+          if (this.armClear(S, E, W)) break;
+        }
+      }
       // sleeve ends a little before the wrist; bare wrist bridges to the hand
       const fdir = scratchFdir.subVectors(W, E).normalize();
       const cuff = scratchCuff.copy(W).addScaledVector(fdir, -0.03);
@@ -790,6 +799,63 @@ export class AvatarRig {
       hand.root.quaternion.copy(hp.quat);
       hand.setShape(hp.shape);
     }
+  }
+
+  // Corrections from the contact solver go through a critically damped spring: a hand that
+  // starts touching the other one or the body settles onto it within ~60 ms, with continuous
+  // velocity, instead of snapping whenever the set of touching fingers changes.
+  private corr: Record<HandSide, THREE.Vector3> = { R: new THREE.Vector3(), L: new THREE.Vector3() };
+  private corrV: Record<HandSide, THREE.Vector3> = { R: new THREE.Vector3(), L: new THREE.Vector3() };
+  private corrT = -1;
+  private sepHint = new THREE.Vector3();
+  private resolveContacts(p: Pose, time: number) {
+    const r0 = corrTmp.R.copy(p.R.pos), l0 = corrTmp.L.copy(p.L.pos);
+    // captured signing (it carries the human's elbow swivel) separates hands in depth only
+    const captured = Math.min(p.R.swW ?? 0, p.L.swW ?? 0);
+    solveHands(p.R, p.L, this.body, p.face, { hint: this.sepHint, depthOnly: captured });
+    const dt = this.corrT < 0 ? 1 : time - this.corrT;
+    this.corrT = time;
+    const w = 2 * Math.PI * 7; // spring frequency (rad/s)
+    for (const s of ["R", "L"] as HandSide[]) {
+      const target = corrTmp.d.subVectors(p[s].pos, s === "R" ? r0 : l0);
+      const c = this.corr[s], v = this.corrV[s];
+      if (dt <= 0 || dt > 0.25) {
+        // first frame, pause or scrub: no easing
+        c.copy(target);
+        v.set(0, 0, 0);
+      } else {
+        // exact critically damped step toward the target
+        const e = Math.exp(-w * dt);
+        corrTmp.x.subVectors(c, target);
+        corrTmp.y.copy(v).addScaledVector(corrTmp.x, w).multiplyScalar(dt);
+        v.addScaledVector(corrTmp.y, -w).multiplyScalar(e);
+        c.copy(target).add(corrTmp.x.add(corrTmp.y).multiplyScalar(e));
+      }
+      p[s].pos.copy(s === "R" ? r0 : l0).add(c);
+    }
+  }
+
+  private elbowFor(S: THREE.Vector3, W: THREE.Vector3, phi: number, pole: THREE.Vector3) {
+    pole.copy(S).add(swivelDir(S, W, phi, scratchSw));
+    return solveElbow(S, W, pole, BODY.upperArm, BODY.forearm, scratchE);
+  }
+
+  /** Upper arm and forearm (away from the joints that legitimately touch the body) clear of the torso. */
+  private armClear(S: THREE.Vector3, E: THREE.Vector3, W: THREE.Vector3) {
+    for (const [a, b, r, u0, u1] of [[S, E, 0.042, 0.5, 1], [E, W, 0.034, 0, 0.7]] as const) {
+      for (let u = u0; u <= u1 + 1e-6; u += (u1 - u0) / 4) {
+        armP.lerpVectors(a, b, u);
+        if (bodySDF(armP, this.armBody, null, armN) < r - 0.012) return false;
+      }
+    }
+    return true;
+  }
+
+  /** Which way to swivel the elbow to move it away from the body. */
+  private outward(S: THREE.Vector3, W: THREE.Vector3, phi: number) {
+    const e1 = this.elbowFor(S, W, phi + 0.1, scratchPole).clone();
+    const e2 = this.elbowFor(S, W, phi - 0.1, scratchPole);
+    return bodySDF(e1, this.armBody, null, armN) >= bodySDF(e2, this.armBody, null, armN) ? 1 : -1;
   }
 
   dispose() {

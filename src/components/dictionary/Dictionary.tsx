@@ -41,6 +41,9 @@ export default function Dictionary() {
   useEffect(() => {
     overrideEntries(Object.values(loadSignOverrides()));
     fetch("/data/gloss/freq.json").then((r) => r.json()).then(setFreq).catch(() => {});
+    // deep link: /dictionary?sign=KNOW (used by the review queue)
+    const deep = new URLSearchParams(window.location.search).get("sign");
+    if (deep) setSel(deep);
     setLang(readViewerPrefs().lang);
   }, []);
 
@@ -158,8 +161,8 @@ export default function Dictionary() {
             {lang === "asl" && (
               <>
                 <p className="mt-2.5 break-all font-mono text-[11px] text-ink-3 border-t border-line/60 pt-2">{e.def}</p>
-                <Link href={`/studio?sign=${encodeURIComponent(e.id)}`} className="mt-2 inline-block font-medium text-brand hover:underline">
-                  Edit phonological specification in Studio →
+                <Link href={`/studio?sign=${encodeURIComponent(e.id)}`} className="mt-2 inline-flex min-h-11 items-center font-medium text-brand hover:underline">
+                  Review, fix or record this sign in the Studio →
                 </Link>
               </>
             )}

@@ -4,7 +4,7 @@
 export const LEX_RELIGION = String.raw`
 ALLAH | 1 @face:o4f6 p:F f:U > @aboveHead:o4f10 d:0.45 ;face:browUp=0.25 | allah,god | med | GDM: index finger raised upward (tawhid)
 GOD | B @aboveHead:f6 p:I f:U > @chestHigh:f16 d:0.45 | god,deity,divinity | high | general ASL sign
-LORD | L @^shoulder:f4 p:B f:I > @hip:f10 d:0.45 | lord,rabb,sustainer,master | med
+LORD | L @^shoulder:f4 p:B f:I at:palm > @waist:o12f6 at:palm d:0.45 | lord,rabb,sustainer,master | med
 FALSE-GOD | =FALSE+GOD | idol,idols,false god,false deity,taghut | med
 PROPHET | =PREDICT+PERSON | prophet,prophets,nabi | med
 PREDICT | V @eyes:f3 p:D f:F > @neutral:u6f14 d:0.35 | B @neutral:u10f8 p:D f:FI | predict,prophesy,foresee | high
@@ -53,7 +53,7 @@ FAVOR | =BLESS | favor,favors,grace,bounty | med
 REWARD | X @neutral:o8 p:I f:F > @far:o8 d:0.3 ;sym | reward,rewarded,recompense,gift | med
 PAY | 1 @base.palm p:D f:F at:tipI > @base.palm:f12u4 d:0.2 | B @neutral p:U f:FI | pay,repay,compensate,due | high
 PUNISH | 1 @neutral:u12o6 p:D f:FI > @neutral:d4i2 d:0.25 | S @neutral:u6 p:I f:U | punish,punishment,penalty,torment,chastise | med
-SUFFER | 10 @chin p:I f:F at:tipT ~twist:30 ;face:browInnerUp=0.7,frown=0.5 | suffer,suffering,misery,anguish | high
+SUFFER | 10 @chin p:I f:U at:tipT ~twist:30 ;face:browInnerUp=0.7,frown=0.5 | suffer,suffering,misery,anguish | high
 PAIN | 1 @neutral:o4u4 p:B f:I ~twist:40 ;sym face:browInnerUp=0.6,squint=0.4 | pain,hurt,painful,agony | high
 JUDGE | F @neutral:o8u4 p:I f:F > @neutral:o8d4 d:0.2 ;alt x2 | judge,judgment,judgement,justice,scale,scales,balance | high
 JUDGMENT-DAY | =DAY+JUDGE | day of judgment,day of recompense,day of resurrection,last day | med
@@ -66,7 +66,7 @@ WORLD | W @base.back:u6 p:I f:U ~circle:I8x1 | W @neutral p:I f:U | world,worlds
 WORLD-LIFE | =WORLD+LIFE | worldly life,life of this world,dunya | med
 CREATE | S @base.back:u3 p:I f:F > @base.back:u3 p:B d:0.15 ;x2 | S @neutral p:I f:F | create,created,creator,make,made,maker | med
 CREATION | =CREATE+THING | creation,creature,creatures | med
-DEVIL | 3 @temple p:F f:U at:tipT > bentV d:0.12 ;x2 | devil,satan,shaytan,iblis | med
+DEVIL | 3 @temple:u2 p:F f:UO at:tipT > bentV d:0.12 ;x2 | devil,satan,shaytan,iblis | med
 JINN | =SPIRIT+PEOPLE | jinn | low
 SIN | X @neutral:o6 p:B f:U ~circle:I4x2 ;sym | sin,sins,sinner,sinful,wrongdoing,crime | low
 EVIL | B @chin p:B f:U at:tipM > @neutral:u2f8 p:D f:F d:0.3 ;face:frown=0.5 | evil,bad,wicked,harm,mischief | high
@@ -76,7 +76,7 @@ DISBELIEVE | =NOT+BELIEVE | disbelieve,disbelief,disbelieved,deny faith,kufr | h
 DISBELIEVER | =NOT+BELIEVE+PERSON | disbeliever,disbelievers,unbeliever,kafir | med
 BELIEVER | =BELIEVE+PERSON | believer,believers,mumin | high
 HYPOCRITE | =FALSE+BELIEVE+PERSON | hypocrite,hypocrites | med
-DENY | 10 @chin:o4 p:I f:F at:tipT > @neutral:o8f10 d:0.25 ;sym face:shake=0.12,browDown=0.5 | deny,denied,denial,reject,disbelieve | med
+DENY | 10 @chin:o6d1 p:I f:U at:tipT > @neutral:o10f10 f:FU d:0.25 ;sym face:shake=0.12,browDown=0.5 | deny,denied,denial,reject,disbelieve | med
 REJECT | B @base.palm:b6 p:D f:F > @base.palm:f14 p:D d:0.25 | B @neutral p:U f:FI | reject,refuse,turn away | high
 OBEY | A @forehead:o6 p:B f:U > openB @neutral:o10f8 p:U f:F d:0.4 ;sym | obey,obedient,obedience | high
 DISOBEY | A @temple:f2 p:B f:U > p:F d:0.2 ;face:browDown=0.4 | disobey,disobedient,rebel | high

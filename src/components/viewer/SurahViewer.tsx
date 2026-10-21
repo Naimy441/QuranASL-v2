@@ -17,6 +17,7 @@ import { mocapSign } from "@/lib/asl/mocap";
 import { bslDraft } from "@/lib/bsl/draft";
 import { getBslLexicon, loadBslLexicon } from "@/lib/bsl/lexicon";
 import { loadBslAyat, type BslAyahClip } from "@/lib/bsl/ayat";
+import { loadAslHumanAyat, type HumanAyahClip } from "@/lib/asl/humanAyat";
 import { readViewerPrefs, writeLastRead, writeViewerPrefs, type AvatarId, type SignLang } from "@/lib/prefs";
 import { loadSurahTajweed, loadBismillahTajweed, TAJWEED_LEGEND, type TajweedSegment } from "@/lib/tajweed";
 import { TajweedAyah, TajweedWord } from "@/components/quran/TajweedText";
@@ -60,6 +61,8 @@ interface AyahCardProps {
   tajweed: boolean;
   tajweedWords?: TajweedSegment[][];
   cardGloss?: { human: boolean; text: string };
+  /** a Global Deaf Muslim signer recorded this ayah (ASL) */
+  humanAsl?: boolean;
   onSelect: (index: number) => void;
 }
 
@@ -72,6 +75,7 @@ const AyahCard = memo(function AyahCard({
   tajweed,
   tajweedWords,
   cardGloss,
+  humanAsl,
   onSelect,
 }: AyahCardProps) {
   return (
@@ -102,6 +106,11 @@ const AyahCard = memo(function AyahCard({
               {it.source === "curated" ? "Glossed" : it.source === "community" ? "Community" : "Auto Draft"}
             </span>
           )}
+          {humanAsl && (
+            <span className="rounded bg-ok/10 px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-ok" title="Signed by a Global Deaf Muslim signer">
+              ASL · Deaf signer
+            </span>
+          )}
           {active && playing && (
             <span className="ml-auto flex items-end gap-0.5" aria-label="Now signing">
               {[0, 1, 2].map((b) => (
@@ -128,6 +137,8 @@ const AyahCard = memo(function AyahCard({
   );
 });
 
+const bslDraftCache: Record<string, string> = {};
+
 export default function SurahViewer({ n }: { n: number }) {
   const [surah, setSurah] = useState<Surah | null>(null);
   const [list, setList] = useState<SurahMeta[]>([]);
@@ -150,6 +161,9 @@ export default function SurahViewer({ n }: { n: number }) {
   const [focus, setFocus] = useState(false);
   const [bslAyat, setBslAyat] = useState<Record<string, BslAyahClip> | null>(null);
   const [bslLexReady, setBslLexReady] = useState(false);
+  const [aslHuman, setAslHuman] = useState<Record<string, HumanAyahClip> | null>(null);
+  /** ASL: play the Global Deaf Muslim signer where a recording exists, or the gloss animation */
+  const [aslSource, setAslSource] = useState<"human" | "gloss">("human");
   const [prefsLoaded, setPrefsLoaded] = useState(false);
   const pb = useRef<PlaybackState>({ time: 0, playing: false, rate: 0.85, loop: false });
   const listRef = useRef<HTMLOListElement>(null);
@@ -193,6 +207,15 @@ export default function SurahViewer({ n }: { n: number }) {
     };
   }, [lang, n]);
 
+  useEffect(() => {
+    if (lang !== "asl") return;
+    let live = true;
+    loadAslHumanAyat(n).then((a) => live && setAslHuman(a));
+    return () => {
+      live = false;
+    };
+  }, [lang, n]);
+
   const hasBismillah = !!surah?.bismillah && n !== 1 && n !== 9;
 
   useEffect(() => {
@@ -231,6 +254,9 @@ export default function SurahViewer({ n }: { n: number }) {
 
   const cur = items[idx];
   const bslClip = lang === "bsl" && cur ? bslAyat?.[cur.ayah ?? 0] : undefined;
+  const aslClipAvail = lang === "asl" && cur ? aslHuman?.[cur.ayah ?? 0] : undefined;
+  const aslClip = aslSource === "human" ? aslClipAvail : undefined;
+  const humanClip = bslClip ?? aslClip;
   const anim = useMemo(() => {
     if (!cur) return null;
     if (lang === "bsl") {
@@ -243,27 +269,31 @@ export default function SurahViewer({ n }: { n: number }) {
       const g = bslDraft(cur.en);
       return g ? animateGloss(g, getBslLexicon()) : null;
     }
+    if (aslClip) {
+      // the whole ayah as signed by a Global Deaf Muslim signer
+      return { timeline: buildTimeline([{ index: 0, label: "ASL", kind: "sign", sign: mocapSign(aslClip, 1) }]), tokens: [] };
+    }
     return cur.gloss ? animateGloss(cur.gloss) : null;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cur, lang, bslClip, bslLexReady, mocapReady]);
+  }, [cur, lang, bslClip, aslClip, bslLexReady, mocapReady]);
 
   // what each ayah card shows under the translation, per language
-  const bslDraftCache = useRef<Record<string, string>>({});
   const cardGloss = useMemo(() => {
     if (lang !== "bsl") return null;
     return items.map((it) => {
       const clip = it.ayah ? bslAyat?.[it.ayah] : undefined;
       if (clip) return { human: true, text: `Signed by an Al Isharah BSL translator · ${Math.floor(clip.start / 60)}:${String(Math.floor(clip.start % 60)).padStart(2, "0")} in the recording` };
       if (!bslLexReady) return { human: false, text: "" };
-      let d = bslDraftCache.current[it.en];
+      let d = bslDraftCache[it.en];
       if (d === undefined) {
         d = bslDraft(it.en) || "No learned BSL signs for this ayah yet";
-        bslDraftCache.current[it.en] = d;
+        bslDraftCache[it.en] = d;
       }
       return { human: false, text: d };
     });
   }, [lang, items, bslAyat, bslLexReady]);
   const bslHumanCount = lang === "bsl" && bslAyat ? Object.keys(bslAyat).filter((k) => k !== "0").length : 0;
+  const aslHumanCount = lang === "asl" && aslHuman ? Object.keys(aslHuman).filter((k) => k !== "0").length : 0;
 
   // remember where the reader is
   useEffect(() => {
@@ -374,6 +404,10 @@ export default function SurahViewer({ n }: { n: number }) {
           <InfoIcon size={13} /> BSL rough draft
         </span>
       )
+    ) : aslClip ? (
+      <span className="inline-flex items-center gap-1.5 rounded-md border border-ok/40 bg-ok/10 px-2.5 py-1 text-[11px] font-semibold text-ok shadow-xs backdrop-blur">
+        <VideoIcon size={13} /> Global Deaf Muslim signer, retargeted
+      </span>
     ) : cur?.source === "auto" ? (
       <span className="inline-flex items-center gap-1.5 rounded-md border border-accent/40 bg-accent/10 px-2.5 py-1 text-[11px] font-semibold text-accent shadow-xs backdrop-blur">
         <InfoIcon size={13} /> Automatic draft
@@ -405,6 +439,7 @@ export default function SurahViewer({ n }: { n: number }) {
             <p className="mt-0.5 text-xs text-ink-2 font-mono">
               {surah.meaning} · {surah.ayahs} ayat · {surah.place === "makkah" ? "Meccan" : "Medinan"}
               {lang === "asl" && curatedCount > 0 && <> · <span className="text-ok font-semibold">{curatedCount === surah.ayahs ? "complete gloss tier" : `${curatedCount} hand-glossed`}</span></>}
+              {lang === "asl" && aslHumanCount > 0 && <> · <span className="text-ok font-semibold">{aslHumanCount} ayat by a Deaf signer</span></>}
               {lang === "bsl" && <> · <span className={bslHumanCount ? "text-ok font-semibold" : "text-accent font-semibold"}>{bslHumanCount ? `${bslHumanCount} ayat by human translator` : "BSL draft"}</span></>}
             </p>
           </div>
@@ -547,6 +582,32 @@ export default function SurahViewer({ n }: { n: number }) {
               <button className="font-medium text-brand underline" onClick={() => setTab("human")}>Watch the original video</button>
             </p>
           )}
+          {lang === "asl" && aslClipAvail && (
+            <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-ink-2">
+              <div role="radiogroup" aria-label="ASL source" className="grid grid-cols-2 rounded-md border border-line bg-panel p-0.5">
+                {(["human", "gloss"] as const).map((src) => (
+                  <button
+                    key={src}
+                    role="radio"
+                    aria-checked={aslSource === src}
+                    onClick={() => {
+                      setAslSource(src);
+                      seek(0);
+                    }}
+                    className={`rounded px-3 py-1 font-semibold transition ${aslSource === src ? "bg-brand text-brand-ink shadow-xs" : "text-ink-2 hover:text-ink"}`}
+                  >
+                    {src === "human" ? "Deaf signer" : "Gloss"}
+                  </button>
+                ))}
+              </div>
+              <span>
+                {aslSource === "human"
+                  ? `The avatar replays the Global Deaf Muslim signer's motion for this ayah${aslClipAvail.timing === "page" ? " (where it starts and ends is estimated: the video shows several ayat at once)" : ""}.`
+                  : "The avatar signs the written gloss, sign by sign."}{" "}
+                <button className="font-medium text-brand underline" onClick={() => setTab("human")}>Watch the original video</button>
+              </span>
+            </div>
+          )}
         </div>
       </section>
 
@@ -626,7 +687,7 @@ export default function SurahViewer({ n }: { n: number }) {
             </div>
           )}
           {tab === "human" ? (
-            <HumanVideos videos={vids} seek={bslClip ? { id: bslClip.video, start: bslClip.start } : undefined} />
+            <HumanVideos videos={vids} seek={humanClip ? { id: humanClip.video, start: humanClip.start } : aslClipAvail ? { id: aslClipAvail.video, start: aslClipAvail.start } : undefined} />
           ) : (
             <ol ref={listRef} className="flex-1 space-y-2.5 overflow-y-auto pb-4 pr-1 lg:max-h-[calc(100vh-10rem)]">
               {items.map((it, i) => {
@@ -643,6 +704,7 @@ export default function SurahViewer({ n }: { n: number }) {
                     tajweed={tajweed}
                     tajweedWords={it.key === "b" ? (bismillahTajweed ?? undefined) : ayahIndex >= 0 ? tajweedData?.[ayahIndex] : undefined}
                     cardGloss={cardGloss ? cardGloss[i] : undefined}
+                    humanAsl={lang === "asl" && !!aslHuman?.[it.ayah ?? 0]}
                     onSelect={go}
                   />
                 );

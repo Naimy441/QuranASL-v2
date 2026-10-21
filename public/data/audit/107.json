@@ -1,0 +1,1 @@
+{"1":{"cov":1,"missing":[],"n":5,"flags":[]},"2":{"cov":1,"missing":[],"n":3,"flags":[]},"3":{"cov":0.67,"missing":["feeding"],"n":4,"flags":["sign-fix"],"signs":["POOR"]},"4":{"cov":1,"missing":[],"n":3,"flags":[]},"5":{"cov":0.5,"missing":["heedless"],"n":2,"flags":[]},"6":{"cov":0.5,"missing":["deeds"],"n":1,"flags":[]},"7":{"cov":0.67,"missing":["simple"],"n":3,"flags":[]}}

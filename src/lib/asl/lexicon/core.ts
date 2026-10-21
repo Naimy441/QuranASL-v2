@@ -17,7 +17,7 @@ POSS-a | B @neutral:o8f8u3 p:FO f:U > @neutral:o12f12u3 d:0.15 | his,her,its | h
 THEY | 1 @neutral:i4f10 p:D f:FI > @neutral:o18f8 f:FO d:0.35 | they,them,those | high
 THEIR | B @neutral:i4f10 p:F f:U > @neutral:o18f8 p:FO d:0.35 | their,theirs | high
 WE | 1 @chestSide:u4 p:D f:B > @^chestSide:u4 ~arc:f7 d:0.35 | we,us | high
-OUR | curvedB @chestSide p:I f:U > @^chestSide p:B ~arc:f8 d:0.4 | our,ours | high
+OUR | curvedB @chestSide p:I f:U at:radial > @^chestSide p:O at:ulnar ~arc:f8 d:0.4 | our,ours | high
 YOU-ALL | 1 @neutral:i8f12 p:D f:F > @neutral:o14f12 d:0.35 | you all,ye | high
 SELF | 10 @neutral:o6f8 p:I f:F > @neutral:o6f13 d:0.12 ;x2 | self,himself,itself | high
 MYSELF | 10 @chest:f6 p:O f:B at:knuckles > @chest:f1 d:0.12 ;x2 | myself | high
@@ -60,7 +60,7 @@ UNTIL | 1 @neutral:o12 p:F f:FU > @base.tipI at:tipI ~arc:u6 d:0.4 | 1 @neutral:
 ONLY | 1 @neutral:u6f4 p:F f:U > p:B d:0.25 | only,alone,sole,except | high
 ALONE | 1 @neutral:u6 p:B f:U ~circle:U4x2 | alone,lonely | high
 ALSO | 1 @neutral:o8 p:D f:F > @neutral:o2 d:0.15 | also,too | high
-NOT | 10 @chin:d1 p:I f:F at:tipT > @chin:f14d2 d:0.2 ;face:shake=0.12,browDown=0.4 | not,no,nor,neither | high
+NOT | 10 @chin:d1 p:I f:U at:tipT > @chin:f14d2 f:FU d:0.2 ;face:shake=0.12,browDown=0.4 | not,no,nor,neither | high
 NO | U @neutral:u8 p:F f:U > flatO d:0.12 ;x2 face:shake=0.15 | no | high
 YES | S @neutral:u8 p:F f:U > @neutral:u5f3 p:D f:F d:0.12 ;x2 face:nod=0.1 | yes,indeed | high
 NONE | O @neutral:f6 p:F f:U > @neutral:f6o14 d:0.35 ;sym face:shake=0.12 | none,nothing,no one | high
@@ -153,7 +153,7 @@ PARENTS | 5 @forehead p:I f:U at:tipT > @chin at:tipT d:0.3 | parents | high
 BROTHER | L @forehead p:I f:F at:tipT > @neutral:u0 d:0.35 | L @neutral:d2 p:I f:F | brother | high
 SISTER | L @jaw p:I f:F at:tipT > @neutral:u0 d:0.35 | L @neutral:d2 p:I f:F | sister | high
 SON | B @forehead:o4 p:D f:F > @neutral:d2 p:U ~arc:f4 d:0.4 | B @neutral:d4 p:U f:FI | son,sons | high
-DAUGHTER | B @jaw p:D f:F > @neutral:d2 p:U ~arc:f4 d:0.4 | B @neutral:d4 p:U f:FI | daughter,daughters | high
+DAUGHTER | B @jaw p:I f:FU at:radial > @neutral:d2 p:U f:F ~arc:f4 d:0.4 | B @neutral:d4 p:U f:F | daughter,daughters | high
 CHILD | B @low:o4 p:D f:F > @low:o14 ~tap:3 d:0.35 | child,children,kids,offspring | high
 BABY | B @neutral:o4 p:U f:FI > @neutral:o4 ~twist:20 h:0.4 | B @neutral:d3 p:U f:FO | baby,infant | high
 MARRY | curvedB @neutral:u4 p:D f:F > @base.back:u2 d:0.3 | curvedB @neutral p:U f:F | marry,married,spouse | high
@@ -167,11 +167,11 @@ POOR | 5 @base.wrist:b20 p:B f:U > flatO @base.wrist:b20d6 d:0.25 ;x2 | B @neutr
 RICH | S @base.palm:u2 p:U f:F > claw5 @base.palm:u14 p:D f:F d:0.35 | B @neutral p:U f:FI | rich,wealthy,self-sufficient | high
 SERVE | B @neutral:o8 p:U f:F > @neutral:o8f8 d:0.2 ;alt x2 | serve,service | high
 SERVANT | =SERVE+PERSON | servant,servants,slave | high
-KING | K @^shoulder p:B f:U > @hip:f6 d:0.45 | king,sovereign,ruler | high
+KING | K @^shoulder:f3 p:B f:U at:palm > @waist:o12f6 at:palm d:0.45 | king,sovereign,ruler | high
 LEADER | =LEAD+PERSON | leader | med
 
 # ---------- emotion & mind ----------
-KNOW | B @temple p:B f:IU at:tipM > @temple:o3 d:0.1 ;x2 | know,knew,knowing,knowledge,aware | high
+KNOW | B @temple p:D f:I at:tipM > @temple:o3 d:0.1 ;x2 | know,knew,knowing,knowledge,aware | high
 NOT-KNOW | B @temple p:B f:IU at:tipM > @forehead:o10f12 p:F d:0.25 ;face:shake=0.1 | do not know | high
 THINK | 1 @temple p:B f:IU at:tipI > @temple:o3 d:0.1 ;x2 | think,thought,consider,suppose,reckon | high
 UNDERSTAND | S @temple:f4 p:B f:U > 1 d:0.18 | understand,comprehend,realize | high
@@ -193,7 +193,7 @@ HAPPY | B @chest:d4 p:B f:I > @chest:u6 ~arc:f3 d:0.15 ;x2 face:smile=0.8,browUp
 SAD | 5 @eyes:o5f8 p:B f:U > @chin:o6f8d8 d:0.45 ;sym face:browInnerUp=0.9,frown=0.6 | sad,grief,grieve,sorrow | high
 ANGRY | claw5 @stomach:o7f3 p:B f:I > @chestHigh:o7f4 d:0.35 ;sym face:browDown=1,squint=0.5,frown=0.6 | angry,anger,wrath,rage,furious | high
 AFRAID | S @chestSide:f8 p:B f:I > 5 @chest:f8o2 d:0.12 ;sym face:eyesWide=0.8,browInnerUp=0.6 | afraid,fear,scared,terror,dread | high
-WORRY | B @face:o8f8 p:B f:I ~circle:B5x2 ;alt face:browInnerUp=0.6,browDown=0.3 | worry,anxious,anxiety | med
+WORRY | B @face:o10u8 p:B f:I ~circle:B4x2 ;alt face:browInnerUp=0.6,browDown=0.3 | worry,anxious,anxiety | med
 PLEASED | B @chest:o4f6u6 p:D f:I > @chest:o4f6d2 d:0.3 ;sym face:smile=0.5 | pleased,satisfied,content,satisfaction | high
 ENJOY | B @chest p:B f:I ~circle:B5x2 ;face:smile=0.5 | enjoy,enjoyment,pleasure,please | high
 PATIENT | A @lips p:I f:U at:tipT > @chin:d4 at:tipT d:0.4 | patient,patience,steadfast,persevere,endure | high

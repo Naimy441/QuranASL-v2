@@ -106,7 +106,7 @@ export class Lexicon {
 export function combineSigns(id: string, parts: CompiledSign[]): CompiledSign {
   const tl = buildTimeline(
     parts.map((s, i) => ({ index: i, label: s.id, kind: "sign" as const, sign: s })),
-    { lead: 0, tail: 0 },
+    { lead: 0, tail: 0, plan: false },
   );
   // Drop the synthetic rest keys at both ends.
   const R = tl.R.slice(1, -1);

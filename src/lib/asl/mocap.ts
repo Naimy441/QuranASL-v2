@@ -6,7 +6,7 @@ export interface MocapClip {
   src: string;
   fps: number;
   seg: [number, number];
-  R: number[][] | null; // [px,py,pz,qx,qy,qz,qw, 16 finger params, 5 thumb params]
+  R: number[][] | null; // [px,py,pz,qx,qy,qz,qw, 16 finger params, 5 thumb params, elbow swivel?]
   L: number[][] | null;
   face: number[][]; // [browUp, browDown, mouthOpen, smile, eyesClosed, headYaw, headRoll, headPitch]
 }
@@ -46,12 +46,12 @@ export function mocapSign(c: MocapClip, step = 2): CompiledSign {
     const keys: HandKey[] = [];
     for (let i = 0; i < rows.length; i += step) {
       const a = rows[i];
-      keys.push({ t: i * dt, hold: 0, pos: [a[0], a[1], a[2]], quat: [a[3], a[4], a[5], a[6]], shape: shapeFrom(a), lin: true });
+      keys.push({ t: i * dt, hold: 0, pos: [a[0], a[1], a[2]], quat: [a[3], a[4], a[5], a[6]], shape: shapeFrom(a), lin: true, sw: a[28] });
     }
     const last = rows.length - 1;
     if (last % step) {
       const a = rows[last];
-      keys.push({ t: last * dt, hold: 0, pos: [a[0], a[1], a[2]], quat: [a[3], a[4], a[5], a[6]], shape: shapeFrom(a), lin: true });
+      keys.push({ t: last * dt, hold: 0, pos: [a[0], a[1], a[2]], quat: [a[3], a[4], a[5], a[6]], shape: shapeFrom(a), lin: true, sw: a[28] });
     }
     keys[0].lin = false;
     return keys;

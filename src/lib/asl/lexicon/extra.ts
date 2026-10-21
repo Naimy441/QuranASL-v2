@@ -177,7 +177,7 @@ THORN | 1 @base.palm:u6 p:D f:D > @base.palm:u0 d:0.1 ;x2 | B @neutral p:U f:FI 
 READY | R @neutral:o2 p:D f:F > @neutral:o14 d:0.3 ;sym | ready,prepared,set | high
 CUT | V @neutral:u2 p:B f:F > U d:0.12 ;x2 | cut,carve,carved | high
 LIMIT | bentB @neutral:u8 p:D f:FI > @neutral:u6 d:0.15 | bentB @neutral:d2 p:D f:FO > @neutral:u0 d:0.15 | limit,restrict,restricted,bound | high
-SHAME | bentB @cheek:d2 p:B f:U at:back > @cheek:u2 at:back d:0.3 ;sym face:browInnerUp=0.6,frown=0.3 | shame,humiliate,disgrace,embarrass | high
+SHAME | bentB @cheek:d2 p:B f:U at:knuckles > @cheek:u2 at:knuckles d:0.3 ;sym face:browInnerUp=0.6,frown=0.3 | shame,humiliate,disgrace,embarrass | high
 INHERIT | 5 @shoulder:f6 p:B f:U > @neutral:f12d2 ~arc:u4 d:0.4 ;sym | inherit,inheritance | med
 GREEDY | claw5 @far p:U f:F > S @chest:f4 d:0.3 ;face:browDown=0.4,squint=0.4 | greedy,greed,devour | med
 FREE | F @neutral:i3 p:B f:U > @neutral:o12 p:F d:0.3 ;sym | free,freedom,release,liberate | high
@@ -282,7 +282,7 @@ BOY | flatO @forehead:u2 p:D f:F > @forehead:u2 d:0.1 ;x2 | boy,boys,young man,y
 MISLEAD | =DECEIVE | mislead,misled,misguide | med
 ADVERSITY | =SUFFER | adversity,affliction,hardship,calamity,distress | med
 SPOUSE | =MARRY | mates,mate,spouse,spouses | med
-DEAF | 1 @ear:f2i2 p:F f:O at:tipI > @mouth:o3 at:tipI d:0.3 | deaf | high
+DEAF | 1 @ear:f2 p:F f:IU at:tipI > @mouth:o3 p:B f:IU at:tipI d:0.3 | deaf | high
 SUDDENLY | =SURPRISE | suddenly,unexpectedly,sudden | med
 EFFECT | =LAST | effect,outcome | low
 AROUND | =SURROUND | around | med
@@ -388,7 +388,7 @@ DEVOTE | =WORSHIP | devote,devotion,dedicate | med
 CHOKE | C @neck:f2 p:B f:U > S @neck:f1 d:0.25 ;face:eyesWide=0.5 | choke,choking | high
 SAND | flatO @base.palm:u2 p:D f:F ~wiggle:12 | B @neutral p:U f:FI | sand,dune,heap of sand | med
 IDOL | =FALSE-GOD | idol,idols,statue,uncleanliness | med
-STUBBORN | B @temple p:F f:U at:heel > bentB d:0.15 | stubborn,obstinate,defiant,defiantly | high
+STUBBORN | B @temple:u2 p:F f:UO at:radial > bentB d:0.15 | stubborn,obstinate,defiant,defiantly | high
 CLIMB | bentV @base.palm:d4 p:F f:U > @base.palm:u6 d:0.2 > @base.palm:u12 d:0.2 | B @neutral:i4 p:I f:U | climb,climbing,ascend steep | high
 IT | =IX-a | it | high
 ITS | =POSS-a | its | high

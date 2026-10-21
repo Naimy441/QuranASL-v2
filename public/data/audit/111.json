@@ -1,0 +1,1 @@
+{"1":{"cov":1,"missing":[],"n":6,"flags":[],"fs":["ABU","LAHAB"]},"2":{"cov":0.67,"missing":["avail"],"n":6,"flags":[]},"3":{"cov":0.8,"missing":["enter"],"n":4,"flags":[]},"4":{"cov":0.75,"missing":["well"],"n":4,"flags":[]},"5":{"cov":0.6,"missing":["around","twisted"],"n":5,"flags":[]}}

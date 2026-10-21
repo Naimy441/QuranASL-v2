@@ -10,6 +10,30 @@ export const BODY = {
   head: { y: 1.615, z: 0.012, rx: 0.081, ry: 0.107, rz: 0.095 },
 };
 
+/** Torso lathe profile: (radius, height above the hips). The mesh and the collision model share it. */
+export const TORSO_PROFILE: [number, number][] = [
+  [0.0, -0.03], [0.15, -0.03], [0.162, 0.04], [0.156, 0.12], [0.15, 0.2], [0.157, 0.28], [0.168, 0.34], [0.177, 0.39],
+  [0.178, 0.425], [0.162, 0.455], [0.125, 0.474], [0.075, 0.484], [0.0, 0.488],
+];
+/** Front-to-back flattening of the torso lathe. */
+export const TORSO_DEPTH = 0.62;
+
+/** Torso lathe radius at height h above the hips (0 above the shoulders). */
+export function torsoRadius(h: number) {
+  const P = TORSO_PROFILE;
+  if (h <= P[1][1]) return P[1][0];
+  for (let i = 1; i < P.length - 1; i++) {
+    const [r0, y0] = P[i], [r1, y1] = P[i + 1];
+    if (h <= y1) return r0 + ((r1 - r0) * (h - y0)) / (y1 - y0);
+  }
+  return 0;
+}
+
+/** Front of the hijab drape (z) at height h above the hips: it lies on the chest and wraps the neck. */
+export function drapeFront(h: number) {
+  return Math.max(torsoRadius(h) * TORSO_DEPTH + 0.01, 0.066);
+}
+
 /**
  * Named body / signing-space locations. x is measured OUTWARD from the midline
  * toward the hand's own side (ipsilateral), so a single entry works for either

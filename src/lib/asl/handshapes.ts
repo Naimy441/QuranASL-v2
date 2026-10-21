@@ -1,4 +1,5 @@
 import type { FingerPose, Handshape, ThumbPose } from "./types";
+import learned from "../avatar/learned.json";
 
 // Finger configurations: [MCP, PIP, DIP, spread]
 const EXT: FingerPose = [0, 0, 0, 0]; // straight
@@ -30,10 +31,10 @@ const H = (i: FingerPose, m: FingerPose, r: FingerPose, p: FingerPose, t: ThumbP
 const sp = (f: FingerPose, s: number): FingerPose => [f[0], f[1], f[2], s];
 
 /**
- * ASL handshape inventory. Names follow common ASL linguistics conventions
- * (letters / numbers / descriptive names).
+ * ASL handshape inventory, textbook form. Names follow common ASL linguistics
+ * conventions (letters / numbers / descriptive names).
  */
-export const HANDSHAPES: Record<string, Handshape> = {
+export const CANONICAL_HANDSHAPES: Record<string, Handshape> = {
   // --- Manual alphabet ---
   A: H(FIST, FIST, FIST, FIST, T_SIDE),
   B: H(EXT, EXT, EXT, EXT, T_TUCK),
@@ -92,6 +93,40 @@ export const HANDSHAPES: Record<string, Handshape> = {
   relaxed: H(RELAX, RELAX, sp(RELAX, 4), sp(RELAX, 6), T_RELAX),
 };
 
+/**
+ * Real hands never make the textbook shapes: straight fingers keep a few degrees
+ * of curl, a fist is a little looser, and each finger differs. Move each finger
+ * joint halfway toward how captured human signers actually form the shape (median
+ * of held frames, scripts/learn/motion-stats.ts), or, for shapes without enough
+ * captured examples, apply the corpus-wide relaxation. Spread and thumb are left
+ * alone (the capture is least reliable there), and fists never open by more than
+ * 6°, so every shape stays distinct.
+ */
+function naturalize(name: string, h: Handshape): Handshape {
+  if (name === "relaxed") return h;
+  const cap = (learned.shapes as Record<string, { n: number; median: number[] }>)[name];
+  const own = cap && cap.n >= 100 ? cap.median : null;
+  const fingers = ["i", "m", "r", "p"] as const;
+  const out = { ...h } as Handshape;
+  fingers.forEach((f, fi) => {
+    const pose = [...h[f]] as FingerPose;
+    for (let j = 0; j < 3; j++) {
+      const t = pose[j];
+      let v = t;
+      if (own) v = t + 0.5 * (own[fi * 4 + j] - t);
+      else if (t < 10) v = t + 0.6 * learned.relax.ext[j];
+      else if (t > 80) v = t + 0.6 * learned.relax.curl[j];
+      if (t > 80) v = Math.max(v, t - 6);
+      pose[j] = Math.round(v * 10) / 10;
+    }
+    out[f] = pose;
+  });
+  return out;
+}
+
+/** Handshapes as the avatar signs them (naturalized from human captures). */
+export const HANDSHAPES: Record<string, Handshape> = Object.fromEntries(Object.entries(CANONICAL_HANDSHAPES).map(([n, h]) => [n, naturalize(n, h)]));
+
 export const HANDSHAPE_NAMES = Object.keys(HANDSHAPES);
 
 export function getHandshape(name: string): Handshape {
@@ -109,4 +144,20 @@ export function lerpHandshape(a: Handshape, b: Handshape, t: number): Handshape 
     p: f(a.p, b.p) as FingerPose,
     t: f(a.t, b.t) as ThumbPose,
   };
+}
+
+// Fingers do not change shape in lockstep: the thumb and index lead, the ulnar
+// fingers follow a few tens of milliseconds later (as in captured signing).
+const STAGGER = { t: 0, i: 0.03, m: 0.06, r: 0.09, p: 0.12 } as const;
+const smooth01 = (x: number) => (x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x));
+
+/** Blend two handshapes with per-finger staggered timing; u in 0..1 is the movement progress. */
+export function blendHandshape(a: Handshape, b: Handshape, u: number, out?: Handshape): Handshape {
+  const o = out ?? { i: [0, 0, 0, 0], m: [0, 0, 0, 0], r: [0, 0, 0, 0], p: [0, 0, 0, 0], t: [0, 0, 0, 0, 0] };
+  for (const k of ["i", "m", "r", "p", "t"] as const) {
+    const w = smooth01((u * 1.3 - STAGGER[k]) / 0.88);
+    const x = a[k], y = b[k], z = o[k] as number[];
+    for (let j = 0; j < x.length; j++) z[j] = x[j] + (y[j] - x[j]) * w;
+  }
+  return o;
 }

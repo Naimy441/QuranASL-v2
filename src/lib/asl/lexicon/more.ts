@@ -33,7 +33,7 @@ ENTER | B @neutral:u4b4 p:D f:F > @neutral:d6f10 f:FD ~arc:u3 d:0.35 | B @neutra
 EXIT | 5 @base.palm:d2 p:D f:D > flatO @base.palm:u10 d:0.3 | C @neutral p:I f:F | exit,out,come out,bring out,emerge,extract | high
 APPEAR | 1 @base.palm:d6 p:B f:U > @base.palm:u8 d:0.2 | B @neutral p:D f:FI | appear,appeared,emerge,show up | high
 DISAPPEAR | 1 @base.palm:u6 p:B f:U > @base.palm:d8 d:0.2 | B @neutral p:D f:FI | disappear,vanish,gone | high
-HIDE | 10 @chin p:I f:F at:tipT > @base.palm:d4 d:0.3 | B @neutral p:D f:FI | hide,hidden,conceal,secret,unseen | high
+HIDE | 10 @chin p:I f:U at:tipT > @base.palm:d4 f:F d:0.3 | B @neutral p:D f:FI | hide,hidden,conceal,secret,unseen | high
 SECRET | 10 @lips p:I f:F at:tipT > @lips:f2 at:tipT d:0.1 ;x2 face:lipsPress=0.6 | secret,private,hidden | high
 WALK | B @neutral:o8 p:D f:F > @neutral:o8f6 d:0.2 ;alt x2 | walk,walked,go about | high
 RUN | L @neutral:o4 p:D f:F > @far:o4 ~wiggle:15 d:0.4 ;sym | run,ran,race,hasten | high

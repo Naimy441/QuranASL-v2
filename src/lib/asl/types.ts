@@ -54,6 +54,13 @@ export interface HandKey {
   overlay?: Overlay;
   /** Linear (un-eased) interpolation into this key — used for dense captured motion. */
   lin?: boolean;
+  /**
+   * Velocity (m/s) the hand passes through this key with — set by the timeline
+   * for pass-through keys and captured motion; absent = the hand stops here.
+   */
+  v?: [number, number, number];
+  /** Elbow swivel (radians, see avatar/elbow.ts) — captured motion only. */
+  sw?: number;
 }
 
 export type FaceKey =

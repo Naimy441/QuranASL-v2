@@ -34,10 +34,16 @@ src/lib/asl/lexicon/*    dictionary: one line per sign in a small notation (belo
 src/lib/asl/dsl.ts       compile a sign → timed keyframes per hand (IK-ready wrist pose,
                          orientation quaternion, handshape joint angles, overlays)
 src/lib/asl/mocap.ts     captured signs → dense linearly-interpolated keyframes + face track
-src/lib/asl/timeline.ts  join signs with eased transitions (no return to rest), slerp,
-                         handshape blending, facial-grammar spans; sample a pose at time t
+src/lib/asl/timeline.ts  join signs with human-timed transitions (Fitts law fitted to captures),
+                         minimum-jerk movement, pass-through velocities (coarticulation),
+                         paths bent around the body, staggered finger timing, settle + micro-motion
+src/lib/asl/physical.ts  body SDF matching the avatar (head + headwear, nose, neck, torso, drape),
+                         hand collision proxies, contact fitting at compile time, runtime solver
+                         that keeps hands out of the body and each other
 src/lib/avatar/*         procedural avatar: articulated hands (15 finger joints + thumb),
-                         two-bone arm IK, brows/lids/gaze/mouth/cheeks, head & torso
+                         two-bone arm IK with learned / captured elbow swivel and torso clearance,
+                         brows/lids/gaze/mouth/cheeks, head & torso
+src/lib/avatar/learned.json  parameters learned from human signing (scripts/learn/motion-stats.ts)
 src/components/avatar/AvatarCanvas.tsx   React Three Fiber renderer (+ @react-three/xr)
 ```
 
@@ -100,6 +106,38 @@ npx tsx scripts/bsl/build-lexicon.ts [minAUC] # → public/data/bsl/lexicon/*.js
 
 `scripts/build-autogloss.ts` also writes `public/data/stats.json` (the numbers on the landing page). `scripts/en.sh N` prints a surah's English, one ayah per line, for glossing.
 
+### Physical plausibility and motion
+
+Hands never pass through the head, hijab, torso or each other:
+
+- **At compile time** (`dsl.ts`): a key that touches the body keeps its contact point and the hand is tilted about it, by the smallest angle that clears the face, neck or chest, as a signer tilts the wrist; contact targets inside the clothed body move onto its surface; two-handed keys are settled so the hands touch instead of overlapping.
+- **When sequencing** (`timeline.ts`): any movement whose straight path would cut through the body is bent into an arc around it.
+- **Every frame** (`AvatarRig.apply`): a solver translates each hand out of the body and separates the hands (least squares over all touching finger pairs; for captured signs, in depth only, the dimension monocular capture gets wrong), eased by a critically damped spring so touching hands settle instead of flickering. The elbow swings out if the arm would pass through the torso. Cost: ~50 µs per frame.
+
+Motion is tuned to captured human signing: transition and movement times follow a Fitts law fitted to Global Deaf Muslim captures (the engine used to move twice as fast as people do), handshapes are moved halfway toward how real hands form them, the elbow follows the swivel human signers use, captured signs follow the signer's own elbow.
+
+```bash
+npx tsx scripts/learn/motion-stats.ts --report   # learn from every retargeted clip → src/lib/avatar/learned.json
+npx tsx scripts/learn/engine-stats.ts 150        # the same statistics measured on the engine, for comparison
+npx tsx scripts/audit-signs.ts                   # physical audit of every sign → public/data/audit/signs.json
+npx tsx scripts/audit-glosses.ts                 # coverage audit of every ayah → public/data/audit/*.json, review queue
+npx tsx scripts/try-def.ts "<def>" ...            # score candidate sign definitions before editing the lexicon
+npx tsx scripts/qa/smoothness.ts SIGN ...         # glitch detector: rendered vs raw hand acceleration, residual overlap
+```
+
+### Retargeting captured signing
+
+`scripts/mocap/lib.ts` maps MediaPipe Holistic landmarks onto the avatar. x/y come from the image (anchored to the shoulders, and to the face for hands near the head), not from MediaPipe's world coordinates, which put the face 30% too low; depth comes from arm reach given the captured elbow angle; a hand overlapping the face in the video is placed on the avatar's face surface by the landmark actually touching it; hands seen over the torso are kept in front of it; tracking glitches are removed and the signal is smoothed with a zero-phase Gaussian. Each frame also carries the signer's elbow swivel.
+
+```bash
+npx tsx scripts/qa/retarget-range.ts data/pose/gdm/surah_fatihah.json 0 61 public/data/_qa/fatihah.json
+node scripts/qa/compare.mjs path/to/video.mp4 /data/_qa/fatihah.json out.png "2,10,30"   # video | avatar side by side
+```
+
+### Review queue
+
+`/review` ranks what Deaf reviewers should look at first: ayat whose gloss leaves part of the meaning uncarried, and the most-used signs whose motion still needs work, with links into the player, dictionary and Gloss Studio. Sign-offs merged into the repository go in `public/data/reviews.json`.
+
 ### Visual QA tools (headless Chrome)
 
 ```bash
@@ -107,6 +145,7 @@ node scripts/qa-signs.mjs out.png KNOW THINK MOTHER     # grid of signs at 35% /
 node scripts/frames.mjs "/lab/sign?gloss=ALLAH%20KNOW" out.png auto
 node scripts/test-practice.mjs clip.y4m out.png         # Practice page with a video as the webcam
 node scripts/snap.mjs "/surah/2?ayah=255" out.png 1280 860 4000 dark   # any page, size, wait, colour scheme
+node scripts/qa/record.mjs "/lab/sign?gloss=ALLAH%20KNOW" out.mp4      # frame-exact MP4 of a lab page
 ```
 
 ## Sources, credits and licences
@@ -116,6 +155,24 @@ node scripts/snap.mjs "/surah/2?ayah=255" out.png 1280 860 4000 dark   # any pag
 - Human ASL videos: [Global Deaf Muslim](https://www.youtube.com/@gdeafmuslim) (embedded from YouTube). BSL videos and BSL motion: Al Isharah's BSL Qur'an Project.
 - Captured Islamic signs and prophet names are retargeted from Global Deaf Muslim videos. **Before any public release, get Global Deaf Muslim's permission** to use their signs this way, and credit them in the app. **Likewise get Al Isharah's permission** before publishing the BSL motion and dictionary derived from their recordings.
 - Hand tracking: MediaPipe (Apache-2.0), served locally from `public/mediapipe`.
+
+## Reviewing
+
+Every gloss and sign is a draft until a Deaf signer approves it.
+
+- **`/review`** ranks what to look at first (from `public/data/audit/`) and shows real status: approved per surah, a *needs changes* view, who decided what. Every row opens the Studio at that ayah or sign.
+- **`/studio`** is where things get fixed: watch the avatar beside the human-signed video, reorder signs by drag or keyboard (Alt+←/→), insert / change signs with the searchable picker, undo / redo, then **Approve** or **Needs changes** (optional comment). *Next in queue* jumps to the next flagged ayah or sign. In sign mode you can edit the definition (live compile check + physical check of how far a hand sinks into the body) or **record yourself** with the webcam (video + MediaPipe hand landmarks, saved as a proposed recording).
+- Decisions are append-only events (`draft → needs-changes → approved`, with reviewer, time, comment and the exact gloss / definition), see `src/lib/review/`. They stay in the browser until exported as one **contribution bundle** (versioned JSON).
+
+Merging a bundle:
+
+```bash
+npx tsx scripts/merge-contributions.ts bundle.json            # dry run: validate + diff
+npx tsx scripts/merge-contributions.ts bundle.json --write    # apply
+npx tsx scripts/build-gloss.ts                                # publish data/gloss → public/data/gloss
+```
+
+The merge refuses glosses with tokens missing from the lexicon, definitions that do not compile, and edits whose base changed in the repo since (`--force` overrides). It writes `data/gloss/*.txt`, `src/lib/asl/lexicon/*.ts`, `public/data/reviews.json`, and recordings to `data/contrib/recordings/` (with a `map.json` for `scripts/mocap/retarget.ts` after `extract_pose.py`). On the dev server the Studio's *Check for repo* button runs the same merge through `/api/studio`.
 
 ## Contributing
 

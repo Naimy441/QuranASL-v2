@@ -2,6 +2,8 @@ import * as THREE from "three";
 import { HANDSHAPES } from "./handshapes";
 import { dirVec, locVec, offsetVec } from "./body";
 import { buildHandRig, type HandRig } from "../avatar/handRig";
+import { fitContact, separateStatic, surfaceTarget } from "./physical";
+import learned from "../avatar/learned.json";
 import type { CompiledSign, FaceState, HandKey, HandPoint, HandSide, Overlay } from "./types";
 
 /*
@@ -112,7 +114,7 @@ function probe(side: HandSide) {
 }
 
 const _x = new THREE.Vector3(), _y = new THREE.Vector3(), _z = new THREE.Vector3();
-const _m = new THREE.Matrix4(), _q = new THREE.Quaternion(), _p = new THREE.Vector3();
+const _m = new THREE.Matrix4(), _q = new THREE.Quaternion(), _p = new THREE.Vector3(), _tv = new THREE.Vector3();
 
 export function orientQuat(palm: [number, number, number], fing: [number, number, number]): THREE.Quaternion {
   _y.set(...fing).normalize();
@@ -151,6 +153,8 @@ interface Resolved {
   arc?: [number, number, number];
   overlay?: Overlay;
   baseRef?: { point: HandPoint; off: [number, number, number] };
+  /** The location is on the body (contact), not in signing space. */
+  onBody: boolean;
 }
 
 function resolveTrack(keys: RawKey[], side: HandSide, id: string): Resolved[] {
@@ -164,16 +168,19 @@ function resolveTrack(keys: RawKey[], side: HandSide, id: string): Resolved[] {
     let target = prev?.target;
     let baseRef = prev?.baseRef;
     let locName = k.loc;
+    let onBody = prev?.onBody ?? false;
     if (k.loc) {
       const off = k.off ? offsetVec(k.off, side) : ([0, 0, 0] as [number, number, number]);
       if (k.loc.startsWith("base")) {
         const point = (k.loc.split(".")[1] ?? "palm") as HandPoint;
         baseRef = { point, off };
         target = [0, 0, 0];
+        onBody = false;
       } else {
         const l = locVec(k.loc, side);
         target = [l[0] + off[0], l[1] + off[1], l[2] + off[2]];
         baseRef = undefined;
+        onBody = !SPACE.has(k.loc.replace(/^\^/, ""));
       }
     } else if (k.off && prev) {
       // offset relative to previous position
@@ -199,7 +206,7 @@ function resolveTrack(keys: RawKey[], side: HandSide, id: string): Resolved[] {
     }
     const defaultHold = overlay?.circle ? 0.32 * overlay.circle.turns : overlay && (overlay.wiggle || overlay.twist || overlay.shake || overlay.tap) ? 0.4 : DEFAULT_H;
     const r: Resolved = {
-      hs, target, at, palm, fing, baseRef,
+      hs, target, at, palm, fing, baseRef, onBody,
       d: idx === 0 ? 0 : k.d ?? DEFAULT_D,
       h: k.h ?? defaultHold,
       arc: k.arc ? offsetVec(k.arc, side) : undefined,
@@ -239,11 +246,20 @@ function timeTrack(r: Resolved[], side: HandSide, base: HandKey[] | null): HandK
       const bp = brig.point(k.baseRef.point, _p).applyQuaternion(_q.set(...bk.quat));
       target = [bk.pos[0] + bp.x + k.baseRef.off[0], bk.pos[1] + bp.y + k.baseRef.off[1], bk.pos[2] + bp.z + k.baseRef.off[2]];
     }
-    const pt = rig.point(k.at, _p).applyQuaternion(q);
+    let pos: [number, number, number];
+    if (k.onBody && !k.baseRef) {
+      // keep the contact, tilt the hand clear of the face / neck / chest
+      const fit = fitContact(side, shape, q, rig.point(k.at, _p).clone(), surfaceTarget(_tv.set(...target)));
+      q.copy(fit.quat);
+      pos = [fit.pos.x, fit.pos.y, fit.pos.z];
+    } else {
+      const pt = rig.point(k.at, _p).applyQuaternion(q);
+      pos = [target[0] - pt.x, target[1] - pt.y, target[2] - pt.z];
+    }
     const key: HandKey = {
       t,
       hold: k.h,
-      pos: [target[0] - pt.x, target[1] - pt.y, target[2] - pt.z],
+      pos,
       quat: [q.x, q.y, q.z, q.w],
       shape,
       arc: k.arc,
@@ -268,6 +284,55 @@ function sampleKeysLinear(keys: HandKey[], t: number): HandKey {
     }
   }
   return keys[keys.length - 1];
+}
+
+/**
+ * Human movements take time in proportion to distance (Fitts' law, fitted to
+ * captured signing in learned.json). Lexicon durations were written by hand and
+ * are often twice as fast as real signers; give every movement longer than 8 cm at
+ * least 80% of the human time. Short movements (taps, wiggles, repetitions) keep
+ * their written rhythm.
+ */
+function humanTiming(keys: HandKey[]) {
+  const F = learned.timing.fitts;
+  let shift = 0;
+  for (let i = 1; i < keys.length; i++) {
+    const a = keys[i - 1], k = keys[i];
+    const t0 = a.t + a.hold; // already shifted
+    k.t += shift;
+    const d = Math.hypot(k.pos[0] - a.pos[0], k.pos[1] - a.pos[1], k.pos[2] - a.pos[2]);
+    if (d < 0.08) continue;
+    const want = 0.8 * (F.a + F.b * d);
+    const have = k.t - t0;
+    if (have < want) {
+      shift += want - have;
+      k.t = t0 + want;
+    }
+  }
+}
+
+const _hR = { pos: new THREE.Vector3(), quat: new THREE.Quaternion(), shape: HANDSHAPES.relaxed };
+const _hL = { pos: new THREE.Vector3(), quat: new THREE.Quaternion(), shape: HANDSHAPES.relaxed };
+/**
+ * Two-handed signs: settle the hands against each other at every key so they touch
+ * instead of overlapping. The dominant hand moves onto the base hand; in symmetric
+ * signs (keys at the same times) both hands give way equally.
+ */
+function fitHands(R: HandKey[], L: HandKey[], sym: boolean) {
+  for (const k of R) {
+    const twin = sym ? L.find((l) => Math.abs(l.t - k.t) < 1e-3) : undefined;
+    const lk = twin ?? sampleKeysLinear(L, k.t);
+    _hR.pos.set(...k.pos);
+    _hR.quat.set(...k.quat);
+    _hR.shape = k.shape;
+    _hL.pos.set(...lk.pos);
+    _hL.quat.set(...lk.quat);
+    _hL.shape = lk.shape;
+    const wR = twin ? 0.5 : 1;
+    if (separateStatic(_hR, _hL, wR) < 1e-4) continue;
+    k.pos = [_hR.pos.x, _hR.pos.y, _hR.pos.z];
+    if (twin) twin.pos = [_hL.pos.x, _hL.pos.y, _hL.pos.z];
+  }
 }
 
 function endTime(keys: HandKey[]) {
@@ -300,7 +365,11 @@ export function compileSign(id: string, def: string): CompiledSign {
     }
     L = timeTrack(ndR, "L", null);
   }
+  if (L) humanTiming(L);
   const R = timeTrack(domR, "R", L);
+  humanTiming(R);
+
+  if (L) fitHands(R, L, p.flags.has("sym") || p.flags.has("alt"));
 
   // Stretch both tracks so they end together.
   let dur = endTime(R);
