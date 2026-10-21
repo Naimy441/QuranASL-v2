@@ -6,6 +6,10 @@ import HeroSigner from "./HeroSigner";
 import { SIGNERS } from "@/components/viewer/SignerPicker";
 import { ArrowRightIcon, BookIcon, CheckIcon, LayersIcon } from "@/components/common/Icons";
 import { readLastRead, readViewerPrefs, writeViewerPrefs, type AvatarId, type LastRead, type SignLang } from "@/lib/prefs";
+import { TextEffect } from "@/components/ui/text-effect";
+import { Frame } from "@/components/ui/frame";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 export default function Hero() {
   const [avatar, setAvatar] = useState<AvatarId>("amina");
@@ -30,29 +34,37 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative border-b border-line/70 bg-bg pb-12 pt-8 md:pb-16 md:pt-12">
+    <section className="relative border-b border-line/60 bg-bg pb-12 pt-8 md:pb-16 md:pt-14">
+      {/* Framed grid background */}
       <div aria-hidden className="pattern-bg pointer-events-none absolute inset-0 opacity-40" />
 
-      <div className="relative mx-auto grid max-w-7xl items-start gap-10 px-4 lg:grid-cols-[1.12fr_1fr] lg:gap-12">
+      <div className="relative mx-auto grid max-w-7xl items-start gap-10 px-4 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:gap-12">
         {/* Left Column: Academic Editorial Information & Metadata */}
         <div>
           {/* Corpus classification header */}
           <div className="flex flex-wrap items-center gap-2">
-            <span className="academic-tag border-line bg-panel font-mono text-[11px] text-ink-2">
+            <Badge variant="outline" size="sm" className="bg-panel/80">
               Linguistic Corpus &amp; Kinematic Model
-            </span>
-            <span className="academic-tag border-brand/30 bg-brand-soft/60 font-mono text-[11px] text-brand">
+            </Badge>
+            <Badge variant="brand" size="sm">
               Open Research Edition · v2.4
-            </span>
+            </Badge>
           </div>
 
-          {/* Research Title */}
-          <h1 className="font-serif font-editorial mt-5 text-3xl font-medium tracking-tight text-ink sm:text-5xl lg:leading-[1.15]">
-            A Computational Sign Language Corpus of the Qur&apos;an
-          </h1>
+          {/* Research Title using TextEffect */}
+          <div className="mt-5">
+            <TextEffect
+              per="word"
+              preset="fade-in-blur"
+              delay={0.1}
+              className="font-serif font-editorial text-3xl font-medium tracking-tight text-ink sm:text-5xl lg:leading-[1.12]"
+            >
+              A Computational Sign Language Corpus of the Qur&apos;an
+            </TextEffect>
+          </div>
 
           {/* Formal Abstract */}
-          <p className="mt-5 max-w-2xl text-[16.5px] leading-relaxed text-ink-2">
+          <p className="mt-5 max-w-2xl text-[15.5px] leading-relaxed text-ink-2">
             A linguistically annotated digital corpus and 3D kinetic avatar framework transcribing the Qur&apos;anic text
             into American Sign Language (ASL) and British Sign Language (BSL). Features morphosyntactic gloss tiering,
             3D spatial referential loci, non-manual grammatical facial markers, and comparative video documentation
@@ -60,18 +72,22 @@ export default function Hero() {
           </p>
 
           {/* Research Metrics / Accession Badges */}
-          <div className="mt-6 flex flex-wrap gap-2 text-xs text-ink-3">
-            <span className="rounded border border-line bg-panel px-2.5 py-1">
-              <strong className="font-semibold text-ink">114</strong> Surahs
+          <div className="mt-6 flex flex-wrap gap-2 text-xs">
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-line bg-panel px-2.5 py-1 text-ink-2 shadow-xs">
+              <span className="font-mono font-semibold text-ink">114</span>
+              <span>Surahs</span>
             </span>
-            <span className="rounded border border-line bg-panel px-2.5 py-1">
-              <strong className="font-semibold text-ink">6,236</strong> Ayat Glossed
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-line bg-panel px-2.5 py-1 text-ink-2 shadow-xs">
+              <span className="font-mono font-semibold text-ink">6,236</span>
+              <span>Ayat Glossed</span>
             </span>
-            <span className="rounded border border-line bg-panel px-2.5 py-1">
-              <strong className="font-semibold text-ink">2,800+</strong> Lexical Signs
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-line bg-panel px-2.5 py-1 text-ink-2 shadow-xs">
+              <span className="font-mono font-semibold text-ink">2,800+</span>
+              <span>Lexical Signs</span>
             </span>
-            <span className="rounded border border-line bg-panel px-2.5 py-1">
-              <strong className="font-semibold text-ink">Peer-Review</strong> Draft Protocol
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-line bg-panel px-2.5 py-1 text-ink-2 shadow-xs">
+              <span className="h-1.5 w-1.5 rounded-full bg-ok" />
+              <span>Peer-Review Draft</span>
             </span>
           </div>
 
@@ -79,78 +95,79 @@ export default function Hero() {
           <div className="mt-7 flex flex-wrap items-center gap-3">
             {last ? (
               <>
-                <Link
-                  href={`/surah/${last.surah}?ayah=${last.ayah}`}
-                  className="btn-primary group inline-flex items-center gap-2 rounded-md px-5 py-3 text-sm font-semibold shadow-xs"
-                >
-                  Continue Reading {last.name} {last.surah}:{last.ayah}
-                  <ArrowRightIcon size={16} className="transition-transform group-hover:translate-x-0.5" />
+                <Link href={`/surah/${last.surah}?ayah=${last.ayah}`}>
+                  <Button variant="default" size="lg" className="group">
+                    Continue Reading {last.name} {last.surah}:{last.ayah}
+                    <ArrowRightIcon size={15} className="transition-transform group-hover:translate-x-0.5" />
+                  </Button>
                 </Link>
-                <Link
-                  href="/surah/1"
-                  className="inline-flex items-center gap-2 rounded-md border border-line-2 bg-panel px-4 py-3 text-sm font-medium text-ink transition hover:border-brand hover:bg-panel-2"
-                >
-                  Access Surah Al-Fātiḥah (1:1)
+                <Link href="/surah/1">
+                  <Button variant="outline" size="lg">
+                    Access Surah Al-Fātiḥah (1:1)
+                  </Button>
                 </Link>
               </>
             ) : (
               <>
-                <Link
-                  href="/surah/1"
-                  className="btn-primary group inline-flex items-center gap-2 rounded-md px-5 py-3 text-sm font-semibold shadow-xs"
-                >
-                  Access Surah Al-Fātiḥah (1:1)
-                  <ArrowRightIcon size={16} className="transition-transform group-hover:translate-x-0.5" />
+                <Link href="/surah/1">
+                  <Button variant="default" size="lg" className="group">
+                    Access Surah Al-Fātiḥah (1:1)
+                    <ArrowRightIcon size={15} className="transition-transform group-hover:translate-x-0.5" />
+                  </Button>
                 </Link>
-                <a
-                  href="#surahs"
-                  className="inline-flex items-center gap-2 rounded-md border border-line-2 bg-panel px-4 py-3 text-sm font-medium text-ink transition hover:border-brand hover:bg-panel-2"
-                >
-                  <BookIcon size={16} /> Browse 114 Surahs Catalogue
+                <a href="#surahs">
+                  <Button variant="outline" size="lg">
+                    <BookIcon size={15} /> Browse 114 Surahs Catalogue
+                  </Button>
                 </a>
               </>
             )}
-            <a
-              href="#methodology"
-              className="inline-flex items-center gap-1.5 px-3 py-3 text-sm font-medium text-brand hover:text-brand-2 hover:underline"
-            >
-              <LayersIcon size={16} /> Methodology &amp; Architecture
+            <a href="#methodology">
+              <Button variant="ghost" size="lg" className="text-brand hover:text-brand-2">
+                <LayersIcon size={15} /> Methodology
+              </Button>
             </a>
           </div>
 
-          {/* Corpus Configuration Workbench Panel */}
-          <div className="mt-8 rounded-xl border border-line bg-panel p-4 shadow-xs">
-            <div className="mb-3 flex items-center justify-between border-b border-line/60 pb-2.5">
-              <span className="text-xs font-semibold uppercase tracking-wider text-ink-3">
-                Linguistic &amp; Rig Specification
+          {/* Corpus Configuration Workbench Frame */}
+          <Frame
+            withCorners
+            withHeader
+            headerTitle={
+              <span className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-brand" />
+                <span className="text-[11px] font-mono uppercase tracking-wider text-ink-3">
+                  Kinematic &amp; Linguistic Parameters
+                </span>
               </span>
-              <span className="text-[11px] font-mono text-ink-3">Realtime Synthesis</span>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2 sm:items-start">
+            }
+            headerAction={<span className="font-mono text-[11px] text-ink-3">Realtime 3D</span>}
+            className="mt-8 p-4 bg-panel shadow-xs"
+          >
+            <div className="grid gap-4 sm:grid-cols-2 sm:items-start pt-1">
               {/* Language Specification */}
               <div>
-                <label className="mb-1.5 block text-xs font-semibold text-ink">
+                <label className="mb-1.5 block text-xs font-medium text-ink">
                   Target Sign Language
                 </label>
-                <div role="radiogroup" aria-label="Sign language" className="grid grid-cols-2 gap-1 rounded-lg bg-panel-2 p-1 border border-line/80">
+                <div role="radiogroup" aria-label="Sign language" className="grid grid-cols-2 gap-1 rounded-lg bg-panel-2 p-1 border border-line/60">
                   {(["asl", "bsl"] as SignLang[]).map((l) => (
                     <button
                       key={l}
                       role="radio"
                       aria-checked={lang === l}
                       onClick={() => pickLang(l)}
-                      className={`rounded-md px-2.5 py-1.5 text-xs font-medium transition ${
+                      className={`rounded-md px-2.5 py-1.5 text-xs font-medium transition cursor-pointer ${
                         lang === l
-                          ? "bg-panel font-semibold text-brand shadow-xs border border-line/70"
+                          ? "bg-panel font-semibold text-brand shadow-xs border border-line"
                           : "text-ink-2 hover:text-ink"
                       }`}
                     >
-                      {l === "asl" ? "ASL (Topic-Comment)" : "BSL (Al Isharah Ref)"}
+                      {l === "asl" ? "ASL (Topic-Comment)" : "BSL (Al Isharah)"}
                     </button>
                   ))}
                 </div>
-                <p className="mt-1 text-[11px] text-ink-3">
+                <p className="mt-1.5 text-[11px] text-ink-3">
                   {lang === "asl"
                     ? "Topic-comment syntax with spatial indexing & NMM"
                     : "Native BSL human video clips retargeted onto kinematic rig"}
@@ -159,7 +176,7 @@ export default function Hero() {
 
               {/* Avatar Model Specification */}
               <div>
-                <label className="mb-1.5 block text-xs font-semibold text-ink">
+                <label className="mb-1.5 block text-xs font-medium text-ink">
                   Biomechanical Avatar Rig
                 </label>
                 <div role="radiogroup" aria-label="Signer avatar" className="flex flex-wrap gap-1.5">
@@ -169,14 +186,14 @@ export default function Hero() {
                       role="radio"
                       aria-checked={avatar === s.id}
                       onClick={() => pickAvatar(s.id)}
-                      className={`flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs transition ${
+                      className={`flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs transition cursor-pointer ${
                         avatar === s.id
-                          ? "border-brand bg-brand-soft/70 font-semibold text-brand"
+                          ? "border-brand bg-brand-soft/70 font-semibold text-brand shadow-xs"
                           : "border-line bg-panel text-ink-2 hover:border-line-2 hover:text-ink"
                       }`}
                     >
                       <span
-                        className="relative h-4 w-4 shrink-0 rounded-full border border-line"
+                        className="relative h-3.5 w-3.5 shrink-0 rounded-full border border-line"
                         style={{
                           background: `linear-gradient(135deg, ${s.swatch[0]} 50%, ${s.swatch[1]} 50%)`,
                         }}
@@ -186,53 +203,62 @@ export default function Hero() {
                     </button>
                   ))}
                 </div>
-                <p className="mt-1 text-[11px] text-ink-3">
+                <p className="mt-1.5 text-[11px] text-ink-3">
                   27-DOF skeletal rig with analytical two-bone IK solver
                 </p>
               </div>
             </div>
-          </div>
+          </Frame>
         </div>
 
-        {/* Right Column: Kinematic Observation Bench */}
+        {/* Right Column: Kinematic Observation Bench (Framed) */}
         <div className="relative">
-          <div className="overflow-hidden rounded-xl border border-line bg-panel shadow-sm">
-            {/* Viewport Control Strip */}
-            <div className="flex items-center justify-between border-b border-line bg-panel-2 px-3.5 py-2 text-xs">
+          <Frame
+            withCorners
+            withHeader
+            headerTitle={
               <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-ok" />
-                <span className="font-mono text-[11px] font-semibold tracking-wide text-ink">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ok opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-ok" />
+                </span>
+                <span className="font-mono text-[11px] font-semibold tracking-wider text-ink">
                   KINEMATIC VIEWPORT · {lang.toUpperCase()}
                 </span>
               </div>
-              <span className="font-mono text-[11px] text-ink-3">
+            }
+            headerAction={
+              <span className="font-mono text-[10px] text-ink-3">
                 Quaternion SLERP · 60 Hz
               </span>
-            </div>
-
+            }
+            className="overflow-hidden shadow-xs"
+          >
             {/* 3D Stage */}
             <div className="stage relative aspect-[4/4.8] w-full overflow-hidden">
               <HeroSigner avatar={avatar} lang={lang} />
             </div>
 
             {/* Ayah Alignment Transcript Footer */}
-            <div className="border-t border-line bg-panel p-3.5">
+            <div className="border-t border-line/60 bg-panel p-4">
               <div className="flex items-center justify-between text-xs text-ink-3 mb-1">
                 <span className="font-mono uppercase text-[10px] tracking-wider">
                   Textual Reference: {lang === "bsl" ? "Surah 112:1" : "Surah 1:1 (Bismillah)"}
                 </span>
-                <span className="font-mono text-[10px]">Classical Arabic / Naskh</span>
+                <span className="font-mono text-[10px]">Uthmanic Arabic</span>
               </div>
               <p className="arabic text-right text-2xl text-ink leading-relaxed" lang="ar">
                 {lang === "bsl" ? "قُلْ هُوَ ٱللَّهُ أَحَدٌ" : "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ"}
               </p>
             </div>
-          </div>
+          </Frame>
 
-          {/* Peer Review Callout */}
-          <div className="mt-3 flex items-start gap-2 rounded-md border border-accent/30 bg-accent-soft/40 p-2.5 text-xs text-ink-2">
-            <span className="font-semibold text-accent shrink-0">Linguistic Note:</span>
-            <span>
+          {/* Linguistic Callout Card */}
+          <div className="mt-3 flex items-start gap-2.5 rounded-lg border border-line bg-panel/70 p-3 text-xs text-ink-2 shadow-xs">
+            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-brand shrink-0 mt-0.5">
+              [Note]
+            </span>
+            <span className="text-ink-3 leading-relaxed">
               Kinematic movements are derived from algorithmic topic-comment gloss synthesis and verified against
               human corpus recordings. Reviewers can suggest adjustments via the Gloss Studio.
             </span>

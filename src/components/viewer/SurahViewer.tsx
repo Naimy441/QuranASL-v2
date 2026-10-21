@@ -19,11 +19,12 @@ import { getBslLexicon, loadBslLexicon } from "@/lib/bsl/lexicon";
 import { loadBslAyat, type BslAyahClip } from "@/lib/bsl/ayat";
 import { readViewerPrefs, writeLastRead, writeViewerPrefs, type AvatarId, type SignLang } from "@/lib/prefs";
 import { loadSurahTajweed, loadBismillahTajweed, TAJWEED_LEGEND, type TajweedSegment } from "@/lib/tajweed";
-import { TajweedAyah, TajweedWord } from "@/components/quran/TajweedText";
+import { InteractiveAyah, TajweedAyah, TajweedWord } from "@/components/quran/TajweedText";
 import {
   ArrowLeftIcon, ArrowRightIcon, ContinueIcon, CubeIcon, EditIcon, ExpandIcon, InfoIcon, NextIcon, PauseIcon, PlayIcon, PrevIcon,
   RepeatIcon, ShrinkIcon, SquareIcon, VideoIcon, TextIcon,
 } from "@/components/common/Icons";
+import { TextEffect } from "@/components/ui/text-effect";
 
 const AvatarCanvas = dynamic(() => import("@/components/avatar/AvatarCanvas"), {
   ssr: false,
@@ -50,16 +51,21 @@ function IconToggle({ on, onClick, label, children }: { on: boolean; onClick: ()
   );
 }
 
+const BISMILLAH_WORDS: Word[] = [
+  { ar: "بِسْمِ", tr: "bis'mi", en: "In the name" },
+  { ar: "ٱللَّهِ", tr: "l-lāhi", en: "of Allah" },
+  { ar: "ٱلرَّحْمَـٰنِ", tr: "al-raḥmāni", en: "the Most Gracious" },
+  { ar: "ٱلرَّحِيمِ", tr: "al-raḥīmi", en: "the Most Merciful" },
+];
+
 interface AyahCardProps {
   it: { key: string; label: string; ar: string; en: string; gloss: string; source: string; ayah?: number };
   index: number;
   active: boolean;
   playing: boolean;
   progress: number;
-  showWords: boolean;
   tajweed: boolean;
   tajweedWords?: TajweedSegment[][];
-  wordTajweedList?: TajweedSegment[][];
   words?: Word[];
   cardGloss?: { human: boolean; text: string };
   onSelect: (index: number) => void;
@@ -71,10 +77,8 @@ const AyahCard = memo(function AyahCard({
   active,
   playing,
   progress,
-  showWords,
   tajweed,
   tajweedWords,
-  wordTajweedList,
   words,
   cardGloss,
   onSelect,
@@ -84,11 +88,11 @@ const AyahCard = memo(function AyahCard({
       <button
         onClick={() => onSelect(index)}
         aria-current={active ? "true" : undefined}
-        className={`group relative w-full overflow-hidden rounded-xl border p-4 text-left transition ${active ? "border-brand bg-panel shadow-xs" : "border-line bg-panel/70 hover:border-line-2 hover:bg-panel"}`}
+        className={`group relative w-full rounded-xl border p-4 text-left transition ${active ? "border-brand bg-panel shadow-xs" : "border-line bg-panel/70 hover:border-line-2 hover:bg-panel"}`}
       >
-        {active && <span className="absolute inset-y-0 left-0 w-1 bg-brand" aria-hidden />}
+        {active && <span className="absolute inset-y-0 left-0 w-1 bg-brand rounded-l-xl" aria-hidden />}
         {active && (
-          <span className="absolute inset-x-0 bottom-0 h-0.5 bg-panel-2" aria-hidden>
+          <span className="absolute inset-x-0 bottom-0 h-0.5 bg-panel-2 rounded-b-xl overflow-hidden" aria-hidden>
             <span className="block h-full bg-brand transition-[width] duration-100" style={{ width: `${progress * 100}%` }} />
           </span>
         )}
@@ -115,33 +119,14 @@ const AyahCard = memo(function AyahCard({
             </span>
           )}
         </div>
-        <p className="arabic text-right text-[1.65rem] text-ink leading-relaxed" lang="ar">
-          <TajweedAyah
-            words={tajweedWords}
-            fallbackText={it.ar}
+        <p className="arabic text-right text-[1.7rem] text-ink leading-[2.5]" lang="ar">
+          <InteractiveAyah
+            words={words}
+            tajweedWords={tajweedWords}
             tajweed={tajweed}
+            fallbackText={it.ar}
           />
         </p>
-        {showWords && words && (
-          <div className="arabic mt-1 flex flex-wrap gap-x-2 gap-y-1.5 text-right" dir="rtl">
-            {words.map((w, k) => {
-              const wordTajweed = wordTajweedList?.[k];
-              return (
-                <span key={k} className="inline-flex flex-col items-center rounded-lg bg-panel-2 px-2 py-1">
-                  <span className="text-lg leading-tight" lang="ar">
-                    {wordTajweed && tajweed ? (
-                      <TajweedWord segments={wordTajweed} tajweed={tajweed} />
-                    ) : (
-                      w.ar
-                    )}
-                  </span>
-                  <span dir="ltr" className="font-sans text-[11px] leading-tight text-ink-2">{w.en}</span>
-                  {w.root && <span className="text-[10px] leading-tight text-accent">{w.root}</span>}
-                </span>
-              );
-            })}
-          </div>
-        )}
         <p className="mt-1.5 text-[15px] leading-relaxed text-ink">{it.en}</p>
         {cardGloss ? (
           <p className={`mt-2 text-xs leading-relaxed ${cardGloss.human ? "" : "font-mono"} ${active ? "text-ink-2" : "text-ink-3"}`}>{cardGloss.text}</p>
@@ -167,7 +152,6 @@ export default function SurahViewer({ n }: { n: number }) {
   const [autoNext, setAutoNext] = useState(true);
   const [loop, setLoop] = useState(false);
   const [tab, setTab] = useState<"ayat" | "human">("ayat");
-  const [showWords, setShowWords] = useState(false);
   const [tajweed, setTajweed] = useState(true);
   const [showTajweedLegend, setShowTajweedLegend] = useState(false);
   const [tajweedData, setTajweedData] = useState<TajweedSegment[][][] | null>(null);
@@ -421,7 +405,10 @@ export default function SurahViewer({ n }: { n: number }) {
             </Link>
             <h1 className="mt-1 flex flex-wrap items-baseline gap-x-3 font-serif text-2xl font-medium tracking-tight text-ink sm:text-3xl">
               <span>
-                <span className="text-ink-3">{surah.n}.</span> {surah.name}
+                <span className="text-ink-3">{surah.n}.</span>{" "}
+                <TextEffect per="char" preset="fade" className="inline-block">
+                  {surah.name}
+                </TextEffect>
               </span>
               <span className="arabic text-3xl font-normal leading-none" lang="ar">{surah.nameAr}</span>
             </h1>
@@ -589,14 +576,6 @@ export default function SurahViewer({ n }: { n: number }) {
               <>
                 <button
                   role="switch"
-                  aria-checked={showWords}
-                  onClick={() => setShowWords((v) => !v)}
-                  className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${showWords ? "border-brand bg-brand-soft text-brand" : "border-line text-ink-2 hover:text-ink"}`}
-                >
-                  Word by word
-                </button>
-                <button
-                  role="switch"
                   aria-checked={tajweed}
                   onClick={() => setTajweed((v) => !v)}
                   className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition ${tajweed ? "border-brand bg-brand-soft text-brand shadow-xs" : "border-line text-ink-2 hover:text-ink"}`}
@@ -671,11 +650,9 @@ export default function SurahViewer({ n }: { n: number }) {
                     active={active}
                     playing={playing}
                     progress={active ? progress : 0}
-                    showWords={showWords}
                     tajweed={tajweed}
                     tajweedWords={it.key === "b" ? (bismillahTajweed ?? undefined) : ayahIndex >= 0 ? tajweedData?.[ayahIndex] : undefined}
-                    wordTajweedList={ayahIndex >= 0 ? tajweedData?.[ayahIndex] : undefined}
-                    words={ayahIndex >= 0 && surah ? surah.ayat[ayahIndex]?.w : undefined}
+                    words={it.key === "b" ? BISMILLAH_WORDS : ayahIndex >= 0 && surah ? surah.ayat[ayahIndex]?.w : undefined}
                     cardGloss={cardGloss ? cardGloss[i] : undefined}
                     onSelect={go}
                   />

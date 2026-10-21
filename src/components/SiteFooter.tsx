@@ -11,12 +11,14 @@ export default function SiteFooter() {
     return null;
 
   return (
-    <footer className="mt-20 border-t border-line bg-panel-2/50">
-      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 text-xs text-ink-2 md:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
+    <footer className="mt-20 border-t border-line/60 bg-panel-2/30 backdrop-blur-sm">
+      <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 py-12 text-xs text-ink-2 md:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
         {/* Colophon & Institution Info */}
         <div>
           <div className="flex items-center gap-2.5 font-semibold text-ink">
-            <LogoMark size={26} />
+            <div className="flex h-7 w-7 items-center justify-center rounded-md border border-line bg-panel">
+              <LogoMark size={18} className="text-brand" />
+            </div>
             <span className="font-serif text-base tracking-tight">QuranASL Linguistic Initiative</span>
           </div>
           <p className="mt-3 max-w-sm leading-relaxed text-ink-3">
@@ -32,25 +34,25 @@ export default function SiteFooter() {
 
         {/* Corpus Concordance */}
         <div>
-          <p className="mb-2.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-ink">Corpus Index</p>
+          <p className="mb-2.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-ink-3">[Corpus Index]</p>
           <ul className="space-y-2">
             <li>
-              <Link className="hover:text-brand hover:underline" href="/#surahs">
+              <Link className="hover:text-brand transition-colors" href="/#surahs">
                 All 114 Surahs
               </Link>
             </li>
             <li>
-              <Link className="hover:text-brand hover:underline" href="/surah/1">
+              <Link className="hover:text-brand transition-colors" href="/surah/1">
                 Surah Al-Fātiḥah (1:1)
               </Link>
             </li>
             <li>
-              <Link className="hover:text-brand hover:underline" href="/dictionary">
+              <Link className="hover:text-brand transition-colors" href="/dictionary">
                 Sign Lexicon &amp; Concordance
               </Link>
             </li>
             <li>
-              <Link className="hover:text-brand hover:underline" href="/#methodology">
+              <Link className="hover:text-brand transition-colors" href="/#methodology">
                 Linguistic Methodology
               </Link>
             </li>
@@ -59,25 +61,25 @@ export default function SiteFooter() {
 
         {/* Linguistic Workbench */}
         <div>
-          <p className="mb-2.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-ink">Linguistic Tools</p>
+          <p className="mb-2.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-ink-3">[Workbench]</p>
           <ul className="space-y-2">
             <li>
-              <Link className="hover:text-brand hover:underline" href="/practice">
+              <Link className="hover:text-brand transition-colors" href="/practice">
                 Kinematic Practice Lab
               </Link>
             </li>
             <li>
-              <Link className="hover:text-brand hover:underline" href="/studio">
+              <Link className="hover:text-brand transition-colors" href="/studio">
                 Gloss Annotation Studio
               </Link>
             </li>
             <li>
-              <Link className="hover:text-brand hover:underline" href="/about">
+              <Link className="hover:text-brand transition-colors" href="/about">
                 Corpus Documentation
               </Link>
             </li>
             <li>
-              <Link className="hover:text-brand hover:underline" href="/about">
+              <Link className="hover:text-brand transition-colors" href="/about">
                 Citation &amp; BibTeX Format
               </Link>
             </li>
@@ -86,10 +88,10 @@ export default function SiteFooter() {
 
         {/* Academic Credits & Attribution */}
         <div>
-          <p className="mb-2.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-ink">
-            Research Provenance
+          <p className="mb-2.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-ink-3">
+            [Provenance]
           </p>
-          <ul className="space-y-2 text-ink-3">
+          <ul className="space-y-1.5 text-ink-3 text-[11px]">
             <li>Quranic Arabic Corpus (Kais Dukes, Univ. of Leeds)</li>
             <li>Text &amp; Translation: Quran.com API (Saheeh Int.)</li>
             <li>Human ASL Reference: Global Deaf Muslim</li>
@@ -97,14 +99,6 @@ export default function SiteFooter() {
             <li>Edge Vision: Google MediaPipe (Apache 2.0)</li>
           </ul>
         </div>
-      </div>
-
-      {/* Bottom Sub-footer */}
-      <div className="border-t border-line/60 bg-panel px-4 py-4 text-center text-[11px] text-ink-3">
-        <p className="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>&copy; {new Date().getFullYear()} QuranASL Research Initiative. Open Access under CC BY-NC-SA 4.0.</span>
-          <span>Community Peer Review Draft · Built for Linguistic Verification</span>
-        </p>
       </div>
     </footer>
   );

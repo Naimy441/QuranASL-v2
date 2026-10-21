@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Reveal from "@/components/common/Reveal";
+import { Frame } from "@/components/ui/frame";
 
 interface SiteStats {
   ayat: number;
@@ -45,7 +45,7 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
   }, [to]);
 
   return (
-    <span ref={ref} className="tabular-nums font-mono">
+    <span ref={ref} className="tabular-nums font-mono font-semibold tracking-tight text-ink">
       {v.toLocaleString("en")}
       {suffix}
     </span>
@@ -94,50 +94,52 @@ export default function Stats() {
   ];
 
   return (
-    <section aria-label="Corpus specifications and metrics" className="mx-auto w-full max-w-7xl px-4 pt-10">
-      <div className="rounded-xl border border-line bg-panel p-6 shadow-xs">
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-2 border-b border-line pb-4">
-          <div>
-            <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-accent">
-              Corpus Metrics &amp; Annotation Specifications
+    <section aria-label="Corpus specifications and metrics" className="mx-auto w-full max-w-7xl px-4 sm:px-6 pt-10">
+      <Frame
+        withCorners
+        withHeader
+        headerTitle={
+          <div className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand" />
+            <span className="font-mono text-[11px] font-semibold uppercase tracking-wider text-ink-3">
+              Corpus Specification &amp; Coverage Metrics
             </span>
-            <h2 className="mt-1 font-serif text-xl font-medium tracking-tight text-ink sm:text-2xl">
-              Quantitative Coverage of the Digital Qur&apos;anic Corpus
-            </h2>
           </div>
-          <span className="rounded border border-line bg-panel-2 px-2.5 py-1 text-xs font-mono text-ink-3">
-            Annotation Tier: SLP-2.4
+        }
+        headerAction={
+          <span className="font-mono text-[10px] text-ink-3">
+            ISO 639-3: ase / bfi
           </span>
-        </div>
-
-        <div className="grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
-          {items.map((it, i) => (
-            <Reveal key={it.label} delay={i * 60} className="bg-panel p-5 transition hover:bg-panel-2/40">
-              <div className="flex items-center justify-between text-xs text-ink-3">
-                <span className="font-mono text-[10px] uppercase tracking-wider text-accent">
-                  {it.category}
-                </span>
-                <span className="font-mono text-[10px] text-ink-3">{it.spec}</span>
+        }
+        className="p-6 bg-panel shadow-xs"
+      >
+        <div className="grid gap-px overflow-hidden rounded-lg border border-line/60 bg-line/60 sm:grid-cols-2 lg:grid-cols-4">
+          {items.map((it) => (
+            <div
+              key={it.label}
+              className="flex flex-col justify-between bg-panel p-5 transition-colors hover:bg-panel-2/50"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[10px] font-medium uppercase tracking-wider text-ink-3">
+                    {it.category}
+                  </span>
+                  <span className="rounded border border-line bg-panel-2 px-1.5 py-0.5 font-mono text-[9px] text-brand">
+                    {it.spec}
+                  </span>
+                </div>
+                <div className="mt-3 text-3xl font-light tracking-tight text-ink sm:text-4xl">
+                  <Counter to={it.n} />
+                </div>
+                <p className="mt-1 text-xs font-medium text-ink">{it.label}</p>
               </div>
-              <p className="mt-3 text-3xl font-medium tracking-tight text-ink sm:text-4xl">
-                <Counter to={it.n} />
+              <p className="mt-3 text-[11px] leading-relaxed text-ink-3 border-t border-line/40 pt-2.5">
+                {it.note}
               </p>
-              <p className="mt-1 text-sm font-semibold text-brand">{it.label}</p>
-              <p className="mt-2 text-xs leading-relaxed text-ink-2">{it.note}</p>
-            </Reveal>
+            </div>
           ))}
         </div>
-
-        {/* Archival metadata note */}
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-ink-3">
-          <span>
-            <strong>Data Provenance:</strong> Al Isharah BSL Project · Global Deaf Muslim · Quranic Arabic Corpus · Quran.com
-          </span>
-          <span className="font-mono text-[11px]">
-            Open Access · Non-Commercial Linguistic Research
-          </span>
-        </div>
-      </div>
+      </Frame>
     </section>
   );
 }

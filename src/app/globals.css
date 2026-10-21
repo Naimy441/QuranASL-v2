@@ -4,88 +4,89 @@
    Design tokens. Three themes: light (default), dark (system or chosen) and
    high contrast (black / yellow / white, overrides both). The theme is applied
    before first paint by the inline script in layout.tsx.
+   Modern shadcn / frame-type neutral zinc minimal aesthetic.
 --------------------------------------------------------------------------- */
 :root {
   color-scheme: light;
-  --bg: #fbf9f4;
-  --bg-2: #f2eee3;
+  --bg: #fafafa;
+  --bg-2: #f4f4f5;
   --panel: #ffffff;
-  --panel-2: #f5f1e8;
-  --panel-glass: rgb(255 255 255 / 0.88);
-  --ink: #16222a;
-  --ink-2: #485761;
-  --ink-3: #75848e;
-  --line: #e3dccd;
-  --line-2: #d1c6b2;
-  --brand: #0f6166;
-  --brand-2: #0b494d;
-  --brand-soft: #e2f0f0;
+  --panel-2: #f4f4f5;
+  --panel-glass: rgb(255 255 255 / 0.85);
+  --ink: #09090b;
+  --ink-2: #52525b;
+  --ink-3: #71717a;
+  --line: #e4e4e7;
+  --line-2: #d4d4d8;
+  --brand: #0f766e;
+  --brand-2: #115e59;
+  --brand-soft: #f0fdfa;
   --brand-ink: #ffffff;
-  --accent: #9a6b18;
-  --accent-soft: #f6ebd6;
-  --ok: #1e6d44;
-  --warn: #965600;
-  --bad: #b0241b;
-  --stage-a: #e8e2d4;
-  --stage-b: #d6dfe3;
-  --stage-floor: #c5ced4;
-  --shadow: 0 1px 3px rgb(22 34 42 / 0.05), 0 4px 12px -2px rgb(22 34 42 / 0.08);
-  --shadow-lg: 0 2px 6px rgb(22 34 42 / 0.04), 0 16px 36px -8px rgb(22 34 42 / 0.15);
-  --glow: rgb(15 97 102 / 0.12);
-  --pattern: rgb(15 97 102 / 0.04);
-  --ring: #0f6166;
+  --accent: #b45309;
+  --accent-soft: #fef3c7;
+  --ok: #15803d;
+  --warn: #b45309;
+  --bad: #b91c1c;
+  --stage-a: #f4f4f5;
+  --stage-b: #e4e4e7;
+  --stage-floor: #d4d4d8;
+  --shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+  --glow: rgb(15 118 110 / 0.12);
+  --pattern: rgb(0 0 0 / 0.03);
+  --ring: #0f766e;
 
-  /* Tajweed color palette - light mode (exact match to quranki) */
-  --tj-ham_wasl: #AAAAAA;
-  --tj-slnt: #AAAAAA;
-  --tj-laam_shamsiyah: #AAAAAA;
-  --tj-madda_normal: #537FFF;
-  --tj-madda_permissible: #4050FF;
-  --tj-madda_necessary: #000EBC;
-  --tj-madda_obligatory_mottasel: #2144C1;
-  --tj-madda_obligatory_monfasel: #2144C1;
-  --tj-qalaqah: #1B9E4B;
-  --tj-ikhafa: #D61F26;
-  --tj-ikhafa_shafawi: #D61F26;
-  --tj-idgham_shafawi: #8B2FC9;
-  --tj-idgham_ghunnah: #8B2FC9;
-  --tj-idgham_wo_ghunnah: #8A8A8A;
-  --tj-idgham_mutajanisayn: #8A8A8A;
-  --tj-idgham_mutaqaribayn: #8A8A8A;
-  --tj-iqlab: #1876D2;
-  --tj-ghunnah: #FF7E1E;
+  /* Tajweed color palette - light mode */
+  --tj-ham_wasl: #888888;
+  --tj-slnt: #888888;
+  --tj-laam_shamsiyah: #888888;
+  --tj-madda_normal: #3b82f6;
+  --tj-madda_permissible: #2563eb;
+  --tj-madda_necessary: #1d4ed8;
+  --tj-madda_obligatory_mottasel: #1e40af;
+  --tj-madda_obligatory_monfasel: #1e40af;
+  --tj-qalaqah: #16a34a;
+  --tj-ikhafa: #dc2626;
+  --tj-ikhafa_shafawi: #dc2626;
+  --tj-idgham_shafawi: #9333ea;
+  --tj-idgham_ghunnah: #9333ea;
+  --tj-idgham_wo_ghunnah: #71717a;
+  --tj-idgham_mutajanisayn: #71717a;
+  --tj-idgham_mutaqaribayn: #71717a;
+  --tj-iqlab: #0284c7;
+  --tj-ghunnah: #ea580c;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --bg: #0c1317;
-    --bg-2: #101a20;
-    --panel: #142028;
-    --panel-2: #1b2932;
-    --panel-glass: rgb(20 32 40 / 0.72);
-    --ink: #e8eef1;
-    --ink-2: #a7b5bd;
-    --ink-3: #75868f;
-    --line: #233540;
-    --line-2: #2f4552;
-    --brand: #4cc0c2;
-    --brand-2: #79d4d5;
-    --brand-soft: #123538;
-    --brand-ink: #04191a;
-    --accent: #e4b660;
-    --accent-soft: #33291a;
-    --ok: #52c487;
-    --warn: #f0a845;
-    --bad: #ff7b72;
-    --stage-a: #1d2c35;
-    --stage-b: #0b1216;
-    --stage-floor: #0f181d;
-    --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -8px rgb(0 0 0 / 0.5);
-    --shadow-lg: 0 2px 6px rgb(0 0 0 / 0.3), 0 24px 60px -18px rgb(0 0 0 / 0.7);
-    --glow: rgb(76 192 194 / 0.22);
-    --pattern: rgb(76 192 194 / 0.06);
-    --ring: #4cc0c2;
+    --bg: #09090b;
+    --bg-2: #121215;
+    --panel: #121215;
+    --panel-2: #18181b;
+    --panel-glass: rgb(18 18 21 / 0.8);
+    --ink: #f4f4f5;
+    --ink-2: #a1a1aa;
+    --ink-3: #71717a;
+    --line: #27272a;
+    --line-2: #3f3f46;
+    --brand: #14b8a6;
+    --brand-2: #2dd4bf;
+    --brand-soft: #042f2e;
+    --brand-ink: #022c22;
+    --accent: #f59e0b;
+    --accent-soft: #2e2007;
+    --ok: #22c55e;
+    --warn: #f59e0b;
+    --bad: #ef4444;
+    --stage-a: #18181b;
+    --stage-b: #09090b;
+    --stage-floor: #121215;
+    --shadow: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 12px 24px -6px rgb(0 0 0 / 0.6);
+    --glow: rgb(20 184 166 / 0.2);
+    --pattern: rgb(255 255 255 / 0.03);
+    --ring: #14b8a6;
 
     /* Tajweed dark mode palette */
     --tj-ham_wasl: #8B8F8C;
@@ -111,33 +112,33 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #0c1317;
-  --bg-2: #101a20;
-  --panel: #142028;
-  --panel-2: #1b2932;
-  --panel-glass: rgb(20 32 40 / 0.72);
-  --ink: #e8eef1;
-  --ink-2: #a7b5bd;
-  --ink-3: #75868f;
-  --line: #233540;
-  --line-2: #2f4552;
-  --brand: #4cc0c2;
-  --brand-2: #79d4d5;
-  --brand-soft: #123538;
-  --brand-ink: #04191a;
-  --accent: #e4b660;
-  --accent-soft: #33291a;
-  --ok: #52c487;
-  --warn: #f0a845;
-  --bad: #ff7b72;
-  --stage-a: #1d2c35;
-  --stage-b: #0b1216;
-  --stage-floor: #0f181d;
-  --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -8px rgb(0 0 0 / 0.5);
-  --shadow-lg: 0 2px 6px rgb(0 0 0 / 0.3), 0 24px 60px -18px rgb(0 0 0 / 0.7);
-  --glow: rgb(76 192 194 / 0.22);
-  --pattern: rgb(76 192 194 / 0.06);
-  --ring: #4cc0c2;
+  --bg: #09090b;
+  --bg-2: #121215;
+  --panel: #121215;
+  --panel-2: #18181b;
+  --panel-glass: rgb(18 18 21 / 0.8);
+  --ink: #f4f4f5;
+  --ink-2: #a1a1aa;
+  --ink-3: #71717a;
+  --line: #27272a;
+  --line-2: #3f3f46;
+  --brand: #14b8a6;
+  --brand-2: #2dd4bf;
+  --brand-soft: #042f2e;
+  --brand-ink: #022c22;
+  --accent: #f59e0b;
+  --accent-soft: #2e2007;
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --bad: #ef4444;
+  --stage-a: #18181b;
+  --stage-b: #09090b;
+  --stage-floor: #121215;
+  --shadow: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 12px 24px -6px rgb(0 0 0 / 0.6);
+  --glow: rgb(20 184 166 / 0.2);
+  --pattern: rgb(255 255 255 / 0.03);
+  --ring: #14b8a6;
 
   /* Tajweed dark mode palette */
   --tj-ham_wasl: #8B8F8C;
@@ -216,6 +217,23 @@
   --font-arabic: var(--font-amiri);
   --shadow-soft: var(--shadow);
   --shadow-lift: var(--shadow-lg);
+
+  /* shadcn-compatible alias tokens */
+  --color-background: var(--bg);
+  --color-foreground: var(--ink);
+  --color-card: var(--panel);
+  --color-card-foreground: var(--ink);
+  --color-popover: var(--panel);
+  --color-popover-foreground: var(--ink);
+  --color-primary: var(--brand);
+  --color-primary-foreground: var(--brand-ink);
+  --color-secondary: var(--panel-2);
+  --color-secondary-foreground: var(--ink);
+  --color-muted: var(--panel-2);
+  --color-muted-foreground: var(--ink-2);
+  --color-border: var(--line);
+  --color-input: var(--line);
+  --color-ring: var(--ring);
 }
 
 html {
@@ -229,7 +247,7 @@ body {
   font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-feature-settings: "cv11", "ss01";
   letter-spacing: -0.011em;
-  transition: background-color 0.25s ease, color 0.25s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 ::selection {
@@ -278,18 +296,17 @@ body {
 .tj-iqlab { color: var(--tj-iqlab); }
 .tj-ghunnah { color: var(--tj-ghunnah); }
 
-/* Scholarly archival tag */
+/* Academic / frame tags */
 .academic-tag {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
   font-family: var(--font-inter), monospace;
   font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: 0.2rem 0.55rem;
-  border-radius: 0.25rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 0.18rem 0.5rem;
+  border-radius: 9999px;
   border: 1px solid var(--line);
   background: var(--panel-2);
   color: var(--ink-2);
@@ -307,27 +324,23 @@ body {
   outline-offset: -2px;
 }
 
-/* Eight-point star lattice used behind heroes (very faint). */
+/* Subtle dot / grid pattern for frame design */
 .pattern-bg {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath d='M32 8l7 17 17 7-17 7-7 17-7-17-17-7 17-7z'/%3E%3Cpath d='M15 15h34v34H15z' transform='rotate(45 32 32)'/%3E%3C/g%3E%3C/svg%3E");
-  -webkit-mask-image: radial-gradient(ellipse at 50% 0%, #000 0%, transparent 70%);
-  mask-image: radial-gradient(ellipse at 50% 0%, #000 0%, transparent 70%);
-  opacity: 0.05;
-}
-:root[data-theme="dark"] .pattern-bg { filter: invert(1); opacity: 0.06; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .pattern-bg { filter: invert(1); opacity: 0.06; }
+  background-image: radial-gradient(var(--pattern) 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 0%, #000 0%, transparent 80%);
+  mask-image: radial-gradient(ellipse at 50% 0%, #000 0%, transparent 80%);
 }
 :root[data-contrast="high"] .pattern-bg { display: none; }
 
 .glass {
   background: var(--panel-glass);
-  -webkit-backdrop-filter: saturate(160%) blur(14px);
-  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  backdrop-filter: saturate(180%) blur(16px);
 }
 
 :focus-visible {
-  outline: 3px solid var(--ring);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
   border-radius: 6px;
 }
@@ -357,10 +370,10 @@ input[type="checkbox"] {
 }
 
 /* ---------------------------------------------------------------------------
-   Motion
+   Motion & Animation
 --------------------------------------------------------------------------- */
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: none; }
 }
 @keyframes fade-in {
@@ -368,12 +381,12 @@ input[type="checkbox"] {
   to { opacity: 1; }
 }
 @keyframes scale-in {
-  from { opacity: 0; transform: scale(0.96); }
+  from { opacity: 0; transform: scale(0.97); }
   to { opacity: 1; transform: none; }
 }
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+  50% { transform: translateY(-4px); }
 }
 @keyframes shimmer {
   from { background-position: -200% 0; }
@@ -381,31 +394,26 @@ input[type="checkbox"] {
 }
 @keyframes pulse-ring {
   0% { box-shadow: 0 0 0 0 var(--glow); }
-  70% { box-shadow: 0 0 0 14px transparent; }
+  70% { box-shadow: 0 0 0 10px transparent; }
   100% { box-shadow: 0 0 0 0 transparent; }
 }
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
-@keyframes grow-x {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
 
-.animate-fade-up { animation: fade-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-.animate-fade-in { animation: fade-in 0.5s ease both; }
-.animate-scale-in { animation: scale-in 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.animate-fade-up { animation: fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-fade-in { animation: fade-in 0.4s ease both; }
+.animate-scale-in { animation: scale-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) both; }
 .animate-float { animation: float 6s ease-in-out infinite; }
 .animate-pulse-ring { animation: pulse-ring 2.4s ease-out infinite; }
-.animate-grow-x { animation: grow-x 1s cubic-bezier(0.2, 0.7, 0.2, 1) both; transform-origin: left; }
-.delay-1 { animation-delay: 80ms; }
-.delay-2 { animation-delay: 160ms; }
-.delay-3 { animation-delay: 240ms; }
-.delay-4 { animation-delay: 320ms; }
-.delay-5 { animation-delay: 400ms; }
+.delay-1 { animation-delay: 60ms; }
+.delay-2 { animation-delay: 120ms; }
+.delay-3 { animation-delay: 180ms; }
+.delay-4 { animation-delay: 240ms; }
+.delay-5 { animation-delay: 300ms; }
 
 /* Elements revealed as they scroll into view (see components/common/Reveal). */
-.reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.reveal { opacity: 0; transform: translateY(12px); transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
 .reveal.is-visible { opacity: 1; transform: none; }
 
 .skeleton {
@@ -415,31 +423,27 @@ input[type="checkbox"] {
 }
 
 .lift {
-  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
 }
 .lift:hover {
   border-color: var(--line-2);
-  box-shadow: 0 2px 8px -2px rgb(22 34 42 / 0.08);
+  box-shadow: 0 4px 12px -2px rgb(0 0 0 / 0.05);
+  transform: translateY(-1px);
 }
 
 .btn-primary {
   background: var(--brand);
   color: var(--brand-ink);
-  transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.1s ease;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 .btn-primary:hover {
   background: var(--brand-2);
 }
 .btn-primary:active {
-  transform: translateY(1px);
+  transform: scale(0.99);
 }
-
-/* Route cross-fade (React <ViewTransition>). */
-::view-transition-old(root) { animation: 160ms ease-out both fade-in reverse; }
-::view-transition-new(root) { animation: 260ms ease-in 60ms both fade-in; }
-::view-transition-group(.morph) { animation-duration: 420ms; animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -449,7 +453,6 @@ input[type="checkbox"] {
     transition-duration: 0.01ms !important;
   }
   .reveal { opacity: 1; transform: none; }
-  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }
 :root[data-motion="reduce"] *, :root[data-motion="reduce"] *::before, :root[data-motion="reduce"] *::after {
   animation-duration: 0.01ms !important;

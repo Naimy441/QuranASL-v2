@@ -6,6 +6,8 @@ import { loadGlossIndex, loadSurahList, type GlossIndex, type SurahMeta } from "
 import { humanVideos } from "@/lib/data/human-videos";
 import { loadBslIndex } from "@/lib/bsl/ayat";
 import { CloseIcon, SearchIcon } from "./common/Icons";
+import { TextEffect } from "@/components/ui/text-effect";
+import { Badge } from "@/components/ui/badge";
 
 type Filter = "all" | "meccan" | "medinan" | "video" | "bsl";
 type GroupView = "surah" | "juz";
@@ -77,25 +79,32 @@ export default function SurahIndex() {
     return out;
   }, [shown, groupView]);
 
-  const FILTERS: { id: Filter; label: string; count?: number }[] = [
+  const FILTERS: { id: Filter; label: string }[] = [
     { id: "all", label: "All 114 Surahs" },
     { id: "meccan", label: "Meccan (86)" },
     { id: "medinan", label: "Medinan (28)" },
     { id: "bsl", label: "Human BSL Aligned" },
-    { id: "video", label: "Video Reference Grounded" },
+    { id: "video", label: "Video Grounded" },
   ];
 
   return (
-    <section id="surahs" aria-labelledby="surah-heading" className="mx-auto w-full max-w-7xl scroll-mt-20 px-4 pt-16">
+    <section id="surahs" aria-labelledby="surah-heading" className="mx-auto w-full max-w-7xl scroll-mt-20 px-4 sm:px-6 pt-16">
       {/* Catalog Header */}
-      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-5">
+      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line/60 pb-5">
         <div>
-          <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-accent">
+          <Badge variant="outline" size="sm" className="bg-panel font-mono">
             Corpus Catalogue &amp; Canonical Index
-          </span>
-          <h2 id="surah-heading" className="mt-1 font-serif text-2xl font-medium tracking-tight text-ink sm:text-3xl">
-            The 114 Surahs of the Holy Qur&apos;an
-          </h2>
+          </Badge>
+          <div className="mt-2">
+            <TextEffect
+              per="word"
+              preset="fade-in-blur"
+              delay={0.1}
+              className="font-serif text-2xl font-medium tracking-tight text-ink sm:text-3xl"
+            >
+              The 114 Surahs of the Holy Qur&apos;an
+            </TextEffect>
+          </div>
           <p className="mt-1 text-xs text-ink-3">
             Access the syntactic sign-language gloss, word-by-word morphological roots, and parallel human video recordings.
           </p>
@@ -104,39 +113,39 @@ export default function SurahIndex() {
         {/* View Switchers */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Layout Mode (Grid vs Table) */}
-          <div role="tablist" aria-label="Layout mode" className="flex rounded-md border border-line bg-panel p-0.5 text-xs">
+          <div role="tablist" aria-label="Layout mode" className="flex rounded-lg border border-line bg-panel p-0.5 text-xs shadow-xs">
             <button
               role="tab"
               aria-selected={layoutMode === "grid"}
               onClick={() => setLayoutMode("grid")}
-              className={`rounded px-3 py-1 font-medium transition ${
+              className={`rounded-md px-3 py-1 font-medium transition cursor-pointer ${
                 layoutMode === "grid" ? "bg-panel-2 font-semibold text-brand shadow-xs border border-line" : "text-ink-2 hover:text-ink"
               }`}
             >
-              Card View
+              Cards
             </button>
             <button
               role="tab"
               aria-selected={layoutMode === "table"}
               onClick={() => setLayoutMode("table")}
-              className={`rounded px-3 py-1 font-medium transition ${
+              className={`rounded-md px-3 py-1 font-medium transition cursor-pointer ${
                 layoutMode === "table" ? "bg-panel-2 font-semibold text-brand shadow-xs border border-line" : "text-ink-2 hover:text-ink"
               }`}
             >
-              Concordance Table
+              Table
             </button>
           </div>
 
           {/* Group View (Surah vs Juz) */}
-          <div role="tablist" aria-label="Group by" className="flex rounded-md border border-line bg-panel p-0.5 text-xs">
+          <div role="tablist" aria-label="Group by" className="flex rounded-lg border border-line bg-panel p-0.5 text-xs shadow-xs">
             {(["surah", "juz"] as GroupView[]).map((v) => (
               <button
                 key={v}
                 role="tab"
                 aria-selected={groupView === v}
                 onClick={() => setGroupView(v)}
-                className={`rounded px-3 py-1 font-medium transition ${
-                  groupView === v ? "bg-brand text-brand-ink" : "text-ink-2 hover:text-ink"
+                className={`rounded-md px-3 py-1 font-medium transition cursor-pointer ${
+                  groupView === v ? "bg-brand text-brand-ink shadow-xs" : "text-ink-2 hover:text-ink"
                 }`}
               >
                 {v === "surah" ? "Canon Order" : "By Juz (1–30)"}
@@ -147,9 +156,9 @@ export default function SurahIndex() {
       </div>
 
       {/* Sticky Search & Filter Toolbar */}
-      <div className="glass sticky top-16 z-20 -mx-4 mt-4 flex flex-wrap items-center gap-2.5 border-b border-line px-4 py-2.5">
+      <div className="glass sticky top-14 z-20 -mx-4 mt-4 flex flex-wrap items-center gap-2.5 border-b border-line/60 px-4 py-2.5 sm:mx-0 sm:rounded-xl sm:border sm:mt-5">
         <div className="relative min-w-0 flex-1 sm:max-w-xs">
-          <SearchIcon size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-3" />
+          <SearchIcon size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-3" />
           <label className="sr-only" htmlFor="surah-search">
             Search surahs
           </label>
@@ -177,9 +186,9 @@ export default function SurahIndex() {
               key={f.id}
               onClick={() => setFilter(f.id)}
               aria-pressed={filter === f.id}
-              className={`rounded-md border px-2.5 py-1 transition ${
+              className={`rounded-md border px-2.5 py-1 text-xs transition cursor-pointer ${
                 filter === f.id
-                  ? "border-brand bg-brand-soft font-semibold text-brand"
+                  ? "border-brand bg-brand-soft font-semibold text-brand shadow-xs"
                   : "border-line bg-panel text-ink-2 hover:border-line-2 hover:text-ink"
               }`}
             >
@@ -197,14 +206,14 @@ export default function SurahIndex() {
       {!list.length ? (
         <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3" aria-hidden>
           {Array.from({ length: 9 }, (_, i) => (
-            <li key={i} className="skeleton h-[96px] rounded-lg" />
+            <li key={i} className="skeleton h-[96px] rounded-xl" />
           ))}
         </ul>
       ) : !shown.length ? (
         <div className="mt-10 rounded-xl border border-dashed border-line-2 p-10 text-center text-xs text-ink-2">
           No surah matches &ldquo;{q}&rdquo;.{" "}
           <button
-            className="font-medium text-brand underline"
+            className="font-medium text-brand underline cursor-pointer"
             onClick={() => {
               setQ("");
               setFilter("all");
@@ -293,21 +302,21 @@ export default function SurahIndex() {
           </div>
         </div>
       ) : (
-        /* Academic Card Grid View */
+        /* Framed Minimal Card Grid View */
         groups.map((grp) => (
           <div key={grp.title || "all"} className="mt-6">
             {grp.title && (
-              <h3 className="mb-3 mt-6 text-xs font-mono font-semibold uppercase tracking-wider text-accent border-b border-line pb-1">
-                {grp.title}
+              <h3 className="mb-3 mt-6 text-xs font-mono font-semibold uppercase tracking-wider text-brand border-b border-line pb-1">
+                [{grp.title}]
               </h3>
             )}
             <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {grp.items.map((m, i) => {
+              {grp.items.map((m) => {
                 const vids = humanVideos(m.n);
                 const bslN = bsl[m.n]?.filter((a) => a > 0).length ?? 0;
                 const pct = Math.min(100, Math.round((bslN / m.ayahs) * 100));
                 return (
-                  <li key={`${grp.title}-${m.n}`} className="animate-fade-up" style={{ animationDelay: `${Math.min(i, 15) * 20}ms` }}>
+                  <li key={`${grp.title}-${m.n}`}>
                     <Link
                       href={`/surah/${m.n}`}
                       className="lift group relative flex h-full flex-col justify-between overflow-hidden rounded-xl border border-line bg-panel p-4 hover:border-brand/70 shadow-xs"
@@ -316,7 +325,7 @@ export default function SurahIndex() {
                         {/* Header: Surah number, Latin, Arabic */}
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex items-center gap-2.5">
-                            <span className="grid h-7 w-7 shrink-0 place-items-center rounded border border-line bg-panel-2 font-mono text-xs font-semibold text-ink-2 group-hover:border-brand group-hover:text-brand">
+                            <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md border border-line bg-panel-2 font-mono text-xs font-semibold text-ink-2 group-hover:border-brand group-hover:text-brand transition-colors">
                               {m.n}
                             </span>
                             <div>

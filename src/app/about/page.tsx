@@ -1,3 +1,6 @@
+import { AboutHeader } from "@/components/about/AboutHeader";
+import { Frame } from "@/components/ui/frame";
+
 export const metadata = {
   title: "Corpus Documentation & Methodology — QuranASL",
   description:
@@ -6,8 +9,8 @@ export const metadata = {
 
 function SectionHeader({ kicker, title }: { kicker: string; title: string }) {
   return (
-    <div className="mt-12 border-b border-line pb-2">
-      <span className="font-mono text-[11px] font-semibold uppercase tracking-wider text-accent">{kicker}</span>
+    <div className="mt-12 border-b border-line/60 pb-2.5">
+      <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-brand">[{kicker}]</span>
       <h2 className="mt-1 font-serif text-2xl font-medium tracking-tight text-ink sm:text-3xl">{title}</h2>
     </div>
   );
@@ -15,37 +18,22 @@ function SectionHeader({ kicker, title }: { kicker: string; title: string }) {
 
 export default function About() {
   return (
-    <article className="mx-auto w-full max-w-4xl px-4 py-12 leading-relaxed">
+    <article className="mx-auto w-full max-w-4xl px-4 sm:px-6 py-12 leading-relaxed">
       {/* Document Masthead */}
-      <div className="border-b border-line pb-6">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="academic-tag border-line bg-panel text-[11px]">Research Whitepaper &amp; Corpus Documentation</span>
-          <span className="academic-tag border-brand/30 bg-brand-soft/60 font-mono text-[11px] text-brand">
-            Edition 2.4 (2025)
-          </span>
-        </div>
-        <h1 className="mt-4 font-serif text-3xl font-medium tracking-tight text-ink sm:text-5xl">
-          QuranASL: A Digital Sign Language Corpus &amp; Computational Model for the Qur&apos;an
-        </h1>
-        <p className="mt-4 text-base leading-relaxed text-ink-2">
-          This document details the theoretical linguistics framework, morphosyntactic glossing standards,
-          biomechanical kinematic synthesis pipeline, and community review protocols that constitute the QuranASL
-          initiative.
-        </p>
-      </div>
+      <AboutHeader />
 
       {/* Advisory Callout */}
-      <div className="mt-6 rounded-xl border border-line bg-panel p-5 text-xs leading-relaxed text-ink-2 shadow-xs">
-        <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-accent block mb-1">
-          Linguistic Notice &amp; Scope of Research
+      <Frame withCorners className="mt-6 p-5 text-xs leading-relaxed text-ink-2 shadow-xs bg-panel">
+        <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-brand block mb-1">
+          [Linguistic Notice &amp; Scope of Research]
         </span>
-        <p>
+        <p className="text-ink-3">
           QuranASL is a computational digital humanities project designed to bridge classical Arabic textual scholarship
           and sign language linguistics. The synthetic 3D avatar is not a substitute for human Deaf translators, but
           rather an interactive scaffold, concordance tool, and peer-review environment. Every ayah remains subject to
           ongoing evaluation by accredited Deaf Muslim translators.
         </p>
-      </div>
+      </Frame>
 
       {/* 1. Introduction & Research Objectives */}
       <SectionHeader kicker="1. Overview" title="Introduction &amp; Research Objectives" />
@@ -88,22 +76,22 @@ export default function About() {
       </p>
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
-        <div className="rounded-xl border border-line bg-panel p-5 shadow-xs">
+        <Frame withCorners={false} className="p-5 shadow-xs bg-panel">
           <h3 className="font-semibold text-ink text-sm">Topic–Comment Discourse Structure</h3>
           <p className="mt-2 text-xs leading-relaxed text-ink-2">
             Unlike classical Arabic&apos;s Verb-Subject-Object (VSO) or English&apos;s SVO order, ASL and BSL predominantly
             employ topic-prominent structures. The context or theme is articulated first (accompanied by raised
             eyebrows), followed by the comment, assertion, or predication.
           </p>
-        </div>
-        <div className="rounded-xl border border-line bg-panel p-5 shadow-xs">
+        </Frame>
+        <Frame withCorners={false} className="p-5 shadow-xs bg-panel">
           <h3 className="font-semibold text-ink text-sm">Spatial Reference Loci &amp; Agreement</h3>
           <p className="mt-2 text-xs leading-relaxed text-ink-2">
             Sign syntax organizes referents into geometric points (loci) in the 3D space surrounding the signer.
             Directional agreement verbs move between these established loci to denote agent and patient, disambiguating
             complex pronominal structures without ambiguity.
           </p>
-        </div>
+        </Frame>
       </div>
 
       {/* 3. Non-Manual Grammatical System */}
@@ -113,7 +101,7 @@ export default function About() {
         encodes non-manual markers into separate annotation tiers synchronized with the manual gloss tokens:
       </p>
 
-      <div className="mt-4 overflow-hidden rounded-xl border border-line bg-panel shadow-xs">
+      <Frame withCorners={false} className="mt-4 overflow-hidden shadow-xs bg-panel">
         <table className="w-full border-collapse text-left text-xs">
           <thead>
             <tr className="border-b border-line bg-panel-2 font-mono uppercase tracking-wider text-[11px] text-ink-3">
@@ -145,7 +133,7 @@ export default function About() {
             </tr>
           </tbody>
         </table>
-      </div>
+      </Frame>
 
       {/* 4. Comparative Corpus: ASL vs BSL */}
       <SectionHeader kicker="4. Multi-Dialectal Corpus" title="Comparative Analysis: ASL and BSL" />
@@ -153,22 +141,22 @@ export default function About() {
         QuranASL explicitly supports two distinct, historically unrelated sign language families:
       </p>
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
-        <div className="rounded-xl border border-line bg-panel p-5 shadow-xs">
+        <Frame withCorners={false} className="p-5 shadow-xs bg-panel">
           <h3 className="font-semibold text-ink text-sm">ASL (American Sign Language)</h3>
           <p className="mt-2 text-xs leading-relaxed text-ink-2">
             Belongs to the French Sign Language (LSF) family. Uses a one-handed manual alphabet. All 6,236 ayat are
             algorithmically glossed in ASL topic-comment order with custom Islamic community signs captured from Global
             Deaf Muslim.
           </p>
-        </div>
-        <div className="rounded-xl border border-line bg-panel p-5 shadow-xs">
+        </Frame>
+        <Frame withCorners={false} className="p-5 shadow-xs bg-panel">
           <h3 className="font-semibold text-ink text-sm">BSL (British Sign Language)</h3>
           <p className="mt-2 text-xs leading-relaxed text-ink-2">
             Belongs to the BANZSL family (British, Australian, New Zealand Sign Language). Employs a two-handed manual
             alphabet. Grounded directly in time-aligned recordings from the Al Isharah BSL Qur&apos;an Project, retargeted
             onto the 3D avatar.
           </p>
-        </div>
+        </Frame>
       </div>
 
       {/* 5. Data Sources & Provenance */}
@@ -207,13 +195,19 @@ export default function About() {
         linguistics work, or publications, please cite the project using the following citation formats:
       </p>
 
-      {/* BibTeX */}
-      <div className="mt-4 rounded-xl border border-line bg-panel p-4 shadow-xs">
-        <div className="flex items-center justify-between border-b border-line pb-2 mb-2 text-xs">
-          <span className="font-mono font-semibold uppercase text-accent text-[10px]">BibTeX Citation</span>
-          <span className="font-mono text-ink-3 text-[10px]">Standard Format</span>
-        </div>
-        <pre className="overflow-x-auto text-[11px] font-mono leading-relaxed text-ink-2">
+      {/* BibTeX Frame */}
+      <Frame
+        withCorners
+        withHeader
+        headerTitle={
+          <span className="font-mono font-semibold uppercase text-brand text-[10px]">
+            [BibTeX Citation]
+          </span>
+        }
+        headerAction={<span className="font-mono text-ink-3 text-[10px]">Standard RFC</span>}
+        className="mt-4 p-4 shadow-xs bg-panel"
+      >
+        <pre className="overflow-x-auto text-[11px] font-mono leading-relaxed text-ink-2 pt-2">
 {`@misc{quranasl2025,
   title        = {QuranASL: A Digital Sign Language Corpus and Computational Kinematic Model for the Holy Qur'an},
   author       = {{QuranASL Research Initiative and Community Contributors}},
@@ -222,20 +216,20 @@ export default function About() {
   note         = {Open Research Edition 2.4; Multimodal ASL/BSL Syntactic Corpus}
 }`}
         </pre>
-      </div>
+      </Frame>
 
       {/* APA & Chicago */}
       <div className="mt-4 space-y-3 rounded-xl border border-line bg-panel p-4 text-xs shadow-xs text-ink-2">
         <div>
           <span className="font-mono font-semibold text-ink text-[10px] uppercase block mb-1">APA Style (7th Edition)</span>
-          <p className="font-sans leading-relaxed">
+          <p className="font-sans leading-relaxed text-ink-3">
             QuranASL Research Initiative. (2025). <em>QuranASL: A digital sign language corpus and computational kinematic
             model for the Holy Qur&apos;an</em> (Version 2.4) [Digital humanities corpus]. https://quranasl.org
           </p>
         </div>
         <div className="border-t border-line/60 pt-2.5">
           <span className="font-mono font-semibold text-ink text-[10px] uppercase block mb-1">Chicago Manual of Style (17th Edition)</span>
-          <p className="font-sans leading-relaxed">
+          <p className="font-sans leading-relaxed text-ink-3">
             QuranASL Research Initiative. &ldquo;QuranASL: A Digital Sign Language Corpus and Computational Kinematic Model
             for the Holy Qur&apos;an.&rdquo; Digital Corpus and Concordance, 2025. https://quranasl.org.
           </p>
