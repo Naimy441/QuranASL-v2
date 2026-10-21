@@ -83,15 +83,17 @@ export default function HeroSigner({ avatar, lang }: { avatar: AvatarId; lang: S
         interactive={false}
         ariaLabel={`Signing avatar signing ${lang === "bsl" ? "Surah Al-Ikhlas ayah 1 in BSL" : "the Bismillah in ASL"}`}
       />
-      <div className="pointer-events-none absolute inset-x-0 bottom-4 flex flex-col items-center gap-2 px-4">
-        <span className="flex h-9 items-center">
-          {tok && tok.status !== "pause" && (
-            <span key={tok.index} className="animate-scale-in rounded-full bg-black/70 px-4 py-1.5 font-mono text-base font-semibold tracking-wider text-white backdrop-blur" aria-hidden>
-              {tok.gloss}
-            </span>
-          )}
-        </span>
-        <span className="max-w-sm text-center text-xs text-ink-2">{anim.caption}</span>
+      <div className="pointer-events-none absolute inset-x-0 bottom-3 flex flex-col items-center gap-1.5 px-3">
+        {tok && tok.status !== "pause" && (
+          <div key={tok.index} className="flex items-center gap-2 rounded-md border border-white/20 bg-black/85 px-3.5 py-1 text-xs font-mono font-medium tracking-wide text-white shadow-sm backdrop-blur">
+            <span className="text-[10px] uppercase tracking-wider text-white/50">Gloss Tier:</span>
+            <span className="font-semibold text-white">{tok.gloss}</span>
+            {tok.locus && <span className="text-[10px] text-accent">[{tok.locus}]</span>}
+          </div>
+        )}
+        <div className="rounded-md border border-line bg-panel/92 px-3 py-1 text-center text-xs text-ink-2 shadow-xs backdrop-blur max-w-sm">
+          {anim.caption}
+        </div>
       </div>
     </div>
   );

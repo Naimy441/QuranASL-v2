@@ -41,7 +41,7 @@ export default function Dictionary() {
   const entries = useMemo(() => {
     const s = q.trim().toLowerCase();
     return [...lex.entries.values()]
-      .filter((e) => (!cat || lang === "bsl" || e.cat === cat) && (!s || e.id.toLowerCase().includes(s) || e.en?.some((w) => w.includes(s))))
+      .filter((e) => !e.id.endsWith(".drawn") && (!cat || lang === "bsl" || e.cat === cat) && (!s || e.id.toLowerCase().includes(s) || e.en?.some((w) => w.includes(s))))
       .sort((a, b) => a.id.localeCompare(b.id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lex, q, cat, lang, bslReady]);
@@ -66,12 +66,12 @@ export default function Dictionary() {
   return (
     <div className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
       <section className="flex flex-col gap-3 lg:sticky lg:top-20 lg:self-start">
-        <div className="flex items-end justify-between gap-3">
+        <div className="flex items-end justify-between gap-3 border-b border-line pb-3">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wider text-accent">Dictionary</p>
-            <h1 className="mt-1 text-3xl font-semibold tracking-tight">{lang === "bsl" ? "BSL signs" : "ASL signs"}</h1>
+            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-accent">Linguistic Concordance</span>
+            <h1 className="mt-1 font-serif text-2xl font-medium tracking-tight text-ink sm:text-3xl">{lang === "bsl" ? "BSL Sign Lexicon" : "ASL Sign Lexicon"}</h1>
           </div>
-          <div role="radiogroup" aria-label="Sign language" className="grid grid-cols-2 rounded-full border border-line bg-panel p-1 text-sm">
+          <div role="radiogroup" aria-label="Sign language" className="grid grid-cols-2 rounded-md border border-line bg-panel p-0.5 text-xs">
             {(["asl", "bsl"] as SignLang[]).map((l) => (
               <button
                 key={l}
@@ -81,48 +81,48 @@ export default function Dictionary() {
                   setLang(l);
                   setSpell("");
                 }}
-                className={`rounded-full px-4 py-1.5 font-semibold transition ${lang === l ? "bg-brand text-brand-ink shadow-soft" : "text-ink-2 hover:text-ink"}`}
+                className={`rounded px-3 py-1 font-semibold transition ${lang === l ? "bg-brand text-brand-ink shadow-xs" : "text-ink-2 hover:text-ink"}`}
               >
                 {l.toUpperCase()}
               </button>
             ))}
           </div>
         </div>
-        <div className="stage relative aspect-[4/3.4] overflow-hidden rounded-3xl border border-line shadow-soft">
+        <div className="stage relative aspect-[4/3.4] overflow-hidden rounded-xl border border-line shadow-xs">
           <AvatarCanvas className="absolute inset-0" timeline={timeline} playback={pb} ariaLabel={`Sign for ${spell || sel}`} />
-          <div className="absolute left-3 top-3 rounded-full bg-black/70 px-3.5 py-1 font-mono text-lg font-semibold text-white backdrop-blur">{spell ? `fs: ${spell}` : sel}</div>
+          <div className="absolute left-3 top-3 rounded-md border border-white/20 bg-black/80 px-3 py-1 font-mono text-base font-semibold text-white shadow-xs backdrop-blur">{spell ? `fs: ${spell}` : sel}</div>
         </div>
         {!spell && e && (
-          <div className="rounded-2xl border border-line bg-panel p-4 text-sm shadow-soft">
-            <p><strong>English:</strong> {e.en?.join(", ") || "—"}</p>
+          <div className="rounded-xl border border-line bg-panel p-4 text-xs shadow-xs">
+            <p><strong>English Gloss Equivalence:</strong> {e.en?.join(", ") || "—"}</p>
             {lang === "bsl" ? (
-              <p className="mt-1 text-brand">From Al Isharah&apos;s BSL Qur&apos;an Project recordings — {e.note}</p>
+              <p className="mt-1.5 text-brand">From Al Isharah&apos;s BSL Qur&apos;an Project recordings — {e.note}</p>
             ) : (
-              e.mocap && hasMocap(e.mocap) && <p className="mt-1 text-brand">Motion captured from a Global Deaf Muslim video</p>
+              e.mocap && hasMocap(e.mocap) && <p className="mt-1.5 text-brand">Motion captured from a Global Deaf Muslim video</p>
             )}
-            <p className="mt-1"><strong>Confidence:</strong> <span className={e.conf === "low" ? "text-warn" : e.conf === "high" ? "text-ok" : ""}>{e.conf}</span>{lang === "asl" && e.note ? ` · ${e.note}` : ""}</p>
-            {lang === "asl" && freq[e.id] ? <p className="mt-1 text-ink-2">Used {freq[e.id]}× across the Qur&apos;an glosses</p> : null}
+            <p className="mt-1.5"><strong>Validation Confidence:</strong> <span className={e.conf === "low" ? "text-warn font-semibold" : e.conf === "high" ? "text-ok font-semibold" : "text-accent font-semibold"}>{e.conf ? e.conf.toUpperCase() : "STANDARD"}</span>{lang === "asl" && e.note ? ` · ${e.note}` : ""}</p>
+            {lang === "asl" && freq[e.id] ? <p className="mt-1.5 text-ink-2 font-mono">Corpus Frequency: {freq[e.id]}× occurrences across 6,236 ayat</p> : null}
             {lang === "asl" && (
               <>
-                <p className="mt-2 break-all font-mono text-xs text-ink-2">{e.def}</p>
-                <Link href={`/studio?sign=${encodeURIComponent(e.id)}`} className="mt-2 inline-block font-medium text-brand underline">Improve this sign</Link>
+                <p className="mt-2.5 break-all font-mono text-[11px] text-ink-3 border-t border-line/60 pt-2">{e.def}</p>
+                <Link href={`/studio?sign=${encodeURIComponent(e.id)}`} className="mt-2 inline-block font-semibold text-brand hover:underline">Edit phonological specification in Studio →</Link>
               </>
             )}
           </div>
         )}
-        <label className="flex items-center gap-2 text-sm text-ink-2">
-          Fingerspell anything ({lang === "bsl" ? "two-handed" : "one-handed"})
-          <input value={spell} onChange={(ev) => setSpell(ev.target.value.replace(/[^a-z ]/gi, "").toUpperCase())} placeholder="e.g. MUSA" className="min-w-0 flex-1 rounded-full border border-line bg-panel px-3 py-1.5 font-mono text-ink outline-none focus:border-brand" />
+        <label className="flex items-center gap-2 text-xs text-ink-2">
+          <span>Manual fingerspelling ({lang === "bsl" ? "two-handed" : "one-handed"}):</span>
+          <input value={spell} onChange={(ev) => setSpell(ev.target.value.replace(/[^a-z ]/gi, "").toUpperCase())} placeholder="e.g. MUSA" className="min-w-0 flex-1 rounded-md border border-line bg-panel px-2.5 py-1 font-mono text-ink text-xs outline-none focus:border-brand" />
         </label>
       </section>
       <section>
         <div className="glass sticky top-16 z-10 -mx-1 mb-3 flex flex-wrap gap-2 px-1 py-2">
           <div className="relative flex-1">
-            <SearchIcon size={17} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-3" />
-            <input value={q} onChange={(ev) => setQ(ev.target.value)} placeholder={`Search ${lex.entries.size} signs (gloss or English)`} className="w-full rounded-full border border-line bg-panel py-2.5 pl-10 pr-3 text-sm outline-none focus:border-brand" aria-label="Search signs" />
+            <SearchIcon size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-3" />
+            <input value={q} onChange={(ev) => setQ(ev.target.value)} placeholder={`Search ${lex.entries.size} signs in lexicon...`} className="w-full rounded-md border border-line bg-panel py-2 pl-8 pr-3 text-xs outline-none focus:border-brand" aria-label="Search signs" />
           </div>
           {lang === "asl" && (
-            <select value={cat} onChange={(ev) => setCat(ev.target.value)} className="rounded-full border border-line bg-panel px-3 text-sm" aria-label="Category">
+            <select value={cat} onChange={(ev) => setCat(ev.target.value)} className="rounded-md border border-line bg-panel px-3 text-xs" aria-label="Category">
               <option value="">All categories</option>
               {Object.entries(CATS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
             </select>
@@ -130,7 +130,7 @@ export default function Dictionary() {
         </div>
         {lang === "bsl" && !bslReady ? (
           <ul className="grid grid-cols-2 gap-1.5 sm:grid-cols-3" aria-hidden>
-            {Array.from({ length: 18 }, (_, i) => <li key={i} className="skeleton h-12 rounded-xl" />)}
+            {Array.from({ length: 18 }, (_, i) => <li key={i} className="skeleton h-12 rounded-lg" />)}
           </ul>
         ) : (
           <ul className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
@@ -139,13 +139,15 @@ export default function Dictionary() {
                 <button
                   onClick={() => { setSel(x.id); setSpell(""); }}
                   aria-pressed={sel === x.id && !spell}
-                  className={`w-full rounded-xl border px-2.5 py-1.5 text-left transition ${sel === x.id && !spell ? "border-brand bg-brand-soft" : "border-line bg-panel/70 hover:border-line-2 hover:bg-panel"}`}
+                  className={`w-full h-full flex flex-col justify-between rounded-lg border px-3 py-2 text-left transition ${sel === x.id && !spell ? "border-brand bg-brand-soft shadow-xs" : "border-line bg-panel/70 hover:border-line-2 hover:bg-panel"}`}
                 >
-                  <span className="flex items-center gap-1.5 font-mono text-sm">
-                    <span className={`h-2 w-2 shrink-0 rounded-full ${x.conf === "high" ? "bg-ok" : x.conf === "low" ? "bg-warn" : "bg-accent"}`} aria-label={`${x.conf} confidence`} />
+                  <span className="flex items-center gap-1.5 font-mono text-xs font-semibold text-ink">
+                    <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${x.conf === "high" ? "bg-ok" : x.conf === "low" ? "bg-warn" : "bg-accent"}`} aria-label={`${x.conf} confidence`} />
                     <span className="truncate">{x.id}</span>
                   </span>
-                  <span className="block truncate text-xs text-ink-2">{x.en?.slice(0, 4).join(", ")}</span>
+                  <span className="block truncate text-[11px] text-ink-3 mt-0.5 min-h-[1.1rem]">
+                    {x.en?.length ? x.en.slice(0, 3).join(", ") : "—"}
+                  </span>
                 </button>
               </li>
             ))}

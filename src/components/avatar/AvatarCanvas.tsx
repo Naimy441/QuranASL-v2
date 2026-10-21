@@ -5,10 +5,21 @@ import { OrbitControls, OrthographicCamera, PerspectiveCamera, ContactShadows } 
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
-import { createXRStore, XR, useXR } from "@react-three/xr";
 import { AvatarRig, AVATAR_PRESETS, type AvatarStyle } from "@/lib/avatar/AvatarRig";
 import { buildTimeline, makePose, samplePose, type Timeline } from "@/lib/asl/timeline";
 import { readViewerPrefs, useResolvedTheme, type ResolvedTheme } from "@/lib/prefs";
+
+// Suppress Three.js r186 deprecation warnings from @react-three/fiber internals (Clock & PCFSoftShadowMap)
+if (typeof window !== "undefined" && typeof THREE.setConsoleFunction === "function") {
+  THREE.setConsoleFunction((type, message, ...args) => {
+    if (typeof message === "string" && (message.includes("Clock") || message.includes("PCFSoftShadowMap"))) {
+      return;
+    }
+    if (type === "warn") console.warn(message, ...args);
+    else if (type === "error") console.error(message, ...args);
+    else console.log(message, ...args);
+  });
+}
 
 export interface PlaybackState {
   time: number;
@@ -35,25 +46,6 @@ export interface AvatarCanvasProps {
   xr?: boolean;
   /** Allow orbiting / zooming with pointer and wheel (off for decorative signers). */
   interactive?: boolean;
-}
-
-/** In an immersive session the user stands at the origin: place the signer in front of them. */
-function XRPlacement({ children }: { children: React.ReactNode }) {
-  const mode = useXR((s) => s.mode);
-  const inXR = mode === "immersive-vr" || mode === "immersive-ar";
-  return <group position={inXR ? [0, 0, -1.4] : [0, 0, 0]}>{children}</group>;
-}
-
-function useXRSupport() {
-  const [sup, setSup] = useState({ vr: false, ar: false });
-  useEffect(() => {
-    const xr = (navigator as Navigator & { xr?: { isSessionSupported(m: string): Promise<boolean> } }).xr;
-    if (!xr) return;
-    Promise.all([xr.isSessionSupported("immersive-vr").catch(() => false), xr.isSessionSupported("immersive-ar").catch(() => false)]).then(([vr, ar]) =>
-      setSup({ vr, ar }),
-    );
-  }, []);
-  return sup;
 }
 
 function Rig({ timeline, playback, onTime, onEnd, avatar }: Pick<AvatarCanvasProps, "timeline" | "playback" | "onTime" | "onEnd" | "avatar">) {
@@ -119,15 +111,21 @@ function StudioEnvironment({ intensity }: { intensity: number }) {
   const { gl, scene } = useThree();
   useEffect(() => {
     const pmrem = new THREE.PMREMGenerator(gl);
-    const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    const room = new RoomEnvironment();
+    const env = pmrem.fromScene(room, 0.04).texture;
     scene.environment = env;
-    scene.environmentIntensity = intensity;
     return () => {
       scene.environment = null;
       env.dispose();
       pmrem.dispose();
+      room.dispose?.();
     };
-  }, [gl, scene, intensity]);
+  }, [gl, scene]);
+
+  useEffect(() => {
+    scene.environmentIntensity = intensity;
+  }, [scene, intensity]);
+
   return null;
 }
 
@@ -138,9 +136,7 @@ const LIGHTS: Record<ResolvedTheme, { env: number; key: number; fill: number; ri
   contrast: { env: 0.7, key: 2.4, fill: 0.8, rim: 3.4, rimColor: "#ffffff", amb: 0.35, shadow: 0 },
 };
 
-export default function AvatarCanvas({ mode = "3d", background, className, ariaLabel, framing, xr = false, interactive = true, avatar, ...rest }: AvatarCanvasProps) {
-  const store = useMemo(() => (xr ? createXRStore({ hand: false, controller: false }) : null), [xr]);
-  const sup = useXRSupport();
+export default function AvatarCanvas({ mode = "3d", background, className, ariaLabel, framing, xr: _xr, interactive = true, avatar, ...rest }: AvatarCanvasProps) {
   const theme = useResolvedTheme();
   const L = LIGHTS[theme];
   const [prefAvatar, setPrefAvatar] = useState<string>("amina");
@@ -148,16 +144,10 @@ export default function AvatarCanvas({ mode = "3d", background, className, ariaL
   const rigProps = { ...rest, avatar: avatar ?? prefAvatar };
   return (
     <div className={className} role="img" aria-label={ariaLabel ?? "3D signing avatar"}>
-      {store && (sup.vr || sup.ar) && (
-        <div className="absolute bottom-3 right-3 z-10 flex gap-1">
-          {sup.vr && <button onClick={() => store.enterVR()} className="rounded-full bg-black/60 px-3 py-1 text-xs text-white backdrop-blur">View in VR</button>}
-          {sup.ar && <button onClick={() => store.enterAR()} className="rounded-full bg-black/60 px-3 py-1 text-xs text-white backdrop-blur">View in AR</button>}
-        </div>
-      )}
       <Canvas
-        shadows="soft"
-        dpr={[1, 2]}
-        gl={{ antialias: true, preserveDrawingBuffer: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.0 }}
+        shadows={{ type: THREE.PCFShadowMap }}
+        dpr={[1, 1.5]}
+        gl={{ antialias: true, preserveDrawingBuffer: false, powerPreference: "high-performance", toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.0 }}
         style={{ background: background ?? "transparent", touchAction: interactive ? "none" : "pan-y" }}
       >
         <CameraRig mode={mode} framing={framing} />
@@ -170,7 +160,7 @@ export default function AvatarCanvas({ mode = "3d", background, className, ariaL
           intensity={mode === "2d" ? 0.6 : L.key}
           color="#fff3e6"
           castShadow
-          shadow-mapSize={[2048, 2048]}
+          shadow-mapSize={[1024, 1024]}
           shadow-bias={-0.0004}
           shadow-normalBias={0.02}
           shadow-camera-left={-0.8}
@@ -183,15 +173,7 @@ export default function AvatarCanvas({ mode = "3d", background, className, ariaL
         {/* rim: behind and above, outlines head and shoulders */}
         <directionalLight position={[-0.6, 2.4, -2.2]} intensity={L.rim} color={L.rimColor} />
         <directionalLight position={[0.9, 1.8, -2]} intensity={L.rim * 0.6} color={L.rimColor} />
-        {store ? (
-          <XR store={store}>
-            <XRPlacement>
-              <Rig {...rigProps} />
-            </XRPlacement>
-          </XR>
-        ) : (
-          <Rig {...rigProps} />
-        )}
+        <Rig {...rigProps} />
         {mode === "3d" && L.shadow > 0 && <ContactShadows position={[0, 0.02, 0]} opacity={L.shadow} scale={2.2} blur={2.6} far={1.2} resolution={512} />}
         <OrbitControls
           target={framing === "face" ? [0, 1.6, 0] : [0, 1.36, 0]}

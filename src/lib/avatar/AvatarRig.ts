@@ -27,12 +27,14 @@ export interface AvatarStyle {
 export const AVATAR_PRESETS: Record<string, AvatarStyle> = {
   amina: { skin: "#c48a66", top: "#18394a", accent: "#d6b06a", headwear: "hijab", hijab: "#6d4a5c", underscarf: "#efe4d6", beard: false, hair: "#2a1d17", iris: "#4a2f1d" },
   maryam: { skin: "#7a4a33", top: "#2a2236", accent: "#caa25c", headwear: "hijab", hijab: "#1f3a4c", underscarf: "#0f1f29", beard: false, hair: "#120c09", iris: "#2a1a10" },
-  yusuf: { skin: "#a8724f", top: "#26392e", accent: "#c9a25a", headwear: "kufi", hijab: "#f3efe6", beard: true, hair: "#1d1510", iris: "#3a2618" },
+  yusuf: { skin: "#a8724f", top: "#26392e", accent: "#c9a25a", headwear: "kufi", hijab: "#ebe4d5", beard: true, hair: "#1d1510", iris: "#3a2618" },
   sam: { skin: "#e0b493", top: "#232a3a", accent: "#6aa6d9", headwear: "none", hijab: "#333", beard: false, hair: "#4a3322", iris: "#3d5a73" },
 };
 
 const UP = new THREE.Vector3(0, 1, 0);
 const v1 = new THREE.Vector3(), v2 = new THREE.Vector3(), v3 = new THREE.Vector3(), v4 = new THREE.Vector3();
+const scratchS = new THREE.Vector3(), scratchW = new THREE.Vector3(), scratchPole = new THREE.Vector3();
+const scratchE = new THREE.Vector3(), scratchFdir = new THREE.Vector3(), scratchCuff = new THREE.Vector3();
 const qTmp = new THREE.Quaternion();
 
 /** Two-bone IK: returns elbow position. */
@@ -486,6 +488,7 @@ export class AvatarRig {
     if (style.headwear === "hijab") this.buildHijab();
     else {
       // short hair: a cap following the skull, lower at the back and sides
+      const isKufi = style.headwear === "kufi";
       const hg = new THREE.SphereGeometry(1, 64, 40, 0, Math.PI * 2, 0, Math.PI * 0.62);
       const hp = hg.attributes.position;
       for (let i = 0; i < hp.count; i++) {
@@ -493,7 +496,8 @@ export class AvatarRig {
         // hairline: rises at the forehead, drops behind the ears
         const frontness = Math.max(0, z);
         const yCut = 0.42 * frontness * frontness - 0.35 * Math.max(0, -z);
-        const lift = y < yCut ? 1.012 : 1.06 + 0.025 * Math.max(0, y);
+        // under a kufi, hair stays close to the skull so it doesn't clip through the crown
+        const lift = y < yCut ? 1.012 : (isKufi ? 1.018 : 1.06 + 0.025 * Math.max(0, y));
         hp.setXYZ(i, x * rx * lift, Math.max(y, yCut) * ry * lift, z * rz * lift);
       }
       hg.computeVertexNormals();
@@ -501,19 +505,59 @@ export class AvatarRig {
       hair.position.set(0, 0.004, -0.002);
       hair.castShadow = true;
       H.add(hair);
-      if (style.headwear === "kufi") {
-        const kufi = new THREE.Mesh(new THREE.SphereGeometry(1, 56, 20, 0, Math.PI * 2, 0, Math.PI * 0.4), mats.hijab);
-        kufi.scale.set(rx * 1.12, ry * 1.04, rz * 1.13);
-        kufi.rotation.x = -0.32;
-        kufi.position.y = 0.014;
-        H.add(kufi);
-        // embroidered band
-        const rimR = Math.sin(Math.PI * 0.4), rimY = Math.cos(Math.PI * 0.4) * ry * 1.04;
-        const band = new THREE.Mesh(new THREE.TorusGeometry(1, 0.022, 8, 72), mats.accent);
-        band.rotation.x = Math.PI / 2 - 0.32;
-        band.scale.set(rx * 1.13 * rimR, rz * 1.14 * rimR, 0.12);
-        band.position.set(0, 0.014 + rimY * Math.cos(0.32), rimY * Math.sin(0.32));
-        H.add(band);
+
+      if (isKufi) {
+        const kufiGroup = new THREE.Group();
+        kufiGroup.position.set(0, 0.016, -0.002);
+        kufiGroup.rotation.x = -0.12;
+
+        // Structured kufi cap dome with knit/woven relief
+        const kg = new THREE.SphereGeometry(1, 64, 32, 0, Math.PI * 2, 0, Math.PI * 0.44);
+        const kp = kg.attributes.position;
+        for (let i = 0; i < kp.count; i++) {
+          const x = kp.getX(i), y = kp.getY(i), z = kp.getZ(i);
+          const phi = Math.atan2(z, x);
+          const theta = Math.acos(Math.max(-1, Math.min(1, y)));
+          const rib = Math.sin(phi * 32) * 0.0035 * Math.sin(theta * 2);
+          const ring = Math.cos(theta * 20) * 0.002;
+          const factor = 1 + rib + ring;
+          kp.setXYZ(i, x * rx * 1.095 * factor, y * ry * 1.075 * factor, z * rz * 1.105 * factor);
+        }
+        kg.computeVertexNormals();
+
+        const kufiMesh = new THREE.Mesh(kg, mats.hijab);
+        kufiMesh.castShadow = true;
+        kufiMesh.receiveShadow = true;
+        kufiGroup.add(kufiMesh);
+
+        // Lower rim coordinates in local space
+        const thetaRim = Math.PI * 0.44;
+        const rimY = Math.cos(thetaRim) * ry * 1.075;
+        const rimR = Math.sin(thetaRim);
+
+        // Gold/accent embroidered band around the bottom edge
+        const bandGeo = new THREE.CylinderGeometry(rx * 1.10 * rimR, rx * 1.105 * rimR, 0.014, 64, 1, true);
+        bandGeo.scale(1, 1, rz / rx);
+        const band = new THREE.Mesh(bandGeo, mats.accent);
+        band.position.set(0, rimY - 0.004, 0);
+        band.castShadow = true;
+        kufiGroup.add(band);
+
+        // Dark green piping trim along the bottom edge (matches thobe)
+        const pipeGeo = new THREE.TorusGeometry(rx * 1.102 * rimR, 0.0022, 8, 64);
+        pipeGeo.scale(1, rz / rx, 1);
+        pipeGeo.rotateX(Math.PI / 2);
+        const pipe = new THREE.Mesh(pipeGeo, mats.top);
+        pipe.position.set(0, rimY - 0.011, 0);
+        pipe.castShadow = true;
+        kufiGroup.add(pipe);
+
+        // Top crown rosette button
+        const crownButton = new THREE.Mesh(new THREE.CylinderGeometry(0.0045, 0.0045, 0.0025, 16), mats.accent);
+        crownButton.position.set(0, ry * 1.075 + 0.001, 0);
+        kufiGroup.add(crownButton);
+
+        H.add(kufiGroup);
       }
     }
     if (style.beard) {
@@ -719,23 +763,23 @@ export class AvatarRig {
     for (const s of ["R", "L"] as HandSide[]) {
       const hp = p[s];
       const sx = s === "R" ? -1 : 1;
-      const S = v3.set(sx * BODY.shoulder.x, BODY.shoulder.y + breath, BODY.shoulder.z).clone();
-      const W = v4.copy(hp.pos).clone();
+      const S = scratchS.set(sx * BODY.shoulder.x, BODY.shoulder.y + breath, BODY.shoulder.z);
+      const W = scratchW.copy(hp.pos);
       // elbow pole: down, out and a little back; flares out for high hands
       const high = Math.max(0, W.y - 1.35);
       // Hands crossing the midline pull the elbow forward rather than out.
       const cross = Math.max(0, -sx * W.x) * 1.2;
       // Raised hands (face signs) keep the elbow low and in front of the body.
       const face = Math.min(1, high / 0.25);
-      const pole = new THREE.Vector3(
+      const pole = scratchPole.set(
         S.x + sx * (0.22 - face * 0.1 - cross * 0.5),
         S.y - 0.55 - face * 0.15,
         S.z - 0.2 + face * 0.45 + cross * 0.3 + Math.max(0, W.z - 0.25) * 0.25,
       );
-      const E = solveElbow(S, W, pole, BODY.upperArm, BODY.forearm, new THREE.Vector3());
+      const E = solveElbow(S, W, pole, BODY.upperArm, BODY.forearm, scratchE);
       // sleeve ends a little before the wrist; bare wrist bridges to the hand
-      const fdir = new THREE.Vector3().subVectors(W, E).normalize();
-      const cuff = new THREE.Vector3().copy(W).addScaledVector(fdir, -0.03);
+      const fdir = scratchFdir.subVectors(W, E).normalize();
+      const cuff = scratchCuff.copy(W).addScaledVector(fdir, -0.03);
       this.sleeves[s].update(S, E, cuff, 0.05, 0.041, 0.034);
       const wr = this.wrists[s];
       wr.position.copy(cuff).addScaledVector(fdir, -0.01);

@@ -9,15 +9,25 @@ export interface GlossEntry { gloss: string; source: "curated" | "auto" | "commu
 export interface GlossFile { surah: number; ayat: Record<string, GlossEntry> }
 export interface GlossIndex { [surah: number]: { ayat: number; covered: number; source: string; curated?: number } }
 
+const MAX_CACHE_SIZE = 10;
 const cache = new Map<string, Promise<unknown>>();
 function getJSON<T>(url: string): Promise<T> {
-  if (!cache.has(url)) {
-    cache.set(url, fetch(url).then((r) => {
-      if (!r.ok) throw new Error(`${r.status} ${url}`);
-      return r.json();
-    }));
+  const existing = cache.get(url);
+  if (existing) {
+    cache.delete(url);
+    cache.set(url, existing);
+    return existing as Promise<T>;
   }
-  return cache.get(url) as Promise<T>;
+  if (cache.size >= MAX_CACHE_SIZE) {
+    const oldest = cache.keys().next().value;
+    if (oldest !== undefined) cache.delete(oldest);
+  }
+  const p = fetch(url).then((r) => {
+    if (!r.ok) throw new Error(`${r.status} ${url}`);
+    return r.json();
+  });
+  cache.set(url, p);
+  return p as Promise<T>;
 }
 
 export const loadSurahList = () => getJSON<SurahMeta[]>("/data/surahs.json");

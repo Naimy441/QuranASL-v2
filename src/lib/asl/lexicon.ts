@@ -133,11 +133,10 @@ export function getLexicon(): Lexicon {
     ...parseLexicon(LEX_ISLAMIC, "religion"),
     ...parseLexicon(LEX_PROPHETS, "names"),
   ]);
-  // Link captured community signs; keep the drawn version reachable as a variant.
+  // Link captured community signs from mocap
   for (const [gloss, clip] of Object.entries(MOCAP_LINKS)) {
     const e = _lex.get(gloss);
     if (!e || e.mocap) continue;
-    _lex.add({ ...e, id: gloss + ".drawn", en: [], note: "parametric draft" });
     e.mocap = clip;
   }
   return _lex;

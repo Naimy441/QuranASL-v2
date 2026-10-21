@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Amiri } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
@@ -7,11 +8,26 @@ import { APPEARANCE_BOOT_SCRIPT } from "@/lib/appearance-boot";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const amiri = Amiri({ variable: "--font-amiri", subsets: ["arabic"], weight: ["400", "700"] });
+const uthmanicHafs = localFont({
+  src: "../fonts/UthmanicHafs1Ver18.ttf",
+  variable: "--font-uthmanic",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "QuranASL — The Qur'an in sign language",
   description:
     "The meanings of the Qur'an in American and British Sign Language, ayah by ayah, signed by a 3D avatar — with the Arabic, an English translation, human signer videos, practice and a community review studio.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
 };
 
 export const viewport: Viewport = {
@@ -23,7 +39,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${inter.variable} ${amiri.variable} h-full antialiased`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${amiri.variable} ${uthmanicHafs.variable} h-full antialiased`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: APPEARANCE_BOOT_SCRIPT }} />
       </head>

@@ -7,7 +7,7 @@ import { CheckIcon, UsersIcon } from "@/components/common/Icons";
 export const SIGNERS: { id: AvatarId; name: string; note: string; swatch: [string, string] }[] = [
   { id: "amina", name: "Amina", note: "Hijab", swatch: ["#c48a66", "#6d4a5c"] },
   { id: "maryam", name: "Maryam", note: "Hijab", swatch: ["#7a4a33", "#1f3a4c"] },
-  { id: "yusuf", name: "Yusuf", note: "Kufi, beard", swatch: ["#a8724f", "#f3efe6"] },
+  { id: "yusuf", name: "Yusuf", note: "Kufi, beard", swatch: ["#a8724f", "#ebe4d5"] },
   { id: "sam", name: "Sam", note: "Short hair", swatch: ["#e0b493", "#4a3322"] },
 ];
 

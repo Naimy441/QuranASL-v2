@@ -7,33 +7,53 @@
 --------------------------------------------------------------------------- */
 :root {
   color-scheme: light;
-  --bg: #f7f4ee;
-  --bg-2: #efe9dd;
+  --bg: #fbf9f4;
+  --bg-2: #f2eee3;
   --panel: #ffffff;
-  --panel-2: #f2ede3;
-  --panel-glass: rgb(255 255 255 / 0.72);
-  --ink: #15232c;
-  --ink-2: #4c5b64;
-  --ink-3: #7c8a92;
-  --line: #e2d9c8;
-  --line-2: #d2c6b0;
-  --brand: #0d6b70;
-  --brand-2: #0a5357;
-  --brand-soft: #dcefee;
+  --panel-2: #f5f1e8;
+  --panel-glass: rgb(255 255 255 / 0.88);
+  --ink: #16222a;
+  --ink-2: #485761;
+  --ink-3: #75848e;
+  --line: #e3dccd;
+  --line-2: #d1c6b2;
+  --brand: #0f6166;
+  --brand-2: #0b494d;
+  --brand-soft: #e2f0f0;
   --brand-ink: #ffffff;
-  --accent: #a8761f;
-  --accent-soft: #f6ead2;
-  --ok: #24744a;
-  --warn: #9c5a00;
-  --bad: #b3261e;
-  --stage-a: #f3efe7;
-  --stage-b: #d9dfe3;
-  --stage-floor: #c9d0d5;
-  --shadow: 0 1px 2px rgb(21 35 44 / 0.06), 0 8px 24px -8px rgb(21 35 44 / 0.12);
-  --shadow-lg: 0 2px 6px rgb(21 35 44 / 0.06), 0 24px 60px -18px rgb(21 35 44 / 0.25);
-  --glow: rgb(13 107 112 / 0.18);
-  --pattern: rgb(13 107 112 / 0.06);
-  --ring: #0d6b70;
+  --accent: #9a6b18;
+  --accent-soft: #f6ebd6;
+  --ok: #1e6d44;
+  --warn: #965600;
+  --bad: #b0241b;
+  --stage-a: #e8e2d4;
+  --stage-b: #d6dfe3;
+  --stage-floor: #c5ced4;
+  --shadow: 0 1px 3px rgb(22 34 42 / 0.05), 0 4px 12px -2px rgb(22 34 42 / 0.08);
+  --shadow-lg: 0 2px 6px rgb(22 34 42 / 0.04), 0 16px 36px -8px rgb(22 34 42 / 0.15);
+  --glow: rgb(15 97 102 / 0.12);
+  --pattern: rgb(15 97 102 / 0.04);
+  --ring: #0f6166;
+
+  /* Tajweed color palette - light mode (exact match to quranki) */
+  --tj-ham_wasl: #AAAAAA;
+  --tj-slnt: #AAAAAA;
+  --tj-laam_shamsiyah: #AAAAAA;
+  --tj-madda_normal: #537FFF;
+  --tj-madda_permissible: #4050FF;
+  --tj-madda_necessary: #000EBC;
+  --tj-madda_obligatory_mottasel: #2144C1;
+  --tj-madda_obligatory_monfasel: #2144C1;
+  --tj-qalaqah: #1B9E4B;
+  --tj-ikhafa: #D61F26;
+  --tj-ikhafa_shafawi: #D61F26;
+  --tj-idgham_shafawi: #8B2FC9;
+  --tj-idgham_ghunnah: #8B2FC9;
+  --tj-idgham_wo_ghunnah: #8A8A8A;
+  --tj-idgham_mutajanisayn: #8A8A8A;
+  --tj-idgham_mutaqaribayn: #8A8A8A;
+  --tj-iqlab: #1876D2;
+  --tj-ghunnah: #FF7E1E;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -66,6 +86,26 @@
     --glow: rgb(76 192 194 / 0.22);
     --pattern: rgb(76 192 194 / 0.06);
     --ring: #4cc0c2;
+
+    /* Tajweed dark mode palette */
+    --tj-ham_wasl: #8B8F8C;
+    --tj-slnt: #8B8F8C;
+    --tj-laam_shamsiyah: #8B8F8C;
+    --tj-madda_normal: #7C9CFF;
+    --tj-madda_permissible: #6B7BFF;
+    --tj-madda_necessary: #5C6DFF;
+    --tj-madda_obligatory_mottasel: #6079E8;
+    --tj-madda_obligatory_monfasel: #6079E8;
+    --tj-qalaqah: #3DDB70;
+    --tj-ikhafa: #FF5A5F;
+    --tj-ikhafa_shafawi: #FF5A5F;
+    --tj-idgham_shafawi: #C77DFF;
+    --tj-idgham_ghunnah: #C77DFF;
+    --tj-idgham_wo_ghunnah: #B0B0B0;
+    --tj-idgham_mutajanisayn: #B0B0B0;
+    --tj-idgham_mutaqaribayn: #B0B0B0;
+    --tj-iqlab: #4EA3F5;
+    --tj-ghunnah: #FF9A47;
   }
 }
 
@@ -98,6 +138,26 @@
   --glow: rgb(76 192 194 / 0.22);
   --pattern: rgb(76 192 194 / 0.06);
   --ring: #4cc0c2;
+
+  /* Tajweed dark mode palette */
+  --tj-ham_wasl: #8B8F8C;
+  --tj-slnt: #8B8F8C;
+  --tj-laam_shamsiyah: #8B8F8C;
+  --tj-madda_normal: #7C9CFF;
+  --tj-madda_permissible: #6B7BFF;
+  --tj-madda_necessary: #5C6DFF;
+  --tj-madda_obligatory_mottasel: #6079E8;
+  --tj-madda_obligatory_monfasel: #6079E8;
+  --tj-qalaqah: #3DDB70;
+  --tj-ikhafa: #FF5A5F;
+  --tj-ikhafa_shafawi: #FF5A5F;
+  --tj-idgham_shafawi: #C77DFF;
+  --tj-idgham_ghunnah: #C77DFF;
+  --tj-idgham_wo_ghunnah: #B0B0B0;
+  --tj-idgham_mutajanisayn: #B0B0B0;
+  --tj-idgham_mutaqaribayn: #B0B0B0;
+  --tj-iqlab: #4EA3F5;
+  --tj-ghunnah: #FF9A47;
 }
 
 /* High contrast wins over light and dark. */
@@ -152,6 +212,7 @@
   --color-warn: var(--warn);
   --color-bad: var(--bad);
   --font-sans: var(--font-inter);
+  --font-serif: var(--font-amiri), "Amiri", Georgia, Cambria, "Times New Roman", Times, serif;
   --font-arabic: var(--font-amiri);
   --shadow-soft: var(--shadow);
   --shadow-lift: var(--shadow-lg);
@@ -165,9 +226,10 @@ html {
 body {
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-feature-settings: "cv11", "ss01";
-  transition: background-color 0.35s ease, color 0.35s ease;
+  letter-spacing: -0.011em;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 ::selection {
@@ -175,17 +237,69 @@ body {
   color: var(--brand-ink);
 }
 
+.font-serif {
+  font-family: var(--font-amiri), "Amiri", Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+.font-editorial {
+  font-family: var(--font-amiri), "Amiri", Georgia, Cambria, "Times New Roman", Times, serif;
+  letter-spacing: -0.018em;
+}
+
 .arabic {
-  font-family: var(--font-amiri), "Amiri", serif;
+  font-family: var(--font-uthmanic), var(--font-amiri), "Amiri", serif;
   direction: rtl;
   line-height: 2.1;
 }
 
-/* Signing stage: soft studio backdrop with a floor glow. */
+/* Off-screen list virtualization for browser memory & DOM node containment */
+.ayah-card-item {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 130px;
+}
+
+/* Tajweed rule coloring classes */
+.tj-ham_wasl { color: var(--tj-ham_wasl); }
+.tj-slnt { color: var(--tj-slnt); }
+.tj-laam_shamsiyah { color: var(--tj-laam_shamsiyah); }
+.tj-madda_normal { color: var(--tj-madda_normal); }
+.tj-madda_permissible { color: var(--tj-madda_permissible); }
+.tj-madda_necessary { color: var(--tj-madda_necessary); }
+.tj-madda_obligatory_mottasel { color: var(--tj-madda_obligatory_mottasel); }
+.tj-madda_obligatory_monfasel { color: var(--tj-madda_obligatory_monfasel); }
+.tj-qalaqah { color: var(--tj-qalaqah); }
+.tj-ikhafa { color: var(--tj-ikhafa); }
+.tj-ikhafa_shafawi { color: var(--tj-ikhafa_shafawi); }
+.tj-idgham_shafawi { color: var(--tj-idgham_shafawi); }
+.tj-idgham_ghunnah { color: var(--tj-idgham_ghunnah); }
+.tj-idgham_wo_ghunnah { color: var(--tj-idgham_wo_ghunnah); }
+.tj-idgham_mutajanisayn { color: var(--tj-idgham_mutajanisayn); }
+.tj-idgham_mutaqaribayn { color: var(--tj-idgham_mutaqaribayn); }
+.tj-iqlab { color: var(--tj-iqlab); }
+.tj-ghunnah { color: var(--tj-ghunnah); }
+
+/* Scholarly archival tag */
+.academic-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-inter), monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  color: var(--ink-2);
+}
+
+/* Signing stage: disciplined studio backdrop with subtle perspective floor */
 .stage {
   background:
-    radial-gradient(ellipse 70% 22% at 50% 96%, var(--stage-floor), transparent 70%),
-    radial-gradient(ellipse 80% 70% at 50% 28%, var(--stage-a), var(--stage-b));
+    radial-gradient(ellipse 70% 22% at 50% 96%, var(--stage-floor), transparent 75%),
+    radial-gradient(ellipse 85% 75% at 50% 30%, var(--stage-a), var(--stage-b));
 }
 :root[data-contrast="high"] .stage {
   background: #000;
@@ -300,17 +414,27 @@ input[type="checkbox"] {
   animation: shimmer 1.6s linear infinite;
 }
 
-.lift { transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.25s ease, border-color 0.2s ease, background-color 0.2s ease; }
-.lift:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.lift {
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+.lift:hover {
+  border-color: var(--line-2);
+  box-shadow: 0 2px 8px -2px rgb(22 34 42 / 0.08);
+}
 
 .btn-primary {
   background: var(--brand);
   color: var(--brand-ink);
-  transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 6px 18px -6px var(--glow);
+  transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.1s ease;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.12);
 }
-.btn-primary:hover { background: var(--brand-2); }
-.btn-primary:active { transform: scale(0.97); }
+.btn-primary:hover {
+  background: var(--brand-2);
+}
+.btn-primary:active {
+  transform: translateY(1px);
+}
 
 /* Route cross-fade (React <ViewTransition>). */
 ::view-transition-old(root) { animation: 160ms ease-out both fade-in reverse; }

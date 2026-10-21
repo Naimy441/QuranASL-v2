@@ -2,10 +2,10 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { PlaybackState } from "@/components/avatar/AvatarCanvas";
 import { animateGloss } from "@/lib/asl/gloss";
-import { BISMILLAH_GLOSS, loadGloss, loadSurah, loadSurahList, type GlossFile, type Surah, type SurahMeta } from "@/lib/data/quran";
+import { BISMILLAH_GLOSS, loadGloss, loadSurah, loadSurahList, type GlossFile, type Surah, type SurahMeta, type Word } from "@/lib/data/quran";
 import { humanVideos } from "@/lib/data/human-videos";
 import GlossStrip from "./GlossStrip";
 import HumanVideos from "./HumanVideos";
@@ -18,6 +18,8 @@ import { bslDraft } from "@/lib/bsl/draft";
 import { getBslLexicon, loadBslLexicon } from "@/lib/bsl/lexicon";
 import { loadBslAyat, type BslAyahClip } from "@/lib/bsl/ayat";
 import { readViewerPrefs, writeLastRead, writeViewerPrefs, type AvatarId, type SignLang } from "@/lib/prefs";
+import { loadSurahTajweed, loadBismillahTajweed, TAJWEED_LEGEND, type TajweedSegment } from "@/lib/tajweed";
+import { TajweedAyah, TajweedWord } from "@/components/quran/TajweedText";
 import {
   ArrowLeftIcon, ArrowRightIcon, ContinueIcon, CubeIcon, EditIcon, ExpandIcon, InfoIcon, NextIcon, PauseIcon, PlayIcon, PrevIcon,
   RepeatIcon, ShrinkIcon, SquareIcon, VideoIcon, TextIcon,
@@ -48,6 +50,109 @@ function IconToggle({ on, onClick, label, children }: { on: boolean; onClick: ()
   );
 }
 
+interface AyahCardProps {
+  it: { key: string; label: string; ar: string; en: string; gloss: string; source: string; ayah?: number };
+  index: number;
+  active: boolean;
+  playing: boolean;
+  progress: number;
+  showWords: boolean;
+  tajweed: boolean;
+  tajweedWords?: TajweedSegment[][];
+  wordTajweedList?: TajweedSegment[][];
+  words?: Word[];
+  cardGloss?: { human: boolean; text: string };
+  onSelect: (index: number) => void;
+}
+
+const AyahCard = memo(function AyahCard({
+  it,
+  index,
+  active,
+  playing,
+  progress,
+  showWords,
+  tajweed,
+  tajweedWords,
+  wordTajweedList,
+  words,
+  cardGloss,
+  onSelect,
+}: AyahCardProps) {
+  return (
+    <li data-idx={index} className="ayah-card-item">
+      <button
+        onClick={() => onSelect(index)}
+        aria-current={active ? "true" : undefined}
+        className={`group relative w-full overflow-hidden rounded-xl border p-4 text-left transition ${active ? "border-brand bg-panel shadow-xs" : "border-line bg-panel/70 hover:border-line-2 hover:bg-panel"}`}
+      >
+        {active && <span className="absolute inset-y-0 left-0 w-1 bg-brand" aria-hidden />}
+        {active && (
+          <span className="absolute inset-x-0 bottom-0 h-0.5 bg-panel-2" aria-hidden>
+            <span className="block h-full bg-brand transition-[width] duration-100" style={{ width: `${progress * 100}%` }} />
+          </span>
+        )}
+        <div className="mb-1 flex items-center gap-2 text-xs text-ink-2">
+          <span className={`grid h-6 min-w-6 place-items-center rounded border border-line px-1 font-mono text-[11px] font-semibold ${active ? "border-brand bg-brand text-brand-ink" : "bg-panel-2 text-ink-2"}`}>
+            {it.ayah ?? "✦"}
+          </span>
+          {cardGloss ? (
+            <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider font-mono ${cardGloss.human ? "bg-ok/10 text-ok" : "bg-accent/10 text-accent"}`}>
+              {cardGloss.human ? "BSL · Human" : "BSL Draft"}
+            </span>
+          ) : (
+            <span
+              className={`rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider font-mono ${it.source === "curated" ? "bg-ok/10 text-ok" : it.source === "community" ? "bg-brand/10 text-brand" : "bg-accent/10 text-accent"}`}
+            >
+              {it.source === "curated" ? "Glossed" : it.source === "community" ? "Community" : "Auto Draft"}
+            </span>
+          )}
+          {active && playing && (
+            <span className="ml-auto flex items-end gap-0.5" aria-label="Now signing">
+              {[0, 1, 2].map((b) => (
+                <span key={b} className="w-0.5 rounded-full bg-brand" style={{ height: 6 + b * 3 }} />
+              ))}
+            </span>
+          )}
+        </div>
+        <p className="arabic text-right text-[1.65rem] text-ink leading-relaxed" lang="ar">
+          <TajweedAyah
+            words={tajweedWords}
+            fallbackText={it.ar}
+            tajweed={tajweed}
+          />
+        </p>
+        {showWords && words && (
+          <div className="arabic mt-1 flex flex-wrap gap-x-2 gap-y-1.5 text-right" dir="rtl">
+            {words.map((w, k) => {
+              const wordTajweed = wordTajweedList?.[k];
+              return (
+                <span key={k} className="inline-flex flex-col items-center rounded-lg bg-panel-2 px-2 py-1">
+                  <span className="text-lg leading-tight" lang="ar">
+                    {wordTajweed && tajweed ? (
+                      <TajweedWord segments={wordTajweed} tajweed={tajweed} />
+                    ) : (
+                      w.ar
+                    )}
+                  </span>
+                  <span dir="ltr" className="font-sans text-[11px] leading-tight text-ink-2">{w.en}</span>
+                  {w.root && <span className="text-[10px] leading-tight text-accent">{w.root}</span>}
+                </span>
+              );
+            })}
+          </div>
+        )}
+        <p className="mt-1.5 text-[15px] leading-relaxed text-ink">{it.en}</p>
+        {cardGloss ? (
+          <p className={`mt-2 text-xs leading-relaxed ${cardGloss.human ? "" : "font-mono"} ${active ? "text-ink-2" : "text-ink-3"}`}>{cardGloss.text}</p>
+        ) : (
+          <p className={`mt-2 font-mono text-xs leading-relaxed ${active ? "text-ink-2" : "text-ink-3"}`}>{it.gloss}</p>
+        )}
+      </button>
+    </li>
+  );
+});
+
 export default function SurahViewer({ n }: { n: number }) {
   const [surah, setSurah] = useState<Surah | null>(null);
   const [list, setList] = useState<SurahMeta[]>([]);
@@ -63,6 +168,10 @@ export default function SurahViewer({ n }: { n: number }) {
   const [loop, setLoop] = useState(false);
   const [tab, setTab] = useState<"ayat" | "human">("ayat");
   const [showWords, setShowWords] = useState(false);
+  const [tajweed, setTajweed] = useState(true);
+  const [showTajweedLegend, setShowTajweedLegend] = useState(false);
+  const [tajweedData, setTajweedData] = useState<TajweedSegment[][][] | null>(null);
+  const [bismillahTajweed, setBismillahTajweed] = useState<TajweedSegment[][] | null>(null);
   const [lang, setLang] = useState<SignLang>("asl");
   const [focus, setFocus] = useState(false);
   const [bslAyat, setBslAyat] = useState<Record<string, BslAyahClip> | null>(null);
@@ -87,6 +196,7 @@ export default function SurahViewer({ n }: { n: number }) {
     setRate(p.rate);
     setMode(p.mode);
     setLang(p.lang);
+    if (typeof p.tajweed === "boolean") setTajweed(p.tajweed);
     setPrefsLoaded(true);
     const a = parseInt(new URLSearchParams(window.location.search).get("ayah") ?? "");
     startAyah.current = Number.isFinite(a) ? a : null;
@@ -96,8 +206,8 @@ export default function SurahViewer({ n }: { n: number }) {
   }, [n]);
 
   useEffect(() => {
-    if (prefsLoaded) writeViewerPrefs({ avatar, rate, mode, lang });
-  }, [avatar, rate, mode, lang, prefsLoaded]);
+    if (prefsLoaded) writeViewerPrefs({ avatar, rate, mode, lang, tajweed });
+  }, [avatar, rate, mode, lang, tajweed, prefsLoaded]);
 
   useEffect(() => {
     if (lang !== "bsl") return;
@@ -110,6 +220,21 @@ export default function SurahViewer({ n }: { n: number }) {
   }, [lang, n]);
 
   const hasBismillah = !!surah?.bismillah && n !== 1 && n !== 9;
+
+  useEffect(() => {
+    let live = true;
+    loadSurahTajweed(n)
+      .then((d) => live && setTajweedData(d))
+      .catch((e) => console.warn("Could not load tajweed data:", e));
+    if (hasBismillah) {
+      loadBismillahTajweed()
+        .then((d) => live && setBismillahTajweed(d))
+        .catch((e) => console.warn("Could not load bismillah tajweed:", e));
+    }
+    return () => {
+      live = false;
+    };
+  }, [n, hasBismillah]);
   const items = useMemo(() => {
     if (!surah) return [];
     const out: { key: string; label: string; ar: string; en: string; gloss: string; source: string; ayah?: number }[] = [];
@@ -149,12 +274,19 @@ export default function SurahViewer({ n }: { n: number }) {
   }, [cur, lang, bslClip, bslLexReady, mocapReady]);
 
   // what each ayah card shows under the translation, per language
+  const bslDraftCache = useRef<Record<string, string>>({});
   const cardGloss = useMemo(() => {
     if (lang !== "bsl") return null;
     return items.map((it) => {
       const clip = it.ayah ? bslAyat?.[it.ayah] : undefined;
       if (clip) return { human: true, text: `Signed by an Al Isharah BSL translator · ${Math.floor(clip.start / 60)}:${String(Math.floor(clip.start % 60)).padStart(2, "0")} in the recording` };
-      return { human: false, text: bslLexReady ? bslDraft(it.en) || "No learned BSL signs for this ayah yet" : "" };
+      if (!bslLexReady) return { human: false, text: "" };
+      let d = bslDraftCache.current[it.en];
+      if (d === undefined) {
+        d = bslDraft(it.en) || "No learned BSL signs for this ayah yet";
+        bslDraftCache.current[it.en] = d;
+      }
+      return { human: false, text: d };
     });
   }, [lang, items, bslAyat, bslLexReady]);
   const bslHumanCount = lang === "bsl" && bslAyat ? Object.keys(bslAyat).filter((k) => k !== "0").length : 0;
@@ -260,20 +392,20 @@ export default function SurahViewer({ n }: { n: number }) {
   const statusBadge =
     lang === "bsl" ? (
       bslClip ? (
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-ok px-2.5 py-1 text-[11px] font-semibold text-white shadow-soft">
+        <span className="inline-flex items-center gap-1.5 rounded-md border border-ok/40 bg-ok/10 px-2.5 py-1 text-[11px] font-semibold text-ok shadow-xs backdrop-blur">
           <VideoIcon size={13} /> Human BSL translator, retargeted
         </span>
       ) : (
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-accent px-2.5 py-1 text-[11px] font-semibold text-black shadow-soft">
+        <span className="inline-flex items-center gap-1.5 rounded-md border border-accent/40 bg-accent/10 px-2.5 py-1 text-[11px] font-semibold text-accent shadow-xs backdrop-blur">
           <InfoIcon size={13} /> BSL rough draft
         </span>
       )
     ) : cur?.source === "auto" ? (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-accent px-2.5 py-1 text-[11px] font-semibold text-black shadow-soft">
+      <span className="inline-flex items-center gap-1.5 rounded-md border border-accent/40 bg-accent/10 px-2.5 py-1 text-[11px] font-semibold text-accent shadow-xs backdrop-blur">
         <InfoIcon size={13} /> Automatic draft
       </span>
     ) : (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-panel/85 px-2.5 py-1 text-[11px] font-semibold text-ok shadow-soft backdrop-blur">
+      <span className="inline-flex items-center gap-1.5 rounded-md border border-line bg-panel/90 px-2.5 py-1 text-[11px] font-semibold text-ok shadow-xs backdrop-blur">
         <span className="h-1.5 w-1.5 rounded-full bg-ok" /> ASL gloss · draft for Deaf review
       </span>
     );
@@ -284,22 +416,22 @@ export default function SurahViewer({ n }: { n: number }) {
       <section aria-label="Signing avatar" className={`flex flex-col gap-3 ${focus ? "" : "lg:sticky lg:top-20 lg:h-[calc(100vh-6rem)]"}`}>
         <header className="animate-fade-up flex flex-wrap items-end justify-between gap-3">
           <div className="min-w-0">
-            <Link href="/#surahs" className="inline-flex items-center gap-1 text-sm text-ink-2 transition hover:text-ink">
-              <ArrowLeftIcon size={15} /> All surahs
+            <Link href="/#surahs" className="inline-flex items-center gap-1 text-xs text-ink-3 transition hover:text-ink">
+              <ArrowLeftIcon size={14} /> Back to Corpus Index
             </Link>
-            <h1 className="mt-1 flex flex-wrap items-baseline gap-x-3 text-2xl font-semibold tracking-tight sm:text-3xl">
+            <h1 className="mt-1 flex flex-wrap items-baseline gap-x-3 font-serif text-2xl font-medium tracking-tight text-ink sm:text-3xl">
               <span>
                 <span className="text-ink-3">{surah.n}.</span> {surah.name}
               </span>
               <span className="arabic text-3xl font-normal leading-none" lang="ar">{surah.nameAr}</span>
             </h1>
-            <p className="mt-0.5 text-sm text-ink-2">
+            <p className="mt-0.5 text-xs text-ink-2 font-mono">
               {surah.meaning} · {surah.ayahs} ayat · {surah.place === "makkah" ? "Meccan" : "Medinan"}
-              {lang === "asl" && curatedCount > 0 && <> · <span className="text-ok">{curatedCount === surah.ayahs ? "fully hand-glossed" : `${curatedCount} hand-glossed`}</span></>}
-              {lang === "bsl" && <> · <span className={bslHumanCount ? "text-ok" : "text-accent"}>{bslHumanCount ? `${bslHumanCount} ayat by a human BSL translator` : "BSL draft only"}</span></>}
+              {lang === "asl" && curatedCount > 0 && <> · <span className="text-ok font-semibold">{curatedCount === surah.ayahs ? "complete gloss tier" : `${curatedCount} hand-glossed`}</span></>}
+              {lang === "bsl" && <> · <span className={bslHumanCount ? "text-ok font-semibold" : "text-accent font-semibold"}>{bslHumanCount ? `${bslHumanCount} ayat by human translator` : "BSL draft"}</span></>}
             </p>
           </div>
-          <div role="radiogroup" aria-label="Sign language" className="grid grid-cols-2 rounded-full border border-line bg-panel p-1 text-sm">
+          <div role="radiogroup" aria-label="Sign language" className="grid grid-cols-2 rounded-md border border-line bg-panel p-0.5 text-xs">
             {(["asl", "bsl"] as SignLang[]).map((l) => (
               <button
                 key={l}
@@ -307,7 +439,7 @@ export default function SurahViewer({ n }: { n: number }) {
                 aria-checked={lang === l}
                 onClick={() => setLang(l)}
                 title={l === "asl" ? "American Sign Language" : "British Sign Language"}
-                className={`rounded-full px-4 py-1.5 font-semibold transition ${lang === l ? "bg-brand text-brand-ink shadow-soft" : "text-ink-2 hover:text-ink"}`}
+                className={`rounded px-3 py-1 font-semibold transition ${lang === l ? "bg-brand text-brand-ink shadow-xs" : "text-ink-2 hover:text-ink"}`}
               >
                 {l.toUpperCase()}
               </button>
@@ -315,7 +447,7 @@ export default function SurahViewer({ n }: { n: number }) {
           </div>
         </header>
 
-        <div className={`stage relative flex-1 overflow-hidden rounded-3xl border border-line shadow-soft ${focus ? "min-h-[72vh]" : "min-h-[380px]"}`}>
+        <div className={`stage relative flex-1 overflow-hidden rounded-xl border border-line shadow-xs ${focus ? "min-h-[72vh]" : "min-h-[380px]"}`}>
           <AvatarCanvas
             className="absolute inset-0"
             timeline={anim?.timeline ?? null}
@@ -324,59 +456,58 @@ export default function SurahViewer({ n }: { n: number }) {
             onEnd={onEnd}
             mode={mode}
             avatar={avatar}
-            xr
             ariaLabel={`Avatar signing ${cur?.label ?? ""} in ${lang.toUpperCase()}`}
           />
           {/* top overlays */}
           <div className="pointer-events-none absolute inset-x-3 top-3 flex items-start justify-between gap-2">
             <div className="pointer-events-auto flex flex-col items-start gap-1.5">
               {statusBadge}
-              <span className="rounded-full bg-panel/85 px-2.5 py-1 font-mono text-xs font-semibold text-ink shadow-soft backdrop-blur">{cur?.label}</span>
+              <span className="rounded-md border border-line bg-panel/90 px-2 py-0.5 font-mono text-[11px] font-semibold text-ink shadow-xs backdrop-blur">{cur?.label}</span>
             </div>
             <div className="pointer-events-auto flex items-center gap-1.5">
               <SignerPicker value={avatar} onChange={setAvatar} />
               <button
                 onClick={() => setMode((m) => (m === "3d" ? "2d" : "3d"))}
-                className="grid h-9 w-9 place-items-center rounded-full bg-panel/85 text-ink shadow-soft backdrop-blur transition hover:bg-panel"
+                className="grid h-8 w-8 place-items-center rounded-md border border-line bg-panel/90 text-ink shadow-xs backdrop-blur transition hover:bg-panel"
                 aria-label={`Switch to ${mode === "3d" ? "flat 2D" : "3D"} view`}
                 title={mode === "3d" ? "Flat 2D view" : "3D view"}
               >
-                {mode === "3d" ? <SquareIcon size={17} /> : <CubeIcon size={17} />}
+                {mode === "3d" ? <SquareIcon size={16} /> : <CubeIcon size={16} />}
               </button>
               <button
                 onClick={() => setFocus((v) => !v)}
-                className="grid h-9 w-9 place-items-center rounded-full bg-panel/85 text-ink shadow-soft backdrop-blur transition hover:bg-panel"
+                className="grid h-8 w-8 place-items-center rounded-md border border-line bg-panel/90 text-ink shadow-xs backdrop-blur transition hover:bg-panel"
                 aria-label={focus ? "Exit focus mode" : "Focus mode"}
                 aria-pressed={focus}
                 title={focus ? "Exit focus mode (F)" : "Focus mode (F)"}
               >
-                {focus ? <ShrinkIcon size={17} /> : <ExpandIcon size={17} />}
+                {focus ? <ShrinkIcon size={16} /> : <ExpandIcon size={16} />}
               </button>
             </div>
           </div>
           {/* caption */}
           <div aria-live="polite" className="pointer-events-none absolute inset-x-0 bottom-4 flex flex-col items-center gap-2 px-4">
             {activeLabel && activeLabel.status !== "pause" && (
-              <span key={activeLabel.index} className="animate-scale-in rounded-full bg-black/75 px-4 py-1.5 font-mono text-lg font-semibold tracking-wider text-white shadow-lift backdrop-blur">
+              <span key={activeLabel.index} className="rounded-md border border-white/20 bg-black/85 px-3.5 py-1 font-mono text-base font-semibold tracking-wider text-white shadow-sm backdrop-blur">
                 {activeLabel.kind === "fs" || activeLabel.status === "fallback" ? <span className="mr-1 text-white/60">fs:</span> : null}
                 {activeLabel.gloss}
               </span>
             )}
-            {focus && cur && <p className="max-w-3xl rounded-2xl bg-panel/85 px-4 py-2 text-center text-[15px] text-ink shadow-soft backdrop-blur">{cur.en}</p>}
+            {focus && cur && <p className="max-w-3xl rounded-lg border border-line bg-panel/90 px-4 py-2 text-center text-sm text-ink shadow-xs backdrop-blur">{cur.en}</p>}
           </div>
           {!playing && time === 0 && anim && (
             <button
               onClick={toggle}
-              className="btn-primary animate-scale-in absolute left-1/2 top-1/2 grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full animate-pulse-ring"
+              className="btn-primary absolute left-1/2 top-1/2 grid h-14 w-14 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full shadow-md transition hover:scale-105"
               aria-label="Play this ayah"
             >
-              <PlayIcon size={26} />
+              <PlayIcon size={24} />
             </button>
           )}
         </div>
 
         {/* transport */}
-        <div className="rounded-3xl border border-line bg-panel p-3 shadow-soft sm:p-4">
+        <div className="rounded-xl border border-line bg-panel p-3.5 shadow-xs">
           <div className="flex items-center gap-3">
             <button onClick={() => go(idx - 1)} className="grid h-10 w-10 place-items-center rounded-full text-ink-2 transition hover:bg-panel-2 hover:text-ink disabled:opacity-30" aria-label="Previous ayah" disabled={idx === 0}>
               <PrevIcon size={18} />
@@ -455,81 +586,99 @@ export default function SurahViewer({ n }: { n: number }) {
               </button>
             </div>
             {tab === "ayat" && (
-              <button
-                role="switch"
-                aria-checked={showWords}
-                onClick={() => setShowWords((v) => !v)}
-                className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${showWords ? "border-brand bg-brand-soft text-brand" : "border-line text-ink-2 hover:text-ink"}`}
-              >
-                Word by word
-              </button>
+              <>
+                <button
+                  role="switch"
+                  aria-checked={showWords}
+                  onClick={() => setShowWords((v) => !v)}
+                  className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${showWords ? "border-brand bg-brand-soft text-brand" : "border-line text-ink-2 hover:text-ink"}`}
+                >
+                  Word by word
+                </button>
+                <button
+                  role="switch"
+                  aria-checked={tajweed}
+                  onClick={() => setTajweed((v) => !v)}
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition ${tajweed ? "border-brand bg-brand-soft text-brand shadow-xs" : "border-line text-ink-2 hover:text-ink"}`}
+                  title="Toggle Tajweed recitation colors"
+                >
+                  <span className="inline-flex items-center gap-0.5" aria-hidden="true">
+                    <span className="h-2 w-2 rounded-full tj-qalaqah" style={{ backgroundColor: "currentColor" }} />
+                    <span className="h-2 w-2 rounded-full tj-ikhafa" style={{ backgroundColor: "currentColor" }} />
+                    <span className="h-2 w-2 rounded-full tj-madda_normal" style={{ backgroundColor: "currentColor" }} />
+                  </span>
+                  <span>Tajweed</span>
+                </button>
+                {tajweed && (
+                  <button
+                    onClick={() => setShowTajweedLegend((v) => !v)}
+                    className={`rounded-full border border-line px-2.5 py-1.5 text-xs text-ink-2 transition hover:text-ink ${showTajweedLegend ? "border-brand bg-panel-2 text-ink font-medium" : "hover:bg-panel-2"}`}
+                    title="Tajweed Color Guide"
+                    aria-label="Tajweed Color Guide"
+                  >
+                    Legend
+                  </button>
+                )}
+              </>
             )}
             <Link href={`/studio?surah=${n}&ayah=${cur?.ayah ?? 1}`} className="ml-auto inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm text-ink-2 transition hover:bg-panel-2 hover:text-ink">
               <EditIcon size={15} /> Edit in Studio
             </Link>
           </div>
+          {tab === "ayat" && showTajweedLegend && (
+            <div className="mb-3 rounded-2xl border border-line bg-panel p-4 text-xs shadow-xs animate-fade-up">
+              <div className="flex items-center justify-between border-b border-line pb-2.5 mb-3">
+                <div className="flex items-baseline gap-2">
+                  <span className="font-semibold text-ink">Tajweed Recitation Palette</span>
+                  <span className="text-[11px] text-ink-3 font-mono">Standard Hafs Quranic Coding</span>
+                </div>
+                <button
+                  onClick={() => setShowTajweedLegend(false)}
+                  className="rounded px-2 py-0.5 text-xs text-ink-3 transition hover:bg-panel-2 hover:text-ink"
+                >
+                  Close
+                </button>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                {TAJWEED_LEGEND.map((cat) => (
+                  <div key={cat.title} className="space-y-1.5">
+                    <p className="font-mono text-[10px] uppercase tracking-wider text-ink-3 font-semibold">{cat.title}</p>
+                    <div className="space-y-1">
+                      {cat.rules.map((r) => (
+                        <div key={r.key} className="flex items-center gap-2">
+                          <span className={`h-2.5 w-2.5 rounded-full shrink-0 tj-${r.colorKey}`} style={{ backgroundColor: "currentColor" }} />
+                          <span className="text-ink text-[11px] truncate">{r.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           {tab === "human" ? (
             <HumanVideos videos={vids} seek={bslClip ? { id: bslClip.video, start: bslClip.start } : undefined} />
           ) : (
             <ol ref={listRef} className="flex-1 space-y-2.5 overflow-y-auto pb-4 pr-1 lg:max-h-[calc(100vh-10rem)]">
               {items.map((it, i) => {
                 const active = i === idx;
+                const ayahIndex = it.ayah != null ? it.ayah - 1 : -1;
                 return (
-                  <li key={it.key} data-idx={i}>
-                    <button
-                      onClick={() => go(i)}
-                      aria-current={active ? "true" : undefined}
-                      className={`group relative w-full overflow-hidden rounded-2xl border p-4 text-left transition ${active ? "border-brand bg-panel shadow-soft" : "border-line bg-panel/70 hover:border-line-2 hover:bg-panel"}`}
-                    >
-                      {active && <span className="absolute inset-y-0 left-0 w-1 bg-brand" aria-hidden />}
-                      {active && (
-                        <span className="absolute inset-x-0 bottom-0 h-0.5 bg-panel-2" aria-hidden>
-                          <span className="block h-full bg-brand transition-[width] duration-100" style={{ width: `${progress * 100}%` }} />
-                        </span>
-                      )}
-                      <div className="mb-1 flex items-center gap-2 text-xs text-ink-2">
-                        <span className={`grid h-7 min-w-7 place-items-center rounded-full px-1.5 font-mono text-[11px] font-semibold ${active ? "bg-brand text-brand-ink" : "bg-panel-2 text-ink-2"}`}>
-                          {it.ayah ?? "✦"}
-                        </span>
-                        {cardGloss ? (
-                          <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${cardGloss[i]?.human ? "bg-ok/15 text-ok" : "bg-accent/15 text-accent"}`}>
-                            {cardGloss[i]?.human ? "BSL · human translator" : "BSL draft"}
-                          </span>
-                        ) : (
-                          <span
-                            className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${it.source === "curated" ? "bg-ok/15 text-ok" : it.source === "community" ? "bg-brand/15 text-brand" : "bg-accent/15 text-accent"}`}
-                          >
-                            {it.source === "curated" ? "hand-glossed" : it.source === "community" ? "your edit" : "auto draft"}
-                          </span>
-                        )}
-                        {active && playing && (
-                          <span className="ml-auto flex items-end gap-0.5" aria-label="Now signing">
-                            {[0, 1, 2].map((b) => (
-                              <span key={b} className="w-0.5 animate-[float_0.9s_ease-in-out_infinite] rounded-full bg-brand" style={{ height: 6 + b * 3, animationDelay: `${b * 120}ms` }} />
-                            ))}
-                          </span>
-                        )}
-                      </div>
-                      <p className="arabic text-right text-[1.65rem] text-ink" lang="ar">{it.ar}</p>
-                      {showWords && it.ayah && (
-                        <div className="arabic mt-1 flex flex-wrap gap-x-2 gap-y-1.5 text-right" dir="rtl">
-                          {surah.ayat[it.ayah - 1].w.map((w, k) => (
-                            <span key={k} className="inline-flex flex-col items-center rounded-lg bg-panel-2 px-2 py-1">
-                              <span className="text-lg leading-tight" lang="ar">{w.ar}</span>
-                              <span dir="ltr" className="font-sans text-[11px] leading-tight text-ink-2">{w.en}</span>
-                              {w.root && <span className="text-[10px] leading-tight text-accent">{w.root}</span>}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                      <p className="mt-1.5 text-[15px] leading-relaxed text-ink">{it.en}</p>
-                      {cardGloss ? (
-                        <p className={`mt-2 text-xs leading-relaxed ${cardGloss[i]?.human ? "" : "font-mono"} ${active ? "text-ink-2" : "text-ink-3"}`}>{cardGloss[i]?.text}</p>
-                      ) : (
-                        <p className={`mt-2 font-mono text-xs leading-relaxed ${active ? "text-ink-2" : "text-ink-3"}`}>{it.gloss}</p>
-                      )}
-                    </button>
-                  </li>
+                  <AyahCard
+                    key={it.key}
+                    it={it}
+                    index={i}
+                    active={active}
+                    playing={playing}
+                    progress={active ? progress : 0}
+                    showWords={showWords}
+                    tajweed={tajweed}
+                    tajweedWords={it.key === "b" ? (bismillahTajweed ?? undefined) : ayahIndex >= 0 ? tajweedData?.[ayahIndex] : undefined}
+                    wordTajweedList={ayahIndex >= 0 ? tajweedData?.[ayahIndex] : undefined}
+                    words={ayahIndex >= 0 && surah ? surah.ayat[ayahIndex]?.w : undefined}
+                    cardGloss={cardGloss ? cardGloss[i] : undefined}
+                    onSelect={go}
+                  />
                 );
               })}
               <li className="grid grid-cols-2 gap-2.5 pt-2">

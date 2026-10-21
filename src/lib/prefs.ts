@@ -119,9 +119,10 @@ export interface ViewerPrefs {
   rate: number;
   mode: "3d" | "2d";
   lang: SignLang;
+  tajweed: boolean;
 }
 const VIEWER_KEY = "qasl-viewer";
-export const DEFAULT_VIEWER: ViewerPrefs = { avatar: "amina", rate: 0.85, mode: "3d", lang: "asl" };
+export const DEFAULT_VIEWER: ViewerPrefs = { avatar: "amina", rate: 0.85, mode: "3d", lang: "asl", tajweed: true };
 
 export function readViewerPrefs(): ViewerPrefs {
   try {

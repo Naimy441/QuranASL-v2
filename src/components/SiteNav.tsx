@@ -9,11 +9,12 @@ import {
 } from "./common/Icons";
 
 const LINKS = [
-  { href: "/", label: "Surahs" },
-  { href: "/dictionary", label: "Dictionary" },
-  { href: "/practice", label: "Practice" },
-  { href: "/studio", label: "Studio" },
-  { href: "/about", label: "About" },
+  { href: "/", label: "Corpus" },
+  { href: "/dictionary", label: "Lexicon" },
+  { href: "/#methodology", label: "Methodology" },
+  { href: "/practice", label: "Practice Lab" },
+  { href: "/studio", label: "Gloss Studio" },
+  { href: "/about", label: "Documentation" },
 ];
 
 const THEMES: { id: ThemePref; label: string; Icon: typeof SunIcon }[] = [
@@ -117,11 +118,14 @@ export default function SiteNav() {
   return (
     <header className={`glass sticky top-0 z-40 border-b transition-colors ${scrolled ? "border-line" : "border-transparent"}`}>
       <nav className="mx-auto flex h-16 max-w-7xl items-center gap-2 px-4" aria-label="Main">
-        <Link href="/" className="group mr-3 flex items-center gap-2.5 font-semibold text-ink" aria-label="QuranASL home">
-          <LogoMark size={34} className="transition-transform duration-500 group-hover:rotate-45" />
-          <span className="text-[17px] tracking-tight">
-            Quran<span className="text-brand">ASL</span>
-          </span>
+        <Link href="/" className="group mr-4 flex items-center gap-2.5 font-semibold text-ink" aria-label="QuranASL home">
+          <LogoMark size={32} className="transition-transform duration-500 group-hover:rotate-45" />
+          <div className="flex flex-col">
+            <span className="text-[17px] font-semibold leading-tight tracking-tight">
+              Quran<span className="text-brand">ASL</span>
+            </span>
+            <span className="text-[10px] font-medium tracking-wider uppercase text-ink-3">Corpus &amp; Lexicon</span>
+          </div>
         </Link>
         <ul className="hidden flex-1 items-center gap-1 text-sm md:flex">
           {LINKS.map((l) => {
@@ -131,7 +135,7 @@ export default function SiteNav() {
                 <Link
                   href={l.href}
                   aria-current={active ? "page" : undefined}
-                  className={`relative rounded-full px-3.5 py-2 font-medium transition ${active ? "bg-brand-soft text-brand" : "text-ink-2 hover:bg-panel-2 hover:text-ink"}`}
+                  className={`relative rounded-md px-3 py-1.5 text-[13.5px] font-medium transition ${active ? "bg-panel-2 font-semibold text-brand shadow-xs border border-line" : "text-ink-2 hover:bg-panel-2/60 hover:text-ink"}`}
                 >
                   {l.label}
                 </Link>
