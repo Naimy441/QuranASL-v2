@@ -256,12 +256,12 @@ body {
 }
 
 .font-serif {
-  font-family: var(--font-amiri), "Amiri", Georgia, Cambria, "Times New Roman", Times, serif;
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
 .font-editorial {
-  font-family: var(--font-amiri), "Amiri", Georgia, Cambria, "Times New Roman", Times, serif;
-  letter-spacing: -0.018em;
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.025em;
 }
 
 .arabic {

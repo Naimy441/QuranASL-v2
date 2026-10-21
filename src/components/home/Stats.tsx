@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Frame } from "@/components/ui/frame";
+import { Badge } from "@/components/ui/badge";
 
 interface SiteStats {
   ayat: number;
@@ -45,7 +45,7 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
   }, [to]);
 
   return (
-    <span ref={ref} className="tabular-nums font-mono font-semibold tracking-tight text-ink">
+    <span ref={ref} className="tabular-nums font-mono font-bold tracking-tight text-ink">
       {v.toLocaleString("en")}
       {suffix}
     </span>
@@ -94,52 +94,47 @@ export default function Stats() {
   ];
 
   return (
-    <section aria-label="Corpus specifications and metrics" className="mx-auto w-full max-w-7xl px-4 sm:px-6 pt-10">
-      <Frame
-        withCorners
-        withHeader
-        headerTitle={
+    <section aria-label="Corpus specifications and metrics" className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-12">
+      <div className="rounded-2xl border border-line bg-panel p-6 shadow-sm sm:p-8">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-line/60 pb-4">
           <div className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-brand" />
-            <span className="font-mono text-[11px] font-semibold uppercase tracking-wider text-ink-3">
+            <span className="h-2 w-2 rounded-full bg-brand" />
+            <span className="font-mono text-xs font-semibold uppercase tracking-wider text-ink-3">
               Corpus Specification &amp; Coverage Metrics
             </span>
           </div>
-        }
-        headerAction={
-          <span className="font-mono text-[10px] text-ink-3">
+          <Badge variant="outline" size="sm" className="font-mono">
             ISO 639-3: ase / bfi
-          </span>
-        }
-        className="p-6 bg-panel shadow-xs"
-      >
-        <div className="grid gap-px overflow-hidden rounded-lg border border-line/60 bg-line/60 sm:grid-cols-2 lg:grid-cols-4">
+          </Badge>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {items.map((it) => (
             <div
               key={it.label}
-              className="flex flex-col justify-between bg-panel p-5 transition-colors hover:bg-panel-2/50"
+              className="flex flex-col justify-between rounded-xl border border-line/80 bg-panel-2/40 p-5 transition-all hover:border-line-2 hover:bg-panel-2/80"
             >
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] font-medium uppercase tracking-wider text-ink-3">
+                  <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-ink-3">
                     {it.category}
                   </span>
-                  <span className="rounded border border-line bg-panel-2 px-1.5 py-0.5 font-mono text-[9px] text-brand">
+                  <span className="rounded-full border border-line bg-panel px-2 py-0.5 font-mono text-[9px] text-brand font-medium">
                     {it.spec}
                   </span>
                 </div>
-                <div className="mt-3 text-3xl font-light tracking-tight text-ink sm:text-4xl">
+                <div className="mt-4 text-3xl font-bold tracking-tight text-ink sm:text-4xl font-mono">
                   <Counter to={it.n} />
                 </div>
-                <p className="mt-1 text-xs font-medium text-ink">{it.label}</p>
+                <p className="mt-1 text-sm font-semibold text-ink">{it.label}</p>
               </div>
-              <p className="mt-3 text-[11px] leading-relaxed text-ink-3 border-t border-line/40 pt-2.5">
+              <p className="mt-4 text-xs leading-relaxed text-ink-3 border-t border-line/60 pt-3">
                 {it.note}
               </p>
             </div>
           ))}
         </div>
-      </Frame>
+      </div>
     </section>
   );
 }

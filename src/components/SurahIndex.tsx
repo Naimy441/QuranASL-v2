@@ -95,12 +95,12 @@ export default function SurahIndex() {
           <Badge variant="outline" size="sm" className="bg-panel font-mono">
             Corpus Catalogue &amp; Canonical Index
           </Badge>
-          <div className="mt-2">
+          <div className="mt-3">
             <TextEffect
               per="word"
               preset="fade-in-blur"
-              delay={0.1}
-              className="font-serif text-2xl font-medium tracking-tight text-ink sm:text-3xl"
+              delay={0.05}
+              className="font-sans text-3xl font-bold tracking-tight text-ink sm:text-4xl"
             >
               The 114 Surahs of the Holy Qur&apos;an
             </TextEffect>
