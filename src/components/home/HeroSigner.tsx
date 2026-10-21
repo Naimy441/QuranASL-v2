@@ -29,10 +29,18 @@ function SignerSkeleton() {
 
 /** The landing-page signer: loops the Bismillah (ASL) or a captured BSL ayah. */
 export default function HeroSigner({ avatar, lang }: { avatar: AvatarId; lang: SignLang }) {
+  const [canLoadRig, setCanLoadRig] = useState(false);
   const pb = useRef<PlaybackState>({ time: 0, playing: true, rate: 0.85, loop: false });
   const [time, setTime] = useState(0);
   const [bsl, setBsl] = useState<BslAyahClip | null>(null);
   const mocapReady = useMocapReady();
+
+  useEffect(() => {
+    // Defer heavy 3D WebGL context & shader compilation so the hero headline
+    // typography animation has exclusive main-thread priority on page load.
+    const t = setTimeout(() => setCanLoadRig(true), 400);
+    return () => clearTimeout(t);
+  }, []);
 
   useEffect(() => {
     if (lang !== "bsl") return;
@@ -72,16 +80,20 @@ export default function HeroSigner({ avatar, lang }: { avatar: AvatarId; lang: S
 
   return (
     <div className="relative h-full w-full">
-      <AvatarCanvas
-        className="absolute inset-0"
-        timeline={anim.timeline}
-        playback={pb}
-        onTime={setTime}
-        onEnd={onEnd}
-        avatar={avatar}
-        interactive={false}
-        ariaLabel={`Signing avatar signing ${lang === "bsl" ? "Surah Al-Ikhlas ayah 1 in BSL" : "the Bismillah in ASL"}`}
-      />
+      {canLoadRig ? (
+        <AvatarCanvas
+          className="absolute inset-0"
+          timeline={anim.timeline}
+          playback={pb}
+          onTime={setTime}
+          onEnd={onEnd}
+          avatar={avatar}
+          interactive={false}
+          ariaLabel={`Signing avatar signing ${lang === "bsl" ? "Surah Al-Ikhlas ayah 1 in BSL" : "the Bismillah in ASL"}`}
+        />
+      ) : (
+        <SignerSkeleton />
+      )}
 
       {/* Real-time gloss token pill placed at top-left so hands remain 100% visible */}
       {tok && tok.status !== "pause" && (
