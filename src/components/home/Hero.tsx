@@ -62,6 +62,7 @@ export default function Hero() {
             <TextEffect
               per="word"
               preset="fade-in-blur"
+              trigger={true}
               delay={0.05}
               className="font-sans text-4xl font-bold tracking-tight text-ink sm:text-6xl lg:text-7xl"
             >

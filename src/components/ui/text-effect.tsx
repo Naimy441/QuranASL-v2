@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView, type TargetAndTransition, type Transition, type Variant } from "framer-motion";
+import { motion, useInView, useReducedMotion, type TargetAndTransition, type Transition, type Variant } from "framer-motion";
 import React from "react";
 
 type PresetType = "fade-in-blur" | "fade" | "slide" | "scale";
@@ -35,17 +35,20 @@ const defaultPresets: Record<
   "fade-in-blur": {
     hidden: {
       opacity: 0,
-      filter: "blur(12px)",
-      y: 20,
+      filter: "blur(10px)",
+      y: 16,
     },
     visible: {
       opacity: 1,
       filter: "blur(0px)",
       y: 0,
+      transitionEnd: {
+        filter: "none",
+      },
       transition: {
-        type: "spring",
-        stiffness: 150,
-        damping: 19,
+        y: { type: "spring", stiffness: 150, damping: 25 },
+        opacity: { duration: 0.35, ease: "easeOut" },
+        filter: { duration: 0.35, ease: "easeOut" },
       },
     },
   },
@@ -75,6 +78,7 @@ export function TextEffect({
 }: TextEffectProps) {
   const containerRef = React.useRef<HTMLSpanElement>(null);
   const [hasMounted, setHasMounted] = React.useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   const isInView = useInView(containerRef, {
     once,
@@ -93,7 +97,16 @@ export function TextEffect({
   }, [children, per]);
 
   const stagger = per === "char" ? 0.03 : 0.08;
-  const itemVariants = defaultPresets[preset];
+  const baseVariants = defaultPresets[preset];
+  const itemVariants = React.useMemo(() => {
+    if (shouldReduceMotion) {
+      return {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, filter: "none", y: 0, transition: { duration: 0.2 } },
+      };
+    }
+    return baseVariants;
+  }, [shouldReduceMotion, baseVariants]);
 
   const shouldAnimate = trigger !== undefined ? trigger : isInView;
   const activeState = hasMounted && shouldAnimate ? "visible" : "hidden";
@@ -115,7 +128,11 @@ export function TextEffect({
           aria-hidden="true"
           className={`inline-block whitespace-pre ${segmentWrapperClassName}`}
         >
-          <motion.span variants={itemVariants} className="inline-block whitespace-pre">
+          <motion.span
+            variants={itemVariants}
+            className="inline-block whitespace-pre"
+            style={{ willChange: "filter, transform, opacity" }}
+          >
             {segment}
           </motion.span>
           {per === "word" && index < segments.length - 1 && " "}
