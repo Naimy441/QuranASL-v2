@@ -1,0 +1,3314 @@
+{
+"inde": {
+"video": "6nQdGtQ9wLk",
+"start": 47.28,
+"end": 47.76,
+"src": [
+77,
+7
+],
+"auc": 0.869,
+"support": 126,
+"recall": 0.79
+},
+"lord": {
+"video": "DsDfKg4aB6c",
+"start": 33.92,
+"end": 34.4,
+"src": [
+108,
+2
+],
+"auc": 0.938,
+"support": 94,
+"recall": 0.9
+},
+"day": {
+"video": "6nQdGtQ9wLk",
+"start": 75.12,
+"end": 75.6,
+"src": [
+77,
+13
+],
+"auc": 0.937,
+"support": 85,
+"recall": 0.87
+},
+"allah": {
+"video": "MXJMXzPvJ50",
+"start": 26.87,
+"end": 27.35,
+"src": [
+112,
+1
+],
+"auc": 0.859,
+"support": 65,
+"recall": 0.8
+},
+"know": {
+"video": "6N3592ecNEI",
+"start": 107.52,
+"end": 108.32,
+"src": [
+82,
+12
+],
+"auc": 0.893,
+"support": 41,
+"recall": 0.83
+},
+"except": {
+"video": "_tnzvKbvOHw",
+"start": 174.08,
+"end": 174.56,
+"src": [
+81,
+27
+],
+"auc": 0.912,
+"support": 38,
+"recall": 0.79
+},
+"creat": {
+"video": "or3VZvb_CQM",
+"start": 73.84,
+"end": 74.64,
+"src": [
+78,
+8
+],
+"auc": 0.926,
+"support": 32,
+"recall": 0.9
+},
+"earth": {
+"video": "j5SgkQe9ezM",
+"start": 208.8,
+"end": 209.6,
+"src": [
+79,
+30
+],
+"auc": 0.842,
+"support": 29,
+"recall": 0.64
+},
+"man": {
+"video": "V-G9dBQeksU",
+"start": 112.96,
+"end": 113.44,
+"src": [
+75,
+14
+],
+"auc": 0.835,
+"support": 27,
+"recall": 0.65
+},
+"muhammad": {
+"video": "ucRkZIm3QH4",
+"start": 36.32,
+"end": 37.12,
+"src": [
+36,
+3
+],
+"auc": 0.702,
+"support": 24,
+"recall": 0.48
+},
+"see": {
+"video": "kk5DAficNVQ",
+"start": 69.76,
+"end": 70.56,
+"src": [
+102,
+7
+],
+"auc": 0.82,
+"support": 22,
+"recall": 0.71
+},
+"deny": {
+"video": "j5SgkQe9ezM",
+"start": 153.12,
+"end": 153.92,
+"src": [
+79,
+21
+],
+"auc": 0.937,
+"support": 22,
+"recall": 0.81
+},
+"night": {
+"video": "_tnzvKbvOHw",
+"start": 104.8,
+"end": 105.6,
+"src": [
+81,
+17
+],
+"auc": 0.983,
+"support": 22,
+"recall": 0.95
+},
+"disbeliever": {
+"video": "sROx7aJES_g",
+"start": 312.08,
+"end": 312.56,
+"src": [
+76,
+24
+],
+"auc": 0.911,
+"support": 21,
+"recall": 0.75
+},
+"return": {
+"video": "THnIZ3e0mZE",
+"start": 221.36,
+"end": 222.48,
+"src": [
+71,
+18
+],
+"auc": 0.731,
+"support": 21,
+"recall": 0.4
+},
+"people": {
+"video": "THnIZ3e0mZE",
+"start": 45.76,
+"end": 46.24,
+"src": [
+71,
+2
+],
+"auc": 0.807,
+"support": 20,
+"recall": 0.68
+},
+"therein": {
+"video": "6N3592ecNEI",
+"start": 132.24,
+"end": 133.36,
+"src": [
+82,
+15
+],
+"auc": 0.796,
+"support": 20,
+"recall": 0.68
+},
+"punishment": {
+"video": "j5SgkQe9ezM",
+"start": 171.44,
+"end": 172.56,
+"src": [
+79,
+25
+],
+"auc": 0.982,
+"support": 20,
+"recall": 1.0
+},
+"fear": {
+"video": "j5SgkQe9ezM",
+"start": 180.8,
+"end": 181.28,
+"src": [
+79,
+26
+],
+"auc": 0.959,
+"support": 19,
+"recall": 0.94
+},
+"give": {
+"video": "TbxUZcppvXQ",
+"start": 211.44,
+"end": 212.24,
+"src": [
+84,
+24
+],
+"auc": 0.775,
+"support": 19,
+"recall": 0.5
+},
+"woe": {
+"video": "XQGhjqtwtRo",
+"start": 47.44,
+"end": 48.24,
+"src": [
+107,
+4
+],
+"auc": 0.996,
+"support": 17,
+"recall": 1.0
+},
+"righteou": {
+"video": "or3VZvb_CQM",
+"start": 235.76,
+"end": 236.88,
+"src": [
+78,
+31
+],
+"auc": 0.892,
+"support": 17,
+"recall": 0.75
+},
+"messenger": {
+"video": "6nQdGtQ9wLk",
+"start": 67.04,
+"end": 68.16,
+"src": [
+77,
+11
+],
+"auc": 0.978,
+"support": 17,
+"recall": 1.0
+},
+"quran": {
+"video": "ucRkZIm3QH4",
+"start": 31.52,
+"end": 32.0,
+"src": [
+36,
+2
+],
+"auc": 0.835,
+"support": 17,
+"recall": 0.75
+},
+"heaven": {
+"video": "or3VZvb_CQM",
+"start": 154.64,
+"end": 155.44,
+"src": [
+78,
+19
+],
+"auc": 0.935,
+"support": 16,
+"recall": 0.93
+},
+"enter": {
+"video": "W19vpdJkTCI",
+"start": 44.08,
+"end": 44.88,
+"src": [
+111,
+3
+],
+"auc": 0.829,
+"support": 16,
+"recall": 0.73
+},
+"reward": {
+"video": "6nQdGtQ9wLk",
+"start": 323.04,
+"end": 323.52,
+"src": [
+77,
+44
+],
+"auc": 0.963,
+"support": 16,
+"recall": 0.93
+},
+"life": {
+"video": "RaF1xGeM8GQ",
+"start": 126.88,
+"end": 127.68,
+"src": [
+87,
+16
+],
+"auc": 0.908,
+"support": 16,
+"recall": 0.87
+},
+"merciful": {
+"video": "ucRkZIm3QH4",
+"start": 53.12,
+"end": 53.6,
+"src": [
+36,
+5
+],
+"auc": 0.986,
+"support": 15,
+"recall": 1.0
+},
+"burn": {
+"video": "6N3592ecNEI",
+"start": 129.68,
+"end": 130.48,
+"src": [
+82,
+15
+],
+"auc": 0.814,
+"support": 15,
+"recall": 0.71
+},
+"believ": {
+"video": "PYCpXHAvxhI",
+"start": 318.64,
+"end": 319.12,
+"src": [
+83,
+34
+],
+"auc": 0.955,
+"support": 15,
+"recall": 0.86
+},
+"used": {
+"video": "ucRkZIm3QH4",
+"start": 1009.04,
+"end": 1009.84,
+"src": [
+36,
+64
+],
+"auc": 0.826,
+"support": 15,
+"recall": 0.64
+},
+"ask": {
+"video": "2L7rgCsmHB0",
+"start": 89.36,
+"end": 90.48,
+"src": [
+70,
+10
+],
+"auc": 0.846,
+"support": 14,
+"recall": 0.69
+},
+"mankind": {
+"video": "VreLW5eMY-s",
+"start": 39.67,
+"end": 40.47,
+"src": [
+114,
+3
+],
+"auc": 0.772,
+"support": 14,
+"recall": 0.62
+},
+"fire": {
+"video": "livEzMpVUEc",
+"start": 157.04,
+"end": 158.16,
+"src": [
+90,
+20
+],
+"auc": 0.91,
+"support": 14,
+"recall": 0.77
+},
+"exalt": {
+"video": "RaF1xGeM8GQ",
+"start": 26.0,
+"end": 26.48,
+"src": [
+87,
+1
+],
+"auc": 0.862,
+"support": 14,
+"recall": 0.77
+},
+"clear": {
+"video": "sROx7aJES_g",
+"start": 202.0,
+"end": 203.12,
+"src": [
+76,
+15
+],
+"auc": 0.877,
+"support": 14,
+"recall": 0.69
+},
+"garden": {
+"video": "kpoHidP9bzo",
+"start": 201.84,
+"end": 202.64,
+"src": [
+80,
+30
+],
+"auc": 0.936,
+"support": 14,
+"recall": 0.92
+},
+"sent": {
+"video": "sROx7aJES_g",
+"start": 297.92,
+"end": 298.4,
+"src": [
+76,
+23
+],
+"auc": 0.783,
+"support": 13,
+"recall": 0.5
+},
+"denier": {
+"video": "6nQdGtQ9wLk",
+"start": 85.84,
+"end": 86.32,
+"src": [
+77,
+15
+],
+"auc": 1.0,
+"support": 13,
+"recall": 1.0
+},
+"worship": {
+"video": "M2mxtlj4f0g",
+"start": 30.96,
+"end": 31.44,
+"src": [
+109,
+2
+],
+"auc": 0.806,
+"support": 12,
+"recall": 0.64
+},
+"away": {
+"video": "V-G9dBQeksU",
+"start": 222.48,
+"end": 222.96,
+"src": [
+75,
+32
+],
+"auc": 0.924,
+"support": 12,
+"recall": 0.82
+},
+"companion": {
+"video": "4n8pBxHU_Vk",
+"start": 23.52,
+"end": 24.32,
+"src": [
+105,
+1
+],
+"auc": 0.667,
+"support": 12,
+"recall": 0.36
+},
+"time": {
+"video": "fc0QXDUGysE",
+"start": 519.12,
+"end": 519.6,
+"src": [
+68,
+45
+],
+"auc": 0.833,
+"support": 12,
+"recall": 0.73
+},
+"turn": {
+"video": "kpoHidP9bzo",
+"start": 27.44,
+"end": 27.92,
+"src": [
+80,
+1
+],
+"auc": 0.8,
+"support": 12,
+"recall": 0.73
+},
+"warn": {
+"video": "ucRkZIm3QH4",
+"start": 135.84,
+"end": 136.32,
+"src": [
+36,
+10
+],
+"auc": 0.958,
+"support": 12,
+"recall": 0.91
+},
+"soul": {
+"video": "PyskYlgP9rA",
+"start": 44.24,
+"end": 45.04,
+"src": [
+86,
+4
+],
+"auc": 0.839,
+"support": 12,
+"recall": 0.73
+},
+"drink": {
+"video": "sROx7aJES_g",
+"start": 219.28,
+"end": 219.76,
+"src": [
+76,
+17
+],
+"auc": 0.936,
+"support": 12,
+"recall": 1.0
+},
+"put": {
+"video": "PyskYlgP9rA",
+"start": 96.4,
+"end": 96.88,
+"src": [
+86,
+9
+],
+"auc": 0.818,
+"support": 12,
+"recall": 0.45
+},
+"recompense": {
+"video": "6N3592ecNEI",
+"start": 87.52,
+"end": 88.0,
+"src": [
+82,
+9
+],
+"auc": 0.917,
+"support": 11,
+"recall": 0.9
+},
+"evil": {
+"video": "uje7XqZgCOc",
+"start": 33.03,
+"end": 33.51,
+"src": [
+113,
+2
+],
+"auc": 0.863,
+"support": 11,
+"recall": 0.7
+},
+"wealth": {
+"video": "2L7rgCsmHB0",
+"start": 146.8,
+"end": 147.28,
+"src": [
+70,
+18
+],
+"auc": 0.907,
+"support": 11,
+"recall": 0.9
+},
+"come": {
+"video": "or3VZvb_CQM",
+"start": 147.68,
+"end": 148.16,
+"src": [
+78,
+18
+],
+"auc": 0.753,
+"support": 11,
+"recall": 0.5
+},
+"angel": {
+"video": "kpoHidP9bzo",
+"start": 106.16,
+"end": 107.28,
+"src": [
+80,
+15
+],
+"auc": 0.937,
+"support": 11,
+"recall": 0.9
+},
+"leave": {
+"video": "O1LGk7umhIk",
+"start": 78.72,
+"end": 79.52,
+"src": [
+74,
+11
+],
+"auc": 0.913,
+"support": 11,
+"recall": 0.8
+},
+"sky": {
+"video": "_tnzvKbvOHw",
+"start": 70.88,
+"end": 71.36,
+"src": [
+81,
+11
+],
+"auc": 1.0,
+"support": 11,
+"recall": 1.0
+},
+"never": {
+"video": "or3VZvb_CQM",
+"start": 233.68,
+"end": 234.16,
+"src": [
+78,
+30
+],
+"auc": 0.843,
+"support": 11,
+"recall": 0.7
+},
+"right": {
+"video": "6lYZOF_i2vs",
+"start": 296.8,
+"end": 297.6,
+"src": [
+72,
+21
+],
+"auc": 0.877,
+"support": 11,
+"recall": 0.7
+},
+"able": {
+"video": "fc0QXDUGysE",
+"start": 264.24,
+"end": 265.04,
+"src": [
+68,
+25
+],
+"auc": 0.863,
+"support": 11,
+"recall": 0.8
+},
+"hand": {
+"video": "TbxUZcppvXQ",
+"start": 75.92,
+"end": 76.4,
+"src": [
+84,
+7
+],
+"auc": 0.859,
+"support": 10,
+"recall": 0.78
+},
+"consider": {
+"video": "ucRkZIm3QH4",
+"start": 492.24,
+"end": 493.36,
+"src": [
+36,
+31
+],
+"auc": 0.822,
+"support": 10,
+"recall": 0.67
+},
+"purify": {
+"video": "Y_ZYp00Z7fg",
+"start": 128.8,
+"end": 129.6,
+"src": [
+92,
+18
+],
+"auc": 0.826,
+"support": 10,
+"recall": 0.67
+},
+"given": {
+"video": "O1LGk7umhIk",
+"start": 378.32,
+"end": 379.12,
+"src": [
+74,
+52
+],
+"auc": 0.793,
+"support": 10,
+"recall": 0.78
+},
+"matter": {
+"video": "O1LGk7umhIk",
+"start": 355.6,
+"end": 356.4,
+"src": [
+74,
+49
+],
+"auc": 0.844,
+"support": 10,
+"recall": 0.67
+},
+"cover": {
+"video": "Y_ZYp00Z7fg",
+"start": 24.96,
+"end": 25.76,
+"src": [
+92,
+1
+],
+"auc": 0.789,
+"support": 10,
+"recall": 0.56
+},
+"forth": {
+"video": "sROx7aJES_g",
+"start": 100.24,
+"end": 100.72,
+"src": [
+76,
+6
+],
+"auc": 0.881,
+"support": 10,
+"recall": 0.67
+},
+"reminder": {
+"video": "RaF1xGeM8GQ",
+"start": 82.0,
+"end": 82.48,
+"src": [
+87,
+9
+],
+"auc": 0.967,
+"support": 10,
+"recall": 0.89
+},
+"great": {
+"video": "psv4H-HiZNA",
+"start": 186.16,
+"end": 186.64,
+"src": [
+67,
+12
+],
+"auc": 0.829,
+"support": 9,
+"recall": 0.62
+},
+"refuge": {
+"video": "MXJMXzPvJ50",
+"start": 31.28,
+"end": 32.08,
+"src": [
+112,
+2
+],
+"auc": 0.679,
+"support": 9,
+"recall": 0.38
+},
+"good": {
+"video": "fc0QXDUGysE",
+"start": 128.8,
+"end": 129.28,
+"src": [
+68,
+12
+],
+"auc": 0.988,
+"support": 9,
+"recall": 1.0
+},
+"hell": {
+"video": "6lYZOF_i2vs",
+"start": 231.04,
+"end": 232.16,
+"src": [
+72,
+15
+],
+"auc": 0.896,
+"support": 9,
+"recall": 0.88
+},
+"near": {
+"video": "PYCpXHAvxhI",
+"start": 256.48,
+"end": 257.6,
+"src": [
+83,
+28
+],
+"auc": 0.717,
+"support": 9,
+"recall": 0.25
+},
+"toward": {
+"video": "RaF1xGeM8GQ",
+"start": 76.56,
+"end": 77.68,
+"src": [
+87,
+8
+],
+"auc": 0.838,
+"support": 9,
+"recall": 0.75
+},
+"follow": {
+"video": "6nQdGtQ9wLk",
+"start": 96.48,
+"end": 96.96,
+"src": [
+77,
+17
+],
+"auc": 0.779,
+"support": 9,
+"recall": 0.5
+},
+"mountain": {
+"video": "or3VZvb_CQM",
+"start": 68.88,
+"end": 69.36,
+"src": [
+78,
+7
+],
+"auc": 1.0,
+"support": 9,
+"recall": 1.0
+},
+"promis": {
+"video": "6lYZOF_i2vs",
+"start": 351.92,
+"end": 352.4,
+"src": [
+72,
+24
+],
+"auc": 0.967,
+"support": 9,
+"recall": 1.0
+},
+"record": {
+"video": "PYCpXHAvxhI",
+"start": 184.08,
+"end": 184.56,
+"src": [
+83,
+18
+],
+"auc": 0.958,
+"support": 9,
+"recall": 0.88
+},
+"world": {
+"video": "PYCpXHAvxhI",
+"start": 68.4,
+"end": 68.88,
+"src": [
+83,
+6
+],
+"auc": 0.886,
+"support": 8,
+"recall": 0.43
+},
+"knowledge": {
+"video": "6lYZOF_i2vs",
+"start": 376.0,
+"end": 377.12,
+"src": [
+72,
+26
+],
+"auc": 0.795,
+"support": 8,
+"recall": 0.71
+},
+"prayer": {
+"video": "2L7rgCsmHB0",
+"start": 165.28,
+"end": 166.4,
+"src": [
+70,
+22
+],
+"auc": 0.881,
+"support": 8,
+"recall": 0.86
+},
+"pleasure": {
+"video": "PYCpXHAvxhI",
+"start": 220.64,
+"end": 221.76,
+"src": [
+83,
+24
+],
+"auc": 0.819,
+"support": 8,
+"recall": 0.57
+},
+"believe": {
+"video": "ucRkZIm3QH4",
+"start": 75.44,
+"end": 75.92,
+"src": [
+36,
+7
+],
+"auc": 0.919,
+"support": 8,
+"recall": 1.0
+},
+"back": {
+"video": "j5SgkQe9ezM",
+"start": 156.56,
+"end": 157.04,
+"src": [
+79,
+22
+],
+"auc": 0.695,
+"support": 8,
+"recall": 0.29
+},
+"anyone": {
+"video": "6lYZOF_i2vs",
+"start": 296.24,
+"end": 296.72,
+"src": [
+72,
+20
+],
+"auc": 0.924,
+"support": 8,
+"recall": 0.86
+},
+"moon": {
+"video": "V-G9dBQeksU",
+"start": 82.08,
+"end": 82.88,
+"src": [
+75,
+9
+],
+"auc": 0.933,
+"support": 8,
+"recall": 1.0
+},
+"spread": {
+"video": "O0E_NDfHUQE",
+"start": 53.92,
+"end": 54.4,
+"src": [
+91,
+6
+],
+"auc": 0.824,
+"support": 8,
+"recall": 0.57
+},
+"brought": {
+"video": "_tnzvKbvOHw",
+"start": 85.28,
+"end": 86.4,
+"src": [
+81,
+14
+],
+"auc": 0.795,
+"support": 8,
+"recall": 0.43
+},
+"paradise": {
+"video": "sROx7aJES_g",
+"start": 164.4,
+"end": 165.52,
+"src": [
+76,
+12
+],
+"auc": 0.91,
+"support": 8,
+"recall": 0.86
+},
+"fac": {
+"video": "V-G9dBQeksU",
+"start": 159.52,
+"end": 160.0,
+"src": [
+75,
+22
+],
+"auc": 0.99,
+"support": 8,
+"recall": 1.0
+},
+"creation": {
+"video": "ucRkZIm3QH4",
+"start": 987.28,
+"end": 987.76,
+"src": [
+36,
+62
+],
+"auc": 0.967,
+"support": 8,
+"recall": 1.0
+},
+"behind": {
+"video": "BL7IVCOhI_k",
+"start": 246.56,
+"end": 247.04,
+"src": [
+85,
+20
+],
+"auc": 0.848,
+"support": 8,
+"recall": 0.57
+},
+"word": {
+"video": "_tnzvKbvOHw",
+"start": 117.76,
+"end": 118.24,
+"src": [
+81,
+19
+],
+"auc": 0.857,
+"support": 8,
+"recall": 0.71
+},
+"children": {
+"video": "O1LGk7umhIk",
+"start": 87.2,
+"end": 88.0,
+"src": [
+74,
+13
+],
+"auc": 0.957,
+"support": 8,
+"recall": 1.0
+},
+"favor": {
+"video": "LzmqNY5lLrM",
+"start": 66.95,
+"end": 67.43,
+"src": [
+1,
+7
+],
+"auc": 0.822,
+"support": 7,
+"recall": 0.67
+},
+"pray": {
+"video": "4f_AhyPgHqI",
+"start": 34.16,
+"end": 35.28,
+"src": [
+73,
+2
+],
+"auc": 0.944,
+"support": 7,
+"recall": 0.83
+},
+"deed": {
+"video": "Jml8EVJbdUc",
+"start": 68.16,
+"end": 68.64,
+"src": [
+95,
+6
+],
+"auc": 0.928,
+"support": 7,
+"recall": 0.83
+},
+"increase": {
+"video": "THnIZ3e0mZE",
+"start": 276.0,
+"end": 277.12,
+"src": [
+71,
+24
+],
+"auc": 0.967,
+"support": 7,
+"recall": 1.0
+},
+"surely": {
+"video": "6uSTVBd5GfQ",
+"start": 103.2,
+"end": 104.0,
+"src": [
+96,
+15
+],
+"auc": 0.872,
+"support": 7,
+"recall": 0.67
+},
+"hellfire": {
+"video": "_tnzvKbvOHw",
+"start": 77.36,
+"end": 77.84,
+"src": [
+81,
+12
+],
+"auc": 1.0,
+"support": 7,
+"recall": 1.0
+},
+"disbeliev": {
+"video": "TbxUZcppvXQ",
+"start": 196.88,
+"end": 197.36,
+"src": [
+84,
+22
+],
+"auc": 0.956,
+"support": 7,
+"recall": 1.0
+},
+"came": {
+"video": "ucRkZIm3QH4",
+"start": 190.8,
+"end": 191.28,
+"src": [
+36,
+13
+],
+"auc": 0.85,
+"support": 7,
+"recall": 0.83
+},
+"better": {
+"video": "RaF1xGeM8GQ",
+"start": 131.52,
+"end": 132.0,
+"src": [
+87,
+17
+],
+"auc": 0.983,
+"support": 7,
+"recall": 1.0
+},
+"himself": {
+"video": "RaF1xGeM8GQ",
+"start": 117.68,
+"end": 118.16,
+"src": [
+87,
+14
+],
+"auc": 0.844,
+"support": 7,
+"recall": 0.5
+},
+"call": {
+"video": "6uSTVBd5GfQ",
+"start": 116.16,
+"end": 116.64,
+"src": [
+96,
+17
+],
+"auc": 0.783,
+"support": 7,
+"recall": 0.67
+},
+"ease": {
+"video": "Y_ZYp00Z7fg",
+"start": 57.2,
+"end": 57.68,
+"src": [
+92,
+7
+],
+"auc": 1.0,
+"support": 7,
+"recall": 1.0
+},
+"guid": {
+"video": "ab35b8fAFBY",
+"start": 59.28,
+"end": 59.76,
+"src": [
+93,
+7
+],
+"auc": 0.95,
+"support": 7,
+"recall": 0.83
+},
+"think": {
+"video": "livEzMpVUEc",
+"start": 65.6,
+"end": 66.72,
+"src": [
+90,
+7
+],
+"auc": 0.9,
+"support": 7,
+"recall": 0.67
+},
+"provision": {
+"video": "kpoHidP9bzo",
+"start": 213.28,
+"end": 214.08,
+"src": [
+80,
+32
+],
+"auc": 0.983,
+"support": 7,
+"recall": 1.0
+},
+"wish": {
+"video": "2L7rgCsmHB0",
+"start": 100.08,
+"end": 100.88,
+"src": [
+70,
+11
+],
+"auc": 0.944,
+"support": 7,
+"recall": 1.0
+},
+"hear": {
+"video": "or3VZvb_CQM",
+"start": 258.0,
+"end": 258.48,
+"src": [
+78,
+35
+],
+"auc": 1.0,
+"support": 7,
+"recall": 1.0
+},
+"star": {
+"video": "_tnzvKbvOHw",
+"start": 27.12,
+"end": 27.6,
+"src": [
+81,
+2
+],
+"auc": 1.0,
+"support": 7,
+"recall": 1.0
+},
+"send": {
+"video": "psv4H-HiZNA",
+"start": 248.96,
+"end": 249.44,
+"src": [
+67,
+17
+],
+"auc": 0.894,
+"support": 7,
+"recall": 0.67
+},
+"disbelieve": {
+"video": "ucRkZIm3QH4",
+"start": 736.96,
+"end": 737.44,
+"src": [
+36,
+47
+],
+"auc": 0.994,
+"support": 7,
+"recall": 1.0
+},
+"themselv": {
+"video": "2L7rgCsmHB0",
+"start": 369.44,
+"end": 369.92,
+"src": [
+70,
+42
+],
+"auc": 0.961,
+"support": 7,
+"recall": 1.0
+},
+"take": {
+"video": "PYCpXHAvxhI",
+"start": 30.56,
+"end": 31.36,
+"src": [
+83,
+2
+],
+"auc": 0.883,
+"support": 7,
+"recall": 0.5
+},
+"way": {
+"video": "kpoHidP9bzo",
+"start": 137.2,
+"end": 137.68,
+"src": [
+80,
+20
+],
+"auc": 0.939,
+"support": 7,
+"recall": 0.83
+},
+"fruit": {
+"video": "6nQdGtQ9wLk",
+"start": 301.28,
+"end": 301.76,
+"src": [
+77,
+42
+],
+"auc": 0.889,
+"support": 7,
+"recall": 0.83
+},
+"name": {
+"video": "sROx7aJES_g",
+"start": 315.92,
+"end": 316.72,
+"src": [
+76,
+25
+],
+"auc": 0.993,
+"support": 6,
+"recall": 1.0
+},
+"ever": {
+"video": "4f_AhyPgHqI",
+"start": 192.32,
+"end": 193.12,
+"src": [
+73,
+18
+],
+"auc": 0.947,
+"support": 6,
+"recall": 1.0
+},
+"forgiveness": {
+"video": "THnIZ3e0mZE",
+"start": 154.96,
+"end": 155.44,
+"src": [
+71,
+10
+],
+"auc": 1.0,
+"support": 6,
+"recall": 1.0
+},
+"seen": {
+"video": "livEzMpVUEc",
+"start": 67.68,
+"end": 68.16,
+"src": [
+90,
+7
+],
+"auc": 1.0,
+"support": 6,
+"recall": 1.0
+},
+"orphan": {
+"video": "03qd7ynrvcA",
+"start": 151.6,
+"end": 152.08,
+"src": [
+89,
+17
+],
+"auc": 0.927,
+"support": 6,
+"recall": 0.8
+},
+"feed": {
+"video": "sROx7aJES_g",
+"start": 127.68,
+"end": 128.16,
+"src": [
+76,
+9
+],
+"auc": 0.86,
+"support": 6,
+"recall": 0.6
+},
+"become": {
+"video": "hXcrpj9Pb1A",
+"start": 53.84,
+"end": 54.32,
+"src": [
+98,
+4
+],
+"auc": 0.94,
+"support": 6,
+"recall": 1.0
+},
+"gabriel": {
+"video": "_tnzvKbvOHw",
+"start": 112.48,
+"end": 113.6,
+"src": [
+81,
+19
+],
+"auc": 0.933,
+"support": 6,
+"recall": 0.6
+},
+"servant": {
+"video": "6uSTVBd5GfQ",
+"start": 74.8,
+"end": 75.28,
+"src": [
+96,
+10
+],
+"auc": 0.887,
+"support": 6,
+"recall": 0.6
+},
+"obey": {
+"video": "fc0QXDUGysE",
+"start": 94.96,
+"end": 95.44,
+"src": [
+68,
+8
+],
+"auc": 0.94,
+"support": 6,
+"recall": 0.8
+},
+"morn": {
+"video": "ab35b8fAFBY",
+"start": 26.08,
+"end": 26.56,
+"src": [
+93,
+1
+],
+"auc": 0.893,
+"support": 6,
+"recall": 0.8
+},
+"hereafter": {
+"video": "V-G9dBQeksU",
+"start": 156.08,
+"end": 156.56,
+"src": [
+75,
+21
+],
+"auc": 1.0,
+"support": 6,
+"recall": 1.0
+},
+"none": {
+"video": "PYCpXHAvxhI",
+"start": 112.96,
+"end": 113.76,
+"src": [
+83,
+12
+],
+"auc": 1.0,
+"support": 6,
+"recall": 1.0
+},
+"sun": {
+"video": "V-G9dBQeksU",
+"start": 82.88,
+"end": 83.36,
+"src": [
+75,
+9
+],
+"auc": 0.993,
+"support": 6,
+"recall": 1.0
+},
+"proportion": {
+"video": "V-G9dBQeksU",
+"start": 262.4,
+"end": 263.52,
+"src": [
+75,
+38
+],
+"auc": 0.867,
+"support": 6,
+"recall": 0.6
+},
+"swear": {
+"video": "V-G9dBQeksU",
+"start": 33.76,
+"end": 34.24,
+"src": [
+75,
+2
+],
+"auc": 0.987,
+"support": 6,
+"recall": 1.0
+},
+"eyes": {
+"video": "fc0QXDUGysE",
+"start": 481.28,
+"end": 481.76,
+"src": [
+68,
+43
+],
+"auc": 1.0,
+"support": 6,
+"recall": 1.0
+},
+"two": {
+"video": "4f_AhyPgHqI",
+"start": 243.68,
+"end": 244.8,
+"src": [
+73,
+20
+],
+"auc": 0.92,
+"support": 6,
+"recall": 0.6
+},
+"sign": {
+"video": "ucRkZIm3QH4",
+"start": 588.8,
+"end": 589.92,
+"src": [
+36,
+37
+],
+"auc": 0.993,
+"support": 6,
+"recall": 1.0
+},
+"pharaoh": {
+"video": "j5SgkQe9ezM",
+"start": 122.08,
+"end": 122.56,
+"src": [
+79,
+17
+],
+"auc": 0.96,
+"support": 6,
+"recall": 1.0
+},
+"honor": {
+"video": "kpoHidP9bzo",
+"start": 99.04,
+"end": 99.52,
+"src": [
+80,
+13
+],
+"auc": 0.94,
+"support": 6,
+"recall": 1.0
+},
+"remember": {
+"video": "O1LGk7umhIk",
+"start": 400.48,
+"end": 400.96,
+"src": [
+74,
+55
+],
+"auc": 1.0,
+"support": 6,
+"recall": 1.0
+},
+"reach": {
+"video": "V-G9dBQeksU",
+"start": 180.72,
+"end": 181.2,
+"src": [
+75,
+26
+],
+"auc": 0.92,
+"support": 6,
+"recall": 0.8
+},
+"place": {
+"video": "V-G9dBQeksU",
+"start": 90.08,
+"end": 90.88,
+"src": [
+75,
+10
+],
+"auc": 0.813,
+"support": 6,
+"recall": 0.6
+},
+"former": {
+"video": "j5SgkQe9ezM",
+"start": 78.4,
+"end": 78.88,
+"src": [
+79,
+10
+],
+"auc": 0.827,
+"support": 6,
+"recall": 0.4
+},
+"witness": {
+"video": "BL7IVCOhI_k",
+"start": 124.88,
+"end": 126.0,
+"src": [
+85,
+9
+],
+"auc": 0.913,
+"support": 6,
+"recall": 0.8
+},
+"destroy": {
+"video": "O1LGk7umhIk",
+"start": 122.48,
+"end": 122.96,
+"src": [
+74,
+20
+],
+"auc": 1.0,
+"support": 6,
+"recall": 1.0
+},
+"full": {
+"video": "or3VZvb_CQM",
+"start": 250.0,
+"end": 250.48,
+"src": [
+78,
+33
+],
+"auc": 0.787,
+"support": 6,
+"recall": 0.4
+},
+"listen": {
+"video": "TbxUZcppvXQ",
+"start": 35.12,
+"end": 36.24,
+"src": [
+84,
+2
+],
+"auc": 0.913,
+"support": 6,
+"recall": 0.8
+},
+"heart": {
+"video": "O1LGk7umhIk",
+"start": 169.6,
+"end": 170.08,
+"src": [
+74,
+31
+],
+"auc": 0.927,
+"support": 6,
+"recall": 0.8
+},
+"set": {
+"video": "THnIZ3e0mZE",
+"start": 78.56,
+"end": 79.04,
+"src": [
+71,
+4
+],
+"auc": 0.827,
+"support": 6,
+"recall": 0.6
+},
+"water": {
+"video": "or3VZvb_CQM",
+"start": 193.2,
+"end": 193.68,
+"src": [
+78,
+25
+],
+"auc": 0.94,
+"support": 6,
+"recall": 0.8
+},
+"criminal": {
+"video": "6nQdGtQ9wLk",
+"start": 106.56,
+"end": 107.04,
+"src": [
+77,
+18
+],
+"auc": 1.0,
+"support": 6,
+"recall": 1.0
+},
+"eat": {
+"video": "ucRkZIm3QH4",
+"start": 1146.08,
+"end": 1146.56,
+"src": [
+36,
+72
+],
+"auc": 0.94,
+"support": 6,
+"recall": 0.8
+},
+"present": {
+"video": "ucRkZIm3QH4",
+"start": 191.6,
+"end": 192.08,
+"src": [
+36,
+13
+],
+"auc": 0.94,
+"support": 6,
+"recall": 0.8
+},
+"invit": {
+"video": "fc0QXDUGysE",
+"start": 492.64,
+"end": 493.44,
+"src": [
+68,
+43
+],
+"auc": 0.98,
+"support": 6,
+"recall": 1.0
+},
+"path": {
+"video": "ucRkZIm3QH4",
+"start": 971.68,
+"end": 972.16,
+"src": [
+36,
+61
+],
+"auc": 0.917,
+"support": 5,
+"recall": 1.0
+},
+"high": {
+"video": "K15kZp34XkY",
+"start": 93.76,
+"end": 94.24,
+"src": [
+88,
+13
+],
+"auc": 1.0,
+"support": 5,
+"recall": 1.0
+},
+"seek": {
+"video": "VreLW5eMY-s",
+"start": 27.43,
+"end": 27.91,
+"src": [
+114,
+1
+],
+"auc": 0.892,
+"support": 5,
+"recall": 0.75
+},
+"avail": {
+"video": "ucRkZIm3QH4",
+"start": 376.08,
+"end": 377.2,
+"src": [
+36,
+23
+],
+"auc": 0.958,
+"support": 5,
+"recall": 1.0
+},
+"flame": {
+"video": "2L7rgCsmHB0",
+"start": 134.0,
+"end": 134.48,
+"src": [
+70,
+15
+],
+"auc": 0.892,
+"support": 5,
+"recall": 0.5
+},
+"grant": {
+"video": "DsDfKg4aB6c",
+"start": 28.56,
+"end": 29.04,
+"src": [
+108,
+1
+],
+"auc": 0.967,
+"support": 5,
+"recall": 1.0
+},
+"poor": {
+"video": "O1LGk7umhIk",
+"start": 320.08,
+"end": 320.56,
+"src": [
+74,
+44
+],
+"auc": 1.0,
+"support": 5,
+"recall": 1.0
+},
+"plan": {
+"video": "PyskYlgP9rA",
+"start": 138.24,
+"end": 138.72,
+"src": [
+86,
+16
+],
+"auc": 1.0,
+"support": 5,
+"recall": 1.0
+},
+"truth": {
+"video": "2L7rgCsmHB0",
+"start": 143.04,
+"end": 143.52,
+"src": [
+70,
+17
+],
+"auc": 1.0,
+"support": 5,
+"recall": 1.0
+},
+"burden": {
+"video": "-nO1JkSU5e0",
+"start": 33.92,
+"end": 34.4,
+"src": [
+94,
+2
+],
+"auc": 1.0,
+"support": 5,
+"recall": 1.0
+},
+"command": {
+"video": "4RW-fR5LQJU",
+"start": 56.8,
+"end": 57.6,
+"src": [
+99,
+5
+],
+"auc": 0.992,
+"support": 5,
+"recall": 1.0
+},
+"scripture": {
+"video": "hXcrpj9Pb1A",
+"start": 25.12,
+"end": 25.92,
+"src": [
+98,
+1
+],
+"auc": 0.925,
+"support": 5,
+"recall": 0.75
+},
+"recit": {
+"video": "V-G9dBQeksU",
+"start": 142.4,
+"end": 142.88,
+"src": [
+75,
+18
+],
+"auc": 0.9,
+"support": 5,
+"recall": 0.5
+},
+"best": {
+"video": "Y_ZYp00Z7fg",
+"start": 53.52,
+"end": 54.32,
+"src": [
+92,
+6
+],
+"auc": 0.967,
+"support": 5,
+"recall": 1.0
+},
+"decree": {
+"video": "w9IcV0Co8jc",
+"start": 35.84,
+"end": 36.32,
+"src": [
+97,
+2
+],
+"auc": 0.925,
+"support": 5,
+"recall": 1.0
+},
+"recite": {
+"video": "6uSTVBd5GfQ",
+"start": 28.95,
+"end": 29.75,
+"src": [
+96,
+1
+],
+"auc": 1.0,
+"support": 5,
+"recall": 1.0
+},
+"transgress": {
+"video": "j5SgkQe9ezM",
+"start": 126.88,
+"end": 127.36,
+"src": [
+79,
+17
+],
+"auc": 0.883,
+"support": 5,
+"recall": 1.0
+},
+"city": {
+"video": "livEzMpVUEc",
+"start": 25.12,
+"end": 25.6,
+"src": [
+90,
+1
+],
+"auc": 0.892,
+"support": 5,
+"recall": 0.75
+},
+"caus": {
+"video": "Jml8EVJbdUc",
+"start": 79.52,
+"end": 80.32,
+"src": [
+95,
+7
+],
+"auc": 0.883,
+"support": 5,
+"recall": 0.75
+},
+"rais": {
+"video": "-nO1JkSU5e0",
+"start": 45.76,
+"end": 46.24,
+"src": [
+94,
+4
+],
+"auc": 0.942,
+"support": 5,
+"recall": 1.0
+},
+"stand": {
+"video": "4f_AhyPgHqI",
+"start": 216.48,
+"end": 217.28,
+"src": [
+73,
+20
+],
+"auc": 0.975,
+"support": 5,
+"recall": 1.0
+},
+"find": {
+"video": "4f_AhyPgHqI",
+"start": 280.48,
+"end": 280.96,
+"src": [
+73,
+20
+],
+"auc": 0.95,
+"support": 5,
+"recall": 1.0
+},
+"prophet": {
+"video": "_tnzvKbvOHw",
+"start": 140.4,
+"end": 140.88,
+"src": [
+81,
+22
+],
+"auc": 0.95,
+"support": 5,
+"recall": 1.0
+},
+"sin": {
+"video": "O0E_NDfHUQE",
+"start": 110.8,
+"end": 111.6,
+"src": [
+91,
+14
+],
+"auc": 0.967,
+"support": 5,
+"recall": 1.0
+},
+"left": {
+"video": "2L7rgCsmHB0",
+"start": 313.84,
+"end": 314.32,
+"src": [
+70,
+37
+],
+"auc": 0.892,
+"support": 5,
+"recall": 0.75
+},
+"owner": {
+"video": "_tnzvKbvOHw",
+"start": 122.32,
+"end": 122.8,
+"src": [
+81,
+20
+],
+"auc": 0.917,
+"support": 5,
+"recall": 0.75
+},
+"humbl": {
+"video": "j5SgkQe9ezM",
+"start": 68.56,
+"end": 69.04,
+"src": [
+79,
+9
+],
+"auc": 0.967,
+"support": 5,
+"recall": 1.0
+},
+"speech": {
+"video": "psv4H-HiZNA",
+"start": 204.08,
+"end": 205.2,
+"src": [
+67,
+13
+],
+"auc": 0.967,
+"support": 5,
+"recall": 1.0
+},
+"couch": {
+"video": "K15kZp34XkY",
+"start": 92.0,
+"end": 92.48,
+"src": [
+88,
+13
+],
+"auc": 0.983,
+"support": 5,
+"recall": 1.0
+},
+"look": {
+"video": "K15kZp34XkY",
+"start": 111.84,
+"end": 112.96,
+"src": [
+88,
+17
+],
+"auc": 0.958,
+"support": 5,
+"recall": 1.0
+},
+"remind": {
+"video": "RaF1xGeM8GQ",
+"start": 87.76,
+"end": 88.24,
+"src": [
+87,
+9
+],
+"auc": 0.967,
+"support": 5,
+"recall": 1.0
+},
+"greatest": {
+"video": "K15kZp34XkY",
+"start": 152.0,
+"end": 152.48,
+"src": [
+88,
+24
+],
+"auc": 0.858,
+"support": 5,
+"recall": 0.5
+},
+"mention": {
+"video": "sROx7aJES_g",
+"start": 315.28,
+"end": 315.76,
+"src": [
+76,
+25
+],
+"auc": 0.983,
+"support": 5,
+"recall": 1.0
+},
+"intend": {
+"video": "O1LGk7umhIk",
+"start": 228.0,
+"end": 228.48,
+"src": [
+74,
+31
+],
+"auc": 1.0,
+"support": 5,
+"recall": 1.0
+},
+"blaze": {
+"video": "psv4H-HiZNA",
+"start": 177.12,
+"end": 177.6,
+"src": [
+67,
+11
+],
+"auc": 1.0,
+"support": 5,
+"recall": 1.0
+},
+"painful": {
+"video": "sROx7aJES_g",
+"start": 411.6,
+"end": 412.08,
+"src": [
+76,
+31
+],
+"auc": 0.975,
+"support": 5,
+"recall": 1.0
+},
+"cause": {
+"video": "psv4H-HiZNA",
+"start": 423.44,
+"end": 424.24,
+"src": [
+67,
+28
+],
+"auc": 0.992,
+"support": 5,
+"recall": 1.0
+},
+"vers": {
+"video": "or3VZvb_CQM",
+"start": 215.76,
+"end": 216.24,
+"src": [
+78,
+28
+],
+"auc": 0.883,
+"support": 5,
+"recall": 0.75
+},
+"rather": {
+"video": "O1LGk7umhIk",
+"start": 373.84,
+"end": 374.32,
+"src": [
+74,
+52
+],
+"auc": 0.8,
+"support": 5,
+"recall": 0.75
+},
+"adorn": {
+"video": "PYCpXHAvxhI",
+"start": 327.84,
+"end": 328.32,
+"src": [
+83,
+35
+],
+"auc": 1.0,
+"support": 5,
+"recall": 1.0
+},
+"today": {
+"video": "PYCpXHAvxhI",
+"start": 315.76,
+"end": 316.24,
+"src": [
+83,
+34
+],
+"auc": 0.933,
+"support": 5,
+"recall": 0.75
+},
+"possess": {
+"video": "2L7rgCsmHB0",
+"start": 244.08,
+"end": 245.2,
+"src": [
+70,
+30
+],
+"auc": 0.958,
+"support": 5,
+"recall": 1.0
+},
+"position": {
+"video": "j5SgkQe9ezM",
+"start": 302.56,
+"end": 303.36,
+"src": [
+79,
+43
+],
+"auc": 0.883,
+"support": 5,
+"recall": 0.75
+},
+"already": {
+"video": "ucRkZIm3QH4",
+"start": 77.04,
+"end": 78.16,
+"src": [
+36,
+7
+],
+"auc": 0.967,
+"support": 5,
+"recall": 1.0
+},
+"unseen": {
+"video": "_tnzvKbvOHw",
+"start": 152.56,
+"end": 153.68,
+"src": [
+81,
+24
+],
+"auc": 0.85,
+"support": 5,
+"recall": 0.75
+},
+"course": {
+"video": "6lYZOF_i2vs",
+"start": 157.84,
+"end": 158.32,
+"src": [
+72,
+10
+],
+"auc": 0.983,
+"support": 5,
+"recall": 1.0
+},
+"com": {
+"video": "kpoHidP9bzo",
+"start": 221.36,
+"end": 221.84,
+"src": [
+80,
+33
+],
+"auc": 0.967,
+"support": 5,
+"recall": 1.0
+},
+"disobey": {
+"video": "6lYZOF_i2vs",
+"start": 311.68,
+"end": 312.48,
+"src": [
+72,
+22
+],
+"auc": 1.0,
+"support": 5,
+"recall": 1.0
+},
+"warner": {
+"video": "psv4H-HiZNA",
+"start": 128.4,
+"end": 128.88,
+"src": [
+67,
+8
+],
+"auc": 0.983,
+"support": 5,
+"recall": 1.0
+},
+"above": {
+"video": "psv4H-HiZNA",
+"start": 234.88,
+"end": 235.68,
+"src": [
+67,
+16
+],
+"auc": 1.0,
+"support": 5,
+"recall": 1.0
+},
+"judgement": {
+"video": "6nQdGtQ9wLk",
+"start": 81.04,
+"end": 81.84,
+"src": [
+77,
+14
+],
+"auc": 0.992,
+"support": 5,
+"recall": 1.0
+},
+"plac": {
+"video": "ucRkZIm3QH4",
+"start": 1069.36,
+"end": 1069.84,
+"src": [
+36,
+67
+],
+"auc": 0.983,
+"support": 5,
+"recall": 1.0
+},
+"little": {
+"video": "4f_AhyPgHqI",
+"start": 40.16,
+"end": 40.64,
+"src": [
+73,
+3
+],
+"auc": 0.933,
+"support": 5,
+"recall": 1.0
+},
+"patient": {
+"video": "O1LGk7umhIk",
+"start": 52.0,
+"end": 52.48,
+"src": [
+74,
+7
+],
+"auc": 1.0,
+"support": 5,
+"recall": 1.0
+},
+"mercy": {
+"video": "psv4H-HiZNA",
+"start": 427.28,
+"end": 427.76,
+"src": [
+67,
+28
+],
+"auc": 0.942,
+"support": 5,
+"recall": 0.75
+},
+"resurrection": {
+"video": "psv4H-HiZNA",
+"start": 228.48,
+"end": 228.96,
+"src": [
+67,
+15
+],
+"auc": 0.942,
+"support": 5,
+"recall": 0.75
+},
+"recitation": {
+"video": "V-G9dBQeksU",
+"start": 139.68,
+"end": 140.16,
+"src": [
+75,
+18
+],
+"auc": 1.0,
+"support": 5,
+"recall": 1.0
+},
+"error": {
+"video": "psv4H-HiZNA",
+"start": 157.52,
+"end": 158.0,
+"src": [
+67,
+9
+],
+"auc": 0.883,
+"support": 5,
+"recall": 0.5
+},
+"entirely": {
+"video": "6N3592ecNEI",
+"start": 179.12,
+"end": 179.92,
+"src": [
+82,
+19
+],
+"auc": 0.767,
+"support": 4,
+"recall": 0.67
+},
+"due": {
+"video": "LzmqNY5lLrM",
+"start": 39.83,
+"end": 40.95,
+"src": [
+1,
+2
+],
+"auc": 0.822,
+"support": 4,
+"recall": 0.67
+},
+"astray": {
+"video": "fc0QXDUGysE",
+"start": 83.04,
+"end": 84.16,
+"src": [
+68,
+7
+],
+"auc": 0.989,
+"support": 4,
+"recall": 1.0
+},
+"earn": {
+"video": "ucRkZIm3QH4",
+"start": 1018.16,
+"end": 1019.28,
+"src": [
+36,
+65
+],
+"auc": 0.956,
+"support": 4,
+"recall": 1.0
+},
+"neither": {
+"video": "MXJMXzPvJ50",
+"start": 36.64,
+"end": 37.12,
+"src": [
+112,
+3
+],
+"auc": 0.822,
+"support": 4,
+"recall": 0.33
+},
+"deity": {
+"video": "ucRkZIm3QH4",
+"start": 365.04,
+"end": 365.52,
+"src": [
+36,
+23
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+},
+"breast": {
+"video": "VreLW5eMY-s",
+"start": 61.68,
+"end": 62.16,
+"src": [
+114,
+5
+],
+"auc": 0.833,
+"support": 4,
+"recall": 0.33
+},
+"jinn": {
+"video": "VreLW5eMY-s",
+"start": 68.0,
+"end": 68.48,
+"src": [
+114,
+6
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+},
+"wife": {
+"video": "2L7rgCsmHB0",
+"start": 107.44,
+"end": 108.56,
+"src": [
+70,
+12
+],
+"auc": 0.967,
+"support": 4,
+"recall": 1.0
+},
+"certainty": {
+"video": "V-G9dBQeksU",
+"start": 32.8,
+"end": 33.92,
+"src": [
+75,
+2
+],
+"auc": 0.9,
+"support": 4,
+"recall": 0.67
+},
+"knew": {
+"video": "fc0QXDUGysE",
+"start": 375.44,
+"end": 376.24,
+"src": [
+68,
+33
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+},
+"scriptur": {
+"video": "RaF1xGeM8GQ",
+"start": 143.04,
+"end": 143.52,
+"src": [
+87,
+19
+],
+"auc": 0.956,
+"support": 4,
+"recall": 1.0
+},
+"generou": {
+"video": "6uSTVBd5GfQ",
+"start": 38.56,
+"end": 39.04,
+"src": [
+96,
+3
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+},
+"secure": {
+"video": "_tnzvKbvOHw",
+"start": 125.52,
+"end": 126.0,
+"src": [
+81,
+20
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+},
+"certainly": {
+"video": "livEzMpVUEc",
+"start": 44.48,
+"end": 45.28,
+"src": [
+90,
+4
+],
+"auc": 0.956,
+"support": 4,
+"recall": 1.0
+},
+"long": {
+"video": "-nO1JkSU5e0",
+"start": 70.08,
+"end": 70.56,
+"src": [
+94,
+8
+],
+"auc": 0.956,
+"support": 4,
+"recall": 1.0
+},
+"first": {
+"video": "Y_ZYp00Z7fg",
+"start": 91.92,
+"end": 92.4,
+"src": [
+92,
+13
+],
+"auc": 0.956,
+"support": 4,
+"recall": 1.0
+},
+"found": {
+"video": "ab35b8fAFBY",
+"start": 58.96,
+"end": 60.08,
+"src": [
+93,
+7
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+},
+"wretch": {
+"video": "O0E_NDfHUQE",
+"start": 84.64,
+"end": 85.12,
+"src": [
+91,
+12
+],
+"auc": 0.911,
+"support": 4,
+"recall": 1.0
+},
+"avoid": {
+"video": "Y_ZYp00Z7fg",
+"start": 119.44,
+"end": 119.92,
+"src": [
+92,
+17
+],
+"auc": 0.944,
+"support": 4,
+"recall": 1.0
+},
+"camel": {
+"video": "6nQdGtQ9wLk",
+"start": 226.64,
+"end": 227.44,
+"src": [
+77,
+33
+],
+"auc": 0.889,
+"support": 4,
+"recall": 0.67
+},
+"difficult": {
+"video": "livEzMpVUEc",
+"start": 98.16,
+"end": 99.28,
+"src": [
+90,
+12
+],
+"auc": 0.978,
+"support": 4,
+"recall": 1.0
+},
+"pass": {
+"video": "livEzMpVUEc",
+"start": 100.72,
+"end": 101.84,
+"src": [
+90,
+12
+],
+"auc": 0.911,
+"support": 4,
+"recall": 1.0
+},
+"break": {
+"video": "6N3592ecNEI",
+"start": 24.64,
+"end": 25.12,
+"src": [
+82,
+1
+],
+"auc": 0.956,
+"support": 4,
+"recall": 1.0
+},
+"person": {
+"video": "O1LGk7umhIk",
+"start": 380.72,
+"end": 381.52,
+"src": [
+74,
+52
+],
+"auc": 0.967,
+"support": 4,
+"recall": 1.0
+},
+"number": {
+"video": "03qd7ynrvcA",
+"start": 28.96,
+"end": 29.44,
+"src": [
+89,
+3
+],
+"auc": 0.978,
+"support": 4,
+"recall": 1.0
+},
+"pour": {
+"video": "or3VZvb_CQM",
+"start": 116.96,
+"end": 117.44,
+"src": [
+78,
+14
+],
+"auc": 0.956,
+"support": 4,
+"recall": 1.0
+},
+"thus": {
+"video": "03qd7ynrvcA",
+"start": 110.24,
+"end": 111.04,
+"src": [
+89,
+15
+],
+"auc": 0.967,
+"support": 4,
+"recall": 1.0
+},
+"try": {
+"video": "03qd7ynrvcA",
+"start": 132.48,
+"end": 132.96,
+"src": [
+89,
+16
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+},
+"love": {
+"video": "sROx7aJES_g",
+"start": 333.36,
+"end": 333.84,
+"src": [
+76,
+27
+],
+"auc": 0.956,
+"support": 4,
+"recall": 1.0
+},
+"spr": {
+"video": "K15kZp34XkY",
+"start": 87.2,
+"end": 87.68,
+"src": [
+88,
+12
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+},
+"account": {
+"video": "K15kZp34XkY",
+"start": 170.64,
+"end": 171.76,
+"src": [
+88,
+26
+],
+"auc": 0.978,
+"support": 4,
+"recall": 1.0
+},
+"benefit": {
+"video": "RaF1xGeM8GQ",
+"start": 87.12,
+"end": 88.24,
+"src": [
+87,
+9
+],
+"auc": 0.989,
+"support": 4,
+"recall": 1.0
+},
+"power": {
+"video": "6N3592ecNEI",
+"start": 166.96,
+"end": 167.44,
+"src": [
+82,
+19
+],
+"auc": 0.933,
+"support": 4,
+"recall": 1.0
+},
+"soldier": {
+"video": "ucRkZIm3QH4",
+"start": 446.72,
+"end": 447.2,
+"src": [
+36,
+28
+],
+"auc": 0.978,
+"support": 4,
+"recall": 1.0
+},
+"open": {
+"video": "TbxUZcppvXQ",
+"start": 29.44,
+"end": 30.56,
+"src": [
+84,
+1
+],
+"auc": 0.956,
+"support": 4,
+"recall": 1.0
+},
+"once": {
+"video": "TbxUZcppvXQ",
+"start": 123.2,
+"end": 123.68,
+"src": [
+84,
+13
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+},
+"thought": {
+"video": "6lYZOF_i2vs",
+"start": 104.88,
+"end": 105.68,
+"src": [
+72,
+7
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+},
+"yes": {
+"video": "V-G9dBQeksU",
+"start": 53.84,
+"end": 54.96,
+"src": [
+75,
+4
+],
+"auc": 0.956,
+"support": 4,
+"recall": 1.0
+},
+"wick": {
+"video": "6N3592ecNEI",
+"start": 121.84,
+"end": 122.32,
+"src": [
+82,
+14
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+},
+"transgressor": {
+"video": "PYCpXHAvxhI",
+"start": 116.48,
+"end": 116.96,
+"src": [
+83,
+12
+],
+"auc": 0.944,
+"support": 4,
+"recall": 1.0
+},
+"peopl": {
+"video": "PYCpXHAvxhI",
+"start": 127.36,
+"end": 127.84,
+"src": [
+83,
+13
+],
+"auc": 0.878,
+"support": 4,
+"recall": 0.67
+},
+"mixture": {
+"video": "PYCpXHAvxhI",
+"start": 246.64,
+"end": 247.12,
+"src": [
+83,
+27
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+},
+"noble": {
+"video": "kpoHidP9bzo",
+"start": 109.44,
+"end": 109.92,
+"src": [
+80,
+16
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+},
+"perhap": {
+"video": "ucRkZIm3QH4",
+"start": 1160.4,
+"end": 1160.88,
+"src": [
+36,
+74
+],
+"auc": 0.878,
+"support": 4,
+"recall": 0.67
+},
+"sperm": {
+"video": "kpoHidP9bzo",
+"start": 127.6,
+"end": 128.08,
+"src": [
+80,
+19
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+},
+"death": {
+"video": "O1LGk7umhIk",
+"start": 340.0,
+"end": 340.48,
+"src": [
+74,
+47
+],
+"auc": 0.956,
+"support": 4,
+"recall": 1.0
+},
+"blast": {
+"video": "ucRkZIm3QH4",
+"start": 854.24,
+"end": 854.72,
+"src": [
+36,
+53
+],
+"auc": 0.933,
+"support": 4,
+"recall": 1.0
+},
+"extract": {
+"video": "j5SgkQe9ezM",
+"start": 212.48,
+"end": 212.96,
+"src": [
+79,
+31
+],
+"auc": 0.933,
+"support": 4,
+"recall": 1.0
+},
+"bon": {
+"video": "ucRkZIm3QH4",
+"start": 1230.08,
+"end": 1231.2,
+"src": [
+36,
+78
+],
+"auc": 0.9,
+"support": 4,
+"recall": 1.0
+},
+"remain": {
+"video": "6lYZOF_i2vs",
+"start": 237.28,
+"end": 238.08,
+"src": [
+72,
+16
+],
+"auc": 0.944,
+"support": 4,
+"recall": 1.0
+},
+"blown": {
+"video": "O1LGk7umhIk",
+"start": 58.72,
+"end": 59.2,
+"src": [
+74,
+8
+],
+"auc": 0.922,
+"support": 4,
+"recall": 1.0
+},
+"speak": {
+"video": "6nQdGtQ9wLk",
+"start": 240.48,
+"end": 240.96,
+"src": [
+77,
+35
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+},
+"message": {
+"video": "ucRkZIm3QH4",
+"start": 142.16,
+"end": 142.96,
+"src": [
+36,
+11
+],
+"auc": 0.978,
+"support": 4,
+"recall": 1.0
+},
+"determin": {
+"video": "4f_AhyPgHqI",
+"start": 303.68,
+"end": 304.16,
+"src": [
+73,
+20
+],
+"auc": 0.978,
+"support": 4,
+"recall": 1.0
+},
+"dead": {
+"video": "6nQdGtQ9wLk",
+"start": 158.88,
+"end": 159.36,
+"src": [
+77,
+26
+],
+"auc": 0.978,
+"support": 4,
+"recall": 1.0
+},
+"proce": {
+"video": "ucRkZIm3QH4",
+"start": 1064.88,
+"end": 1065.68,
+"src": [
+36,
+67
+],
+"auc": 0.944,
+"support": 4,
+"recall": 0.67
+},
+"grateful": {
+"video": "psv4H-HiZNA",
+"start": 358.96,
+"end": 359.76,
+"src": [
+67,
+23
+],
+"auc": 0.956,
+"support": 4,
+"recall": 1.0
+},
+"wrongdoer": {
+"video": "THnIZ3e0mZE",
+"start": 342.08,
+"end": 342.56,
+"src": [
+71,
+28
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+},
+"vision": {
+"video": "psv4H-HiZNA",
+"start": 52.4,
+"end": 52.88,
+"src": [
+67,
+3
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+},
+"hasten": {
+"video": "2L7rgCsmHB0",
+"start": 390.32,
+"end": 390.8,
+"src": [
+70,
+43
+],
+"auc": 0.978,
+"support": 4,
+"recall": 1.0
+},
+"almost": {
+"video": "fc0QXDUGysE",
+"start": 611.36,
+"end": 612.48,
+"src": [
+68,
+51
+],
+"auc": 0.978,
+"support": 4,
+"recall": 1.0
+},
+"reveal": {
+"video": "6lYZOF_i2vs",
+"start": 241.76,
+"end": 242.24,
+"src": [
+72,
+16
+],
+"auc": 0.956,
+"support": 4,
+"recall": 1.0
+},
+"straight": {
+"video": "ucRkZIm3QH4",
+"start": 45.12,
+"end": 45.6,
+"src": [
+36,
+4
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+},
+"thrown": {
+"video": "psv4H-HiZNA",
+"start": 113.84,
+"end": 114.32,
+"src": [
+67,
+7
+],
+"auc": 1.0,
+"support": 4,
+"recall": 1.0
+}
+}

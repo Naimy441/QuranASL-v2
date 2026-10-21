@@ -21,7 +21,7 @@ interface HandSample { pos: THREE.Vector3; X: THREE.Vector3; Y: THREE.Vector3; Z
 export function handParams(lm: THREE.Vector3[], isRight: boolean) {
   const s = isRight ? 1 : -1;
   const Y = lm[9].clone().sub(lm[0]).normalize();
-  let Z = new THREE.Vector3().crossVectors(lm[5].clone().sub(lm[0]), lm[17].clone().sub(lm[0]));
+  const Z = new THREE.Vector3().crossVectors(lm[5].clone().sub(lm[0]), lm[17].clone().sub(lm[0]));
   if (!isRight) Z.negate();
   Z.addScaledVector(Y, -Z.dot(Y)).normalize();
   const X = new THREE.Vector3().crossVectors(Y, Z);

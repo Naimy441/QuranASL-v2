@@ -31,7 +31,7 @@ export function loadBslLexicon(base = "/data/bsl/lexicon"): Promise<void> {
       await Promise.all(
         signs.map(async (s) => {
           try {
-            const clip: MocapClip = await fetch(`${base}/${encodeURIComponent(s.id)}.json`).then((r) => r.json());
+            const clip: MocapClip = await fetch(`${base}/${encodeURIComponent(s.gloss)}.json`).then((r) => r.json());
             registerMocap(clip);
             const entry: SignEntry = { id: s.gloss, def: "=fs:" + s.gloss.replace(/[^A-Z]/g, ""), en: s.en, conf: s.conf, mocap: s.id, cat: "learned", note: `learned from ${s.support} ayat (score ${s.score.toFixed(2)})` };
             lex.add(entry);

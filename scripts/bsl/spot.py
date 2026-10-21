@@ -78,7 +78,7 @@ def frame_features(cap):
     for f in cap["frames"]:
         pi = f.get("pi")
         if not pi:
-            rows.append([np.nan] * 32)
+            rows.append([np.nan] * 28)
             continue
         ls, rs = np.array(pi[11][:2]), np.array(pi[12][:2])
         mid = (ls + rs) / 2
@@ -109,8 +109,8 @@ def frame_features(cap):
     return X
 
 
-# feature weights: dominant wrist pos (2), other wrist (2), dominant hand (14), other hand (14)
-W = np.array([1.5, 1.5, 0.6, 0.6] + [1.0] * 7 + [0.8] * 5 + [0.0] * 2 + [0.35] * 7 + [0.25] * 5 + [0.0] * 2)[:32]
+# feature weights: dominant wrist pos (2), other wrist (2), dominant hand (12: 7 shape + 5 orientation), other hand (12)
+W = np.array([1.5, 1.5, 0.6, 0.6] + [1.0] * 7 + [0.8] * 5 + [0.35] * 7 + [0.25] * 5)
 
 
 def subseq_dtw(C, S):

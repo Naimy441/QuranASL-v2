@@ -1,25 +1,44 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Amiri } from "next/font/google";
 import "./globals.css";
 import SiteNav from "@/components/SiteNav";
+import SiteFooter from "@/components/SiteFooter";
+import { APPEARANCE_BOOT_SCRIPT } from "@/lib/appearance-boot";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const amiri = Amiri({ variable: "--font-amiri", subsets: ["arabic"], weight: ["400", "700"] });
 
 export const metadata: Metadata = {
-  title: "QuranASL — The Qur'an in American Sign Language",
-  description: "Ayah-by-ayah American Sign Language rendering of the Qur'an with a 3D signing avatar, human reference videos, practice and a community review studio.",
+  title: "QuranASL — The Qur'an in sign language",
+  description:
+    "The meanings of the Qur'an in American and British Sign Language, ayah by ayah, signed by a 3D avatar — with the Arabic, an English translation, human signer videos, practice and a community review studio.",
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f7f4ee" },
+    { media: "(prefers-color-scheme: dark)", color: "#0c1317" },
+  ],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${inter.variable} ${amiri.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">
-        <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-panel focus:p-2">
+    <html lang="en" className={`${inter.variable} ${amiri.variable} h-full antialiased`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: APPEARANCE_BOOT_SCRIPT }} />
+      </head>
+      <body className="flex min-h-full flex-col">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[60] focus:rounded-lg focus:bg-panel focus:px-3 focus:py-2 focus:shadow-lift"
+        >
           Skip to content
         </a>
         <SiteNav />
-        <main id="main" className="flex-1 flex flex-col">{children}</main>
+        <main id="main" className="flex flex-1 flex-col">
+          {children}
+        </main>
+        <SiteFooter />
       </body>
     </html>
   );

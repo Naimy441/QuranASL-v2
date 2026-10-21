@@ -701,4 +701,102 @@ DISTANCE | =FAR | distance | med
 PLATE | =CUP | plate,plates,dish | low
 LANGUAGE | L @neutral:o4u4 p:D f:F > @neutral:o14u4 ~shake:1 d:0.35 ;sym | language,tongue,speech | high
 KNEEL | bentV @base.palm:u4 p:B f:D > @base.palm:u0 d:0.25 | B @neutral p:U f:FI | kneel,kneeling | high
+
+# ---------- batch 12: Surahs 38-40 ----------
+NOBODY | =NONE | nobody,no one,none | high
+NINETY | =NINE+TEN | ninety | low
+TREAT | =DO | treat,deal with | med
+SPECIAL | F @neutral:u2 p:I f:F > @neutral:u10 d:0.3 | 1 @neutral p:I f:U | special,exclusive,particular | med
+MISS | C @face:o4 p:I f:F > S @face:o10 d:0.25 | miss,missed,overlook | med
+PRETEND | =FALSE | pretend,pretentious,pretense | med
+COLOR | 5 @chin:f4 p:B f:U ~wiggle:25 h:0.5 | color,colors,colour,colours | high
+CROOKED | X @neutral:u8 p:I f:U > @neutral:d4o4 ~shake:2 d:0.4 | crooked,deviance,deviation,crookedness | med
+THREATEN | =WARN | threaten,threatens,threat | med
+SHRINK | B @neutral:o10 p:I f:F > @neutral:o3 d:0.35 ;sym | shrink,shrinks,contract | med
+FOLD | B @neutral:o8 p:U f:F > @neutral:o2u6 p:D d:0.35 | B @neutral:o6 p:U f:F | fold,folded,roll up | med
+CHASE | =FOLLOW+HURRY | chase,chased,pursue,pursued | med
+DELICIOUS | 8 @lips p:B f:U > 8 @lips:f6 ~twist:40 d:0.3 | delicious,tasty,delight | high
+EGG | H @neutral:u4 p:I f:F > @neutral:d2o3 ~twist:40 d:0.25 | H @neutral:u4 p:I f:F | egg,eggs | med
+BOTTOM | B @neutral:d6 p:D f:F > @neutral:d10 d:0.25 | B @neutral:u2 p:D f:FI | bottom,depth,base | med
+
+# ---------- batch 13: Surahs 34-37 ----------
+SWEET | B @chin p:B f:U > @chin:d3 d:0.15 ;x2 | sweet,palatable,fresh water | high
+BOWL | C @neutral:o4 p:U f:F > @neutral:o10u2 ~arc d:0.3 ;sym | bowl,bowls,basin,reservoir | med
+FLOOD | 5 @neutral:d4 p:D f:F > @neutral:u8 ~wiggle:20 d:0.5 ;sym | flood,deluge | high
+ADOPT | 5 @neutral:o6f6 p:D f:F > S @chest d:0.35 | adopt,adopted,claimed son | med
+SHY | bentB @cheek p:B f:U > @cheek ~twist:40 d:0.3 ;face:browInnerUp=0.4 | shy,embarrassed,bashful | high
+UNCLE | U @temple:o2 p:F f:U ~shake:1.5 h:0.4 | uncle,uncles,paternal uncle,maternal uncle | high
+AUNT | A @cheek:o2 p:F f:U ~shake:1.5 h:0.4 | aunt,aunts,paternal aunt,maternal aunt | high
+INK | I @neutral:u4 p:I f:F > @neutral:d2 ~wiggle:15 d:0.3 | B @neutral p:U f:FI | ink | low
+WAVE | B @neutral:o10d2 p:D f:F > @neutral:u6 ~arc d:0.25 > @neutral:o10d2 d:0.25 ;sym | wave,waves | high
+SPIDER | claw5 @neutral:d2 p:D f:F ~wiggle:30 h:0.5 | claw5 @neutral:d2 p:D f:F | spider,spiders | high
+YESTERDAY | Y @cheek:f2 p:F f:U > @cheek:b4 d:0.25 | yesterday,previous day | high
+HIRE | =WORK+GIVE | hire,employ,hired | med
+WOW | 5 @face:f8 p:F f:U > @face:f8 ~shake:2 d:0.3 ;face:mouthOpen=0.5,browUp=0.7 | wow,oh,how amazing | med
+WARM | claw5 @mouth:f2 p:B f:U > 5 @mouth:f10 d:0.3 | warm,warmth,warm yourselves | high
+SNAKE | bentV @mouth:f4 p:D f:F > @neutral:f12 ~shake:2 d:0.45 | snake,serpent | high
+ANT | X @base.back:u2 p:D f:F > @base.back:u2f6 ~wiggle:20 d:0.4 | B @neutral p:D f:FI | ant,ants | high
+PALACE | =KING+HOUSE | palace,castle | med
+WANDER | 1 @neutral:u4 p:F f:U > @neutral:o8u2 ~arc > @neutral:o2 ~arc d:0.5 | wander,wandering,roam | med
+SMILE | G @mouth:o2 p:B f:I > @cheek:u2 d:0.3 ;sym face:smile=0.9 | smile,smiled,smiling | high
+SKILL | 5 @base.ulnar p:I f:F > S @base.ulnar:f6 d:0.3 | B @neutral p:I f:F | skill,skilled,skillful,expert | high
+
+# ---------- batch 14: Surahs 25-33 ----------
+BUY | flatO @base.palm:u2 p:U f:F > @neutral:f12u2 ~arc d:0.3 | B @neutral p:U f:F | buy,bought,purchase | high
+MARKET | =BUY+PLACE | market,markets,marketplace | med
+NARROW | B @neutral:o10 p:I f:F > @neutral:o3 d:0.35 ;sym | narrow,confined,tight | high
+BITE | C @neutral:f2 p:D f:F > S @base.side:u2 d:0.25 | B @neutral:o4 p:I f:F | bite,bites,biting | med
+THIN | I @cheek:u2 p:B f:U > @cheek:d6 d:0.3 ;sym face:puff=0 | thin,lean,skinny | med
+CHURCH | C @base.back:u2 p:I f:F > @base.back d:0.12 ;x2 | S @neutral p:D f:FI | church,churches | high
+LEAF | 1 @base.tipI:d2 p:D f:D > @base.tipI:d2 ~twist:30 h:0.4 | B @neutral:u4 p:I f:U | leaf,leaves | med
+SHOE | S @neutral:o4 p:D f:F > @neutral:o1 d:0.1 ;x2 sym | shoe,shoes,sandal,sandals | high
+BOX | B @neutral:o8u2 p:I f:F > @neutral:o8u2 p:B f:I d:0.3 ;sym | box,chest,casket,ark | high
+FESTIVAL | =HAPPY+DAY | festival,feast,celebration | med
+BLUE | B @neutral:o4 p:B f:U ~twist:30 h:0.4 | blue,blue-eyed | high
+DISAPPOINT | 1 @chin p:B f:U at:tipI > @chin:d1 d:0.2 ;face:frown=0.5 | disappoint,disappointed,unhappy | high
+
+# ---------- batch 15: Surahs 18-22 ----------
+CAVE | C @neutral:f4u2 p:I f:F > @neutral:f10u2 ~arc d:0.35 | C @neutral:u2 p:D f:FI | cave,cavern | med
+DOG | 5 @hip:f2 p:I f:D > @hip:u2f2 d:0.12 ;x2 | dog,dogs | high
+HOW-LONG | =HOW+TIME | how long | high
+WASTE | flatO @base.palm:u2 p:U f:F > 5 @neutral:f10d2 d:0.25 | B @neutral p:U f:F | waste,wasteful,squander,extravagant | high
+MUD | =WATER+DIRTY | mud,clay mud,black mud | med
+
+# ---------- batch 16: Surahs 12-17 ----------
+SHIRT | F @chest:o8u4 p:B f:U > @chest:o8u4f2 d:0.12 ;x2 sym | shirt,garment,tunic | high
+BAG | S @hip:o4f6 p:I f:D > @hip:o4f6d4 d:0.25 | bag,saddlebag,sack,baggage | high
+SEDUCE | =TRY+TRICK | seduce,seduced,tempt,entice | med
+WOLF | 5 @nose:f6 p:B f:U > flatO @nose:f12 d:0.3 | wolf,wolves | high
+AGREE | 1 @temple p:D f:F > @neutral:f6 p:D f:F d:0.3 ;face:nod=0.1 | agree,agreed,consent | high
+BUCKET | S @neutral:o6u2 p:I f:F > @neutral:o6d8 d:0.4 | bucket,pail | med
+KNIFE | H @base.tipI p:I f:F > @base.tipI:f6 d:0.15 ;x2 | H @neutral p:I f:F | knife,knives,blade | high
+BREAD | bentB @base.back:u4 p:B f:I > @base.back:d4 d:0.15 ;x2 | B @chest:f8 p:B f:I | bread,loaf | high
+CONVINCE | =SAY+PUSH | convince,persuade,dissuade | med
+COOK | B @base.palm:u1 p:D f:F > @base.palm:u1 p:U d:0.2 ;x2 | B @neutral p:U f:F | cook,cooked,roast,roasted | high
+SCHOLAR | =KNOWLEDGE+PERSON | scholar,scholars,rabbi,rabbis,learned | med
+COPY | 5 @base.palm:f4 p:B f:F > flatO @base.palm d:0.25 | B @neutral p:B f:U | copy,imitate,imitating | high
+BLOW-OUT | O @mouth:f4 p:I f:F > 5 @mouth:f12 d:0.25 ;face:puff=0.6 | extinguish,blow out,put out | med
+
+# ---------- batch 17: Surahs 8-9 ----------
+WEAPON | =FIGHT+THING | weapon,weapons,armed,arms | med
+WHISTLE | V @mouth:f2 p:F f:U > @mouth:f2 d:0.3 ;face:purse=0.8 | whistle,whistling | med
+CLAP | B @neutral:f4 p:D f:F > @base.palm d:0.08 ;x2 | B @neutral p:U f:F | clap,clapping,handclapping | high
+NEEDLE | F @base.tipI:u2 p:I f:U > @base.tipI:u6 d:0.25 | 1 @neutral p:I f:U | needle,eye of a needle | med
+HOLE | F @neutral:f6 p:F f:U > @neutral:f6 ~circle d:0.4 | hole,opening,niche | med
+
+# ---------- batch 18: Surahs 6-7 ----------
+SHEEP | V @base.back:u2 p:D f:F > @base.back:u6 d:0.15 ;x2 | B @neutral p:D f:FI | sheep,ewe,ewes,lamb | high
+GOAT | V @chin p:B f:U > bentV @chin d:0.15 > V @forehead d:0.2 > bentV @forehead d:0.15 | goat,goats | high
+
+# ---------- batch 19: Surah 5 ----------
+HUNT | L @neutral:o4f6 p:I f:F > @neutral:o4f6 d:0.12 ;x2 sym | hunt,hunting,game | high
+WIPE | B @base.palm:u2 p:D f:F > @base.palm:u2f6 d:0.2 ;x2 | B @neutral p:U f:F | wipe,wiping,rub | high
+GAMBLE | A @neutral:o4 p:U f:F > @neutral:f8 ~twist:40 d:0.3 | gamble,gambling,games of chance | med
+TABLE | B @neutral:u2 p:D f:F > @neutral:u2f6 d:0.15 ;x2 sym | table,spread table | high
+ELBOW | 1 @base.ulnar:d8 p:D f:D at:tipI > @base.ulnar:d8 d:0.1 ;x2 | B @neutral p:B f:U | elbow,elbows | high
+BATHROOM | T @neutral:o4 p:F f:U ~shake:1.5 h:0.4 | bathroom,toilet,privy,relieving | high
+NEIGHBOR | =NEAR+PERSON | neighbor,neighbour,neighbors | high
+WORKER | =WORK+PERSON | worker,workers,laborer | high
+WRITER | =WRITE+PERSON | writer,scribe,scribes | high
+INDIRECT | 1 @neutral:u4 p:F f:U > @neutral:o6 ~arc d:0.35 | indirect,allude,hint | low
 `;

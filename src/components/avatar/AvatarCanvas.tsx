@@ -3,9 +3,12 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, OrthographicCamera, PerspectiveCamera, ContactShadows } from "@react-three/drei";
 import { useEffect, useMemo, useRef, useState } from "react";
+import * as THREE from "three";
+import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { createXRStore, XR, useXR } from "@react-three/xr";
 import { AvatarRig, AVATAR_PRESETS, type AvatarStyle } from "@/lib/avatar/AvatarRig";
 import { buildTimeline, makePose, samplePose, type Timeline } from "@/lib/asl/timeline";
+import { readViewerPrefs, useResolvedTheme, type ResolvedTheme } from "@/lib/prefs";
 
 export interface PlaybackState {
   time: number;
@@ -20,6 +23,7 @@ export interface AvatarCanvasProps {
   playback: React.RefObject<PlaybackState>;
   onTime?: (t: number) => void;
   onEnd?: () => void;
+  /** Signer preset; defaults to the one chosen in the viewer. */
   avatar?: keyof typeof AVATAR_PRESETS;
   mode?: "3d" | "2d";
   background?: string;
@@ -29,6 +33,8 @@ export interface AvatarCanvasProps {
   framing?: "body" | "face";
   /** Show "View in VR / AR" buttons when the device supports WebXR. */
   xr?: boolean;
+  /** Allow orbiting / zooming with pointer and wheel (off for decorative signers). */
+  interactive?: boolean;
 }
 
 /** In an immersive session the user stands at the origin: place the signer in front of them. */
@@ -50,8 +56,8 @@ function useXRSupport() {
   return sup;
 }
 
-function Rig({ timeline, playback, onTime, onEnd, avatar = "amina" }: Pick<AvatarCanvasProps, "timeline" | "playback" | "onTime" | "onEnd" | "avatar">) {
-  const style: AvatarStyle = AVATAR_PRESETS[avatar] ?? AVATAR_PRESETS.amina;
+function Rig({ timeline, playback, onTime, onEnd, avatar }: Pick<AvatarCanvasProps, "timeline" | "playback" | "onTime" | "onEnd" | "avatar">) {
+  const style: AvatarStyle = AVATAR_PRESETS[avatar ?? "amina"] ?? AVATAR_PRESETS.amina;
   const rig = useMemo(() => new AvatarRig(style), [style]);
   useEffect(() => () => rig.dispose(), [rig]);
   const pose = useMemo(() => makePose(), []);
@@ -98,51 +104,107 @@ function CameraRig({ mode, framing = "body" }: { mode: "3d" | "2d"; framing?: "b
   // Keep the signing space (head to waist, elbow to elbow) in frame.
   const zoom = Math.min(size.height / 1.12, size.width / 0.95);
   if (framing === "face") return <PerspectiveCamera makeDefault position={[0, 1.62, 0.75]} fov={30} near={0.05} far={20} />;
+  // Fit the signing box (elbow to elbow, waist to above the head) whatever the aspect ratio.
+  const half = Math.tan((30 * Math.PI) / 360);
+  const dist = 1.06 * Math.max(0.5 / half, 0.5 / (half * aspect));
   return mode === "2d" ? (
     <OrthographicCamera makeDefault position={[0, 1.4, 3]} zoom={zoom} near={0.1} far={10} />
   ) : (
-    <PerspectiveCamera makeDefault position={[0, 1.42, aspect < 0.8 ? 2.7 : 2.15]} fov={30} near={0.05} far={20} />
+    <PerspectiveCamera makeDefault position={[0, 1.42, Math.min(3.2, Math.max(1.8, dist))]} fov={30} near={0.05} far={20} />
   );
 }
 
-export default function AvatarCanvas({ mode = "3d", background, className, ariaLabel, framing, xr = false, ...rest }: AvatarCanvasProps) {
+/** Soft image-based lighting from a procedural studio room (no network fetch). */
+function StudioEnvironment({ intensity }: { intensity: number }) {
+  const { gl, scene } = useThree();
+  useEffect(() => {
+    const pmrem = new THREE.PMREMGenerator(gl);
+    const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    scene.environment = env;
+    scene.environmentIntensity = intensity;
+    return () => {
+      scene.environment = null;
+      env.dispose();
+      pmrem.dispose();
+    };
+  }, [gl, scene, intensity]);
+  return null;
+}
+
+const LIGHTS: Record<ResolvedTheme, { env: number; key: number; fill: number; rim: number; rimColor: string; amb: number; shadow: number }> = {
+  light: { env: 0.55, key: 2.0, fill: 0.55, rim: 1.4, rimColor: "#ffe7c7", amb: 0.25, shadow: 0.32 },
+  dark: { env: 0.42, key: 2.1, fill: 0.45, rim: 2.2, rimColor: "#9fe6e6", amb: 0.18, shadow: 0.5 },
+  // high contrast: brighter body, a strong white rim to separate the silhouette from black
+  contrast: { env: 0.7, key: 2.4, fill: 0.8, rim: 3.4, rimColor: "#ffffff", amb: 0.35, shadow: 0 },
+};
+
+export default function AvatarCanvas({ mode = "3d", background, className, ariaLabel, framing, xr = false, interactive = true, avatar, ...rest }: AvatarCanvasProps) {
   const store = useMemo(() => (xr ? createXRStore({ hand: false, controller: false }) : null), [xr]);
   const sup = useXRSupport();
+  const theme = useResolvedTheme();
+  const L = LIGHTS[theme];
+  const [prefAvatar, setPrefAvatar] = useState<string>("amina");
+  useEffect(() => setPrefAvatar(readViewerPrefs().avatar), []);
+  const rigProps = { ...rest, avatar: avatar ?? prefAvatar };
   return (
     <div className={className} role="img" aria-label={ariaLabel ?? "3D signing avatar"}>
       {store && (sup.vr || sup.ar) && (
         <div className="absolute bottom-3 right-3 z-10 flex gap-1">
-          {sup.vr && <button onClick={() => store.enterVR()} className="rounded-md bg-black/60 px-2 py-1 text-xs text-white">View in VR</button>}
-          {sup.ar && <button onClick={() => store.enterAR()} className="rounded-md bg-black/60 px-2 py-1 text-xs text-white">View in AR</button>}
+          {sup.vr && <button onClick={() => store.enterVR()} className="rounded-full bg-black/60 px-3 py-1 text-xs text-white backdrop-blur">View in VR</button>}
+          {sup.ar && <button onClick={() => store.enterAR()} className="rounded-full bg-black/60 px-3 py-1 text-xs text-white backdrop-blur">View in AR</button>}
         </div>
       )}
-      <Canvas shadows dpr={[1, 2]} gl={{ antialias: true, preserveDrawingBuffer: true }} style={{ background: background ?? "transparent" }}>
+      <Canvas
+        shadows="soft"
+        dpr={[1, 2]}
+        gl={{ antialias: true, preserveDrawingBuffer: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.0 }}
+        style={{ background: background ?? "transparent", touchAction: interactive ? "none" : "pan-y" }}
+      >
         <CameraRig mode={mode} framing={framing} />
-        <ambientLight intensity={mode === "2d" ? 1.4 : 0.7} />
-        <hemisphereLight args={["#fff6ea", "#30343c", mode === "2d" ? 0.6 : 0.9]} />
-        <directionalLight position={[1.2, 2.6, 2.4]} intensity={mode === "2d" ? 0.6 : 2.1} castShadow shadow-mapSize={[1024, 1024]} />
-        <directionalLight position={[-2, 1.8, 1]} intensity={0.45} color="#cfe0ff" />
-        <directionalLight position={[0, 2, -2]} intensity={0.6} color="#ffe2c4" />
+        {mode === "3d" && <StudioEnvironment intensity={L.env} />}
+        <ambientLight intensity={mode === "2d" ? 1.3 : L.amb} />
+        <hemisphereLight args={["#fff6ea", "#30343c", mode === "2d" ? 0.6 : 0.5]} />
+        {/* key: warm, high, camera-left */}
+        <directionalLight
+          position={[1.3, 2.7, 2.4]}
+          intensity={mode === "2d" ? 0.6 : L.key}
+          color="#fff3e6"
+          castShadow
+          shadow-mapSize={[2048, 2048]}
+          shadow-bias={-0.0004}
+          shadow-normalBias={0.02}
+          shadow-camera-left={-0.8}
+          shadow-camera-right={0.8}
+          shadow-camera-top={2.2}
+          shadow-camera-bottom={0.4}
+        />
+        {/* fill: cool, low, camera-right */}
+        <directionalLight position={[-2, 1.6, 1.4]} intensity={L.fill} color="#d6e6ff" />
+        {/* rim: behind and above, outlines head and shoulders */}
+        <directionalLight position={[-0.6, 2.4, -2.2]} intensity={L.rim} color={L.rimColor} />
+        <directionalLight position={[0.9, 1.8, -2]} intensity={L.rim * 0.6} color={L.rimColor} />
         {store ? (
           <XR store={store}>
             <XRPlacement>
-              <Rig {...rest} />
+              <Rig {...rigProps} />
             </XRPlacement>
           </XR>
         ) : (
-          <Rig {...rest} />
+          <Rig {...rigProps} />
         )}
-        {mode === "3d" && <ContactShadows position={[0, 0.03, 0]} opacity={0.35} scale={2} blur={2.4} far={1} />}
+        {mode === "3d" && L.shadow > 0 && <ContactShadows position={[0, 0.02, 0]} opacity={L.shadow} scale={2.2} blur={2.6} far={1.2} resolution={512} />}
         <OrbitControls
           target={framing === "face" ? [0, 1.6, 0] : [0, 1.36, 0]}
           enablePan={false}
-          enableRotate={mode === "3d"}
+          enableRotate={interactive && mode === "3d"}
+          enableZoom={interactive}
           minDistance={0.8}
           maxDistance={4}
+          minPolarAngle={Math.PI * 0.25}
+          maxPolarAngle={Math.PI * 0.62}
           enableDamping
         />
       </Canvas>
     </div>
   );
 }
-

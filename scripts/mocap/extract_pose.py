@@ -8,6 +8,7 @@ landmarks (image coords + z), a subset of face landmarks and frame size.
 import json
 import os
 import sys
+import time
 
 import cv2
 import mediapipe as mp
@@ -30,12 +31,13 @@ def main():
         args = args[2:]
     out_dir, videos = args[0], args[1:]
     os.makedirs(out_dir, exist_ok=True)
-    for path in videos:
+    for video_number, path in enumerate(videos, 1):
         stem = os.path.splitext(os.path.basename(path))[0]
         out = os.path.join(out_dir, stem + ".json")
         if os.path.exists(out):
             print("skip", stem)
             continue
+        print(f"start [{video_number}/{len(videos)}] {stem}", flush=True)
         # fresh tracker per video so state never leaks between clips
         holistic = mp.solutions.holistic.Holistic(
             static_image_mode=False, model_complexity=complexity, smooth_landmarks=True,
@@ -44,6 +46,9 @@ def main():
         fps = cap.get(cv2.CAP_PROP_FPS) or 30
         w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        total_samples = (total_frames + stride - 1) // stride if total_frames > 0 else 0
+        started = last_report = time.monotonic()
         frames = []
         k = -1
         while True:
@@ -70,8 +75,23 @@ def main():
                 lm = res.face_landmarks.landmark
                 f["fc"] = [[r(lm[i].x), r(lm[i].y), r(lm[i].z)] for i in FACE_IDX]
             frames.append(f)
+            now = time.monotonic()
+            if now - last_report >= 10:
+                elapsed = now - started
+                rate = len(frames) / elapsed
+                if total_samples:
+                    percent = min(100.0, 100 * len(frames) / total_samples)
+                    remaining = max(0, total_samples - len(frames)) / rate
+                    detail = (f"{len(frames)}/{total_samples} frames ({percent:.1f}%) "
+                              f"ETA {int(remaining // 60)}m {int(remaining % 60)}s")
+                else:
+                    detail = f"{len(frames)} frames (total unknown)"
+                print(f"progress {stem}: {detail} | {rate:.1f} frames/s | "
+                      f"elapsed {int(elapsed // 60)}m {int(elapsed % 60)}s", flush=True)
+                last_report = now
         cap.release()
         holistic.close()
+        print(f"saving {stem}: {len(frames)} frames", flush=True)
         with open(out + ".tmp", "w") as fh:
             json.dump({"src": os.path.basename(path), "fps": fps / stride, "w": w, "h": h, "faceIdx": FACE_IDX, "frames": frames}, fh)
         os.replace(out + ".tmp", out)  # atomic: readers never see a partial file

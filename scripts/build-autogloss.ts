@@ -36,6 +36,20 @@ for (let n = 1; n <= 114; n++) {
   fs.writeFileSync(file, JSON.stringify(existing));
 }
 fs.writeFileSync(path.join(OUT, "index.json"), JSON.stringify(index));
+// Headline numbers for the landing page.
+const bslIndexFile = path.join(process.cwd(), "public/data/bsl/ayat/index.json");
+const bslIndex: Record<string, number[]> = fs.existsSync(bslIndexFile) ? JSON.parse(fs.readFileSync(bslIndexFile, "utf8")) : {};
+const stats = {
+  surahs: 114,
+  ayat: Object.values(index).reduce((s, v) => s + v.ayat, 0),
+  curated: Object.values(index).reduce((s, v) => s + v.curated, 0),
+  signs: lex.entries.size,
+  lexical: +((lexical / tok) * 100).toFixed(1),
+  bslAyat: Object.values(bslIndex).reduce((s, v) => s + v.filter((a) => a > 0).length, 0),
+  bslSigns: fs.existsSync("public/data/bsl/lexicon/index.json") ? JSON.parse(fs.readFileSync("public/data/bsl/lexicon/index.json", "utf8")).length : 0,
+};
+fs.writeFileSync(path.join(process.cwd(), "public/data/stats.json"), JSON.stringify(stats));
+console.log(stats);
 console.log(`whole Quran: tokens=${tok} lexical=${lexical} (${((lexical / tok) * 100).toFixed(1)}%)`);
 const top = [...unknown.entries()].sort((a, b) => b[1] - a[1]);
 console.log(`unknown word types: ${top.length}`);
