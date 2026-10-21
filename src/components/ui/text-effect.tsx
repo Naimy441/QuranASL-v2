@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, type TargetAndTransition, type Transition, type Variant } from "framer-motion";
+import { motion, useInView, type TargetAndTransition, type Transition, type Variant } from "framer-motion";
 import React from "react";
 
 type PresetType = "fade-in-blur" | "fade" | "slide" | "scale";
@@ -13,6 +13,8 @@ interface TextEffectProps {
   delay?: number;
   className?: string;
   segmentWrapperClassName?: string;
+  trigger?: boolean;
+  once?: boolean;
 }
 
 const defaultContainerVariants = {
@@ -68,20 +70,39 @@ export function TextEffect({
   delay = 0,
   className = "",
   segmentWrapperClassName = "",
+  trigger,
+  once = true,
 }: TextEffectProps) {
+  const containerRef = React.useRef<HTMLSpanElement>(null);
+  const [hasMounted, setHasMounted] = React.useState(false);
+
+  const isInView = useInView(containerRef, {
+    once,
+    amount: 0.2,
+    margin: "0px 0px -40px 0px",
+  });
+
+  React.useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
   const segments = React.useMemo(() => {
     if (per === "char") return children.split("");
     if (per === "word") return children.split(" ");
     return children.split("\n");
   }, [children, per]);
 
-  const stagger = per === "char" ? 0.03 : 0.1;
+  const stagger = per === "char" ? 0.03 : 0.08;
   const itemVariants = defaultPresets[preset];
+
+  const shouldAnimate = trigger !== undefined ? trigger : isInView;
+  const activeState = hasMounted && shouldAnimate ? "visible" : "hidden";
 
   return (
     <motion.span
+      ref={containerRef}
       initial="hidden"
-      animate="visible"
+      animate={activeState}
       aria-label={children}
       custom={{ delay, stagger }}
       variants={defaultContainerVariants}
@@ -103,4 +124,5 @@ export function TextEffect({
     </motion.span>
   );
 }
+
 export type { PresetType, PerType, TextEffectProps };
