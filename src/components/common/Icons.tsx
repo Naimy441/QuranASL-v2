@@ -57,52 +57,25 @@ export const LayersIcon = (p: P) => <I {...p}><path d="M12 3l9 5-9 5-9-5z" /><pa
 export const TextIcon = (p: P) => <I {...p}><path d="M4 6h16M4 12h10M4 18h13" /></I>;
 export const FaceIcon = (p: P) => <I {...p}><circle cx="12" cy="12" r="9" /><path d="M9 10v.01M15 10v.01M8.5 15a4.5 4.5 0 0 0 7 0" /></I>;
 
-/** The QuranASL modern emblem: open Qur'an pages forming elevated signing hands with celestial spark. */
+/** The QuranASL emblem: charcoal open hand icon matching the browser tab icon. */
 export function LogoMark({ size = 32, className = "" }: { size?: number; className?: string }) {
   return (
-    <svg viewBox="0 0 32 32" width={size} height={size} fill="none" aria-hidden className={className}>
+    <svg viewBox="0 0 64 64" width={size} height={size} fill="none" aria-hidden className={className}>
       <defs>
-        <linearGradient id="qasl-logo-grad" x1="6" y1="4" x2="26" y2="28" gradientUnits="userSpaceOnUse">
-          <stop stopColor="var(--brand)" />
-          <stop offset="1" stopColor="var(--brand-2)" />
-        </linearGradient>
-        <linearGradient id="qasl-logo-glow" x1="16" y1="6" x2="16" y2="25" gradientUnits="userSpaceOnUse">
-          <stop stopColor="var(--brand)" stopOpacity="0.25" />
-          <stop offset="1" stopColor="var(--brand)" stopOpacity="0.02" />
+        <linearGradient id="qasl-logo-bg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#3A3A3C" />
+          <stop offset="1" stopColor="#161618" />
         </linearGradient>
       </defs>
-
-      {/* Left Wing / Open Mushaf Page */}
-      <path
-        d="M15.5 24C12 21 7 18.5 7 12.5C7 8.5 10.5 7 14.5 8.8L15.5 24Z"
-        fill="url(#qasl-logo-glow)"
-        stroke="url(#qasl-logo-grad)"
-        strokeWidth="1.7"
-        strokeLinejoin="round"
-      />
-
-      {/* Right Wing / Open Mushaf Page */}
-      <path
-        d="M16.5 24C20 21 25 18.5 25 12.5C25 8.5 21.5 7 17.5 8.8L16.5 24Z"
-        fill="url(#qasl-logo-glow)"
-        stroke="url(#qasl-logo-grad)"
-        strokeWidth="1.7"
-        strokeLinejoin="round"
-      />
-
-      {/* Center Spine */}
-      <path
-        d="M16 8.5V24.5"
-        stroke="url(#qasl-logo-grad)"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-      />
-
-      {/* Zenith Celestial Spark (✦) */}
-      <path
-        d="M16 4L16.7 5.5L18.2 6.2L16.7 6.9L16 8.4L15.3 6.9L13.8 6.2L15.3 5.5Z"
-        fill="var(--brand)"
-      />
+      <circle cx="32" cy="32" r="32" fill="url(#qasl-logo-bg)" />
+      <g transform="translate(2.8 0.5)" fill="#fff" stroke="#fff" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M22.5 31 V19" strokeWidth="5.6" fill="none" />
+        <path d="M28.7 29 V14" strokeWidth="5.8" fill="none" />
+        <path d="M35 29 V15" strokeWidth="5.8" fill="none" />
+        <path d="M41 31 V19.5" strokeWidth="5.4" fill="none" />
+        <path d="M22 41 L14.5 34" strokeWidth="5.8" fill="none" />
+        <path d="M19.8 29 H43.8 V40 C43.8 47 39 51.5 32 51.5 C25 51.5 19.8 47 19.8 40 Z" strokeWidth="0" />
+      </g>
     </svg>
   );
 }

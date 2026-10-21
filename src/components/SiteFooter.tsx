@@ -16,8 +16,8 @@ export default function SiteFooter() {
         {/* Colophon & Institution Info */}
         <div>
           <div className="flex items-center gap-2.5 font-semibold text-ink">
-            <div className="flex h-7 w-7 items-center justify-center rounded-md border border-line bg-panel">
-              <LogoMark size={18} className="text-brand" />
+            <div className="flex h-7 w-7 items-center justify-center rounded-full overflow-hidden shadow-xs">
+              <LogoMark size={28} />
             </div>
             <span className="font-serif text-base tracking-tight">QuranASL Linguistic Initiative</span>
           </div>

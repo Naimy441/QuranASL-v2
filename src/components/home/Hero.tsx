@@ -61,7 +61,7 @@ export default function Hero() {
           <div className="mt-8">
             <TextEffect
               per="word"
-              preset="fade-in-blur"
+              preset="fade"
               trigger={true}
               delay={0.05}
               className="font-sans text-4xl font-bold tracking-tight text-ink sm:text-6xl lg:text-7xl"

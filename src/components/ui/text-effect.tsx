@@ -53,8 +53,8 @@ const defaultPresets: Record<
     },
   },
   fade: {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.3 } },
+    hidden: { opacity: 0, y: 8 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] } },
   },
   slide: {
     hidden: { opacity: 0, y: 20 },
@@ -123,20 +123,15 @@ export function TextEffect({
     >
       <span className="sr-only">{children}</span>
       {segments.map((segment, index) => (
-        <span
+        <motion.span
           key={index}
           aria-hidden="true"
+          variants={itemVariants}
           className={`inline-block whitespace-pre ${segmentWrapperClassName}`}
         >
-          <motion.span
-            variants={itemVariants}
-            className="inline-block whitespace-pre"
-            style={{ willChange: "filter, transform, opacity" }}
-          >
-            {segment}
-          </motion.span>
+          {segment}
           {per === "word" && index < segments.length - 1 && " "}
-        </span>
+        </motion.span>
       ))}
     </motion.span>
   );
