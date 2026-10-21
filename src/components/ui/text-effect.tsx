@@ -35,8 +35,8 @@ const defaultPresets: Record<
   "fade-in-blur": {
     hidden: {
       opacity: 0,
-      filter: "blur(10px)",
-      y: 16,
+      filter: "blur(8px)",
+      y: 14,
     },
     visible: {
       opacity: 1,
@@ -47,8 +47,8 @@ const defaultPresets: Record<
       },
       transition: {
         y: { type: "spring", stiffness: 150, damping: 25 },
-        opacity: { duration: 0.35, ease: "easeOut" },
-        filter: { duration: 0.35, ease: "easeOut" },
+        opacity: { duration: 0.3, ease: "easeOut" },
+        filter: { duration: 0.28, ease: "easeOut" },
       },
     },
   },
