@@ -173,18 +173,6 @@ export default function Hero() {
               {/* 3D Kinetic Avatar Canvas */}
               <div className="stage relative aspect-[4/3.2] w-full overflow-hidden sm:aspect-[4/3] lg:aspect-auto lg:h-[480px]">
                 <HeroSigner avatar={avatar} lang={lang} />
-
-                {/* Floating Ayah Pill */}
-                <div className="absolute inset-x-4 bottom-4 flex justify-center pointer-events-none">
-                  <div className="rounded-xl border border-line/60 bg-panel/90 px-4 py-2 text-center shadow-lg backdrop-blur-md">
-                    <span className="block font-mono text-[10px] uppercase text-ink-3">
-                      {lang === "bsl" ? "Surah 112:1 (Al-Ikhlāṣ)" : "Surah 1:1 (Al-Fātiḥah)"}
-                    </span>
-                    <p className="arabic mt-0.5 text-xl font-normal text-ink" lang="ar">
-                      {lang === "bsl" ? "قُلْ هُوَ ٱللَّهُ أَحَدٌ" : "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ"}
-                    </p>
-                  </div>
-                </div>
               </div>
 
               {/* Interactive Control Sidebar */}
@@ -257,6 +245,23 @@ export default function Hero() {
                   </Link>
                 </div>
               </div>
+            </div>
+
+            {/* Clean, Full-Width Transcribed Ayah Bar at Bottom of Window */}
+            <div className="flex flex-col justify-between gap-3 border-t border-line bg-panel px-5 py-4 sm:flex-row sm:items-center">
+              <div>
+                <span className="font-mono text-[10px] uppercase tracking-wider text-brand font-semibold block">
+                  {lang === "bsl" ? "Surah 112:1 (Al-Ikhlāṣ)" : "Surah 1:1 (Al-Fātiḥah)"}
+                </span>
+                <p className="mt-0.5 text-xs text-ink-2 max-w-lg">
+                  {lang === "bsl"
+                    ? "Say, “He is Allah, [who is] One” — Native BSL translation retargeted onto 3D rig"
+                    : "In the name of Allah, the Entirely Merciful, the Especially Merciful"}
+                </p>
+              </div>
+              <p className="arabic text-right text-2xl font-normal text-ink shrink-0 leading-normal" lang="ar">
+                {lang === "bsl" ? "قُلْ هُوَ ٱللَّهُ أَحَدٌ" : "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ"}
+              </p>
             </div>
           </div>
         </div>

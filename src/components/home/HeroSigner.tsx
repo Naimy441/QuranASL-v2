@@ -48,7 +48,7 @@ export default function HeroSigner({ avatar, lang }: { avatar: AvatarId; lang: S
       return {
         timeline: buildTimeline([{ index: 0, label: "BSL", kind: "sign", sign: mocapSign(bsl, 1) }]),
         tokens: [],
-        caption: "Say, “He is Allah, [who is] One” — 112:1 in BSL",
+        caption: "Say, “He is Allah, [who is] One”",
       };
     }
     return { ...animateGloss(BISMILLAH_GLOSS), caption: "In the name of Allah, the Entirely Merciful, the Especially Merciful" };
@@ -61,7 +61,6 @@ export default function HeroSigner({ avatar, lang }: { avatar: AvatarId; lang: S
   }, [anim]);
 
   const onEnd = () => {
-    // breathe for a moment between loops
     setTimeout(() => {
       pb.current.time = 0;
       pb.current.playing = true;
@@ -83,18 +82,16 @@ export default function HeroSigner({ avatar, lang }: { avatar: AvatarId; lang: S
         interactive={false}
         ariaLabel={`Signing avatar signing ${lang === "bsl" ? "Surah Al-Ikhlas ayah 1 in BSL" : "the Bismillah in ASL"}`}
       />
-      <div className="pointer-events-none absolute inset-x-0 bottom-3 flex flex-col items-center gap-1.5 px-3">
-        {tok && tok.status !== "pause" && (
-          <div key={tok.index} className="flex items-center gap-2 rounded-md border border-white/20 bg-black/85 px-3.5 py-1 text-xs font-mono font-medium tracking-wide text-white shadow-sm backdrop-blur">
-            <span className="text-[10px] uppercase tracking-wider text-white/50">Gloss Tier:</span>
-            <span className="font-semibold text-white">{tok.gloss}</span>
-            {tok.locus && <span className="text-[10px] text-accent">[{tok.locus}]</span>}
-          </div>
-        )}
-        <div className="rounded-md border border-line bg-panel/92 px-3 py-1 text-center text-xs text-ink-2 shadow-xs backdrop-blur max-w-sm">
-          {anim.caption}
+
+      {/* Real-time gloss token pill placed at top-left so hands remain 100% visible */}
+      {tok && tok.status !== "pause" && (
+        <div className="pointer-events-none absolute left-3 top-3 z-10 flex items-center gap-2 rounded-lg border border-line/60 bg-panel/90 px-3 py-1 text-xs font-mono font-medium tracking-wide text-ink shadow-sm backdrop-blur-md">
+          <span className="h-1.5 w-1.5 rounded-full bg-brand animate-pulse" />
+          <span className="text-[10px] uppercase tracking-wider text-ink-3">GLOSS:</span>
+          <span className="font-semibold text-brand">{tok.gloss}</span>
+          {tok.locus && <span className="text-[10px] text-accent">[{tok.locus}]</span>}
         </div>
-      </div>
+      )}
     </div>
   );
 }
