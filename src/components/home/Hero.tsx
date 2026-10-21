@@ -64,6 +64,7 @@ export default function Hero() {
               preset="fade-in-blur"
               trigger={true}
               delay={0.05}
+              stagger={0.04}
               className="font-sans text-4xl font-bold tracking-tight text-ink sm:text-6xl lg:text-7xl"
             >
               The Holy Qur&apos;an, Articulated in Sign Language.

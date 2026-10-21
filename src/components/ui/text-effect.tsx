@@ -11,6 +11,7 @@ interface TextEffectProps {
   per?: PerType;
   preset?: PresetType;
   delay?: number;
+  stagger?: number;
   className?: string;
   segmentWrapperClassName?: string;
   trigger?: boolean;
@@ -22,7 +23,7 @@ const defaultContainerVariants = {
   visible: (custom: { delay?: number; stagger?: number }) => ({
     opacity: 1,
     transition: {
-      staggerChildren: custom.stagger ?? 0.05,
+      staggerChildren: custom.stagger ?? 0.04,
       delayChildren: custom.delay ?? 0,
     },
   }),
@@ -35,8 +36,8 @@ const defaultPresets: Record<
   "fade-in-blur": {
     hidden: {
       opacity: 0,
-      filter: "blur(8px)",
-      y: 14,
+      filter: "blur(4px)",
+      y: 12,
     },
     visible: {
       opacity: 1,
@@ -46,9 +47,9 @@ const defaultPresets: Record<
         filter: "none",
       },
       transition: {
-        y: { type: "spring", stiffness: 150, damping: 25 },
-        opacity: { duration: 0.3, ease: "easeOut" },
-        filter: { duration: 0.28, ease: "easeOut" },
+        y: { duration: 0.25, ease: [0.25, 0.1, 0.25, 1] },
+        opacity: { duration: 0.22, ease: "easeOut" },
+        filter: { duration: 0.2, ease: "easeOut" },
       },
     },
   },
@@ -71,6 +72,7 @@ export function TextEffect({
   per = "word",
   preset = "fade-in-blur",
   delay = 0,
+  stagger: staggerProp,
   className = "",
   segmentWrapperClassName = "",
   trigger,
@@ -96,7 +98,7 @@ export function TextEffect({
     return children.split("\n");
   }, [children, per]);
 
-  const stagger = per === "char" ? 0.03 : 0.08;
+  const stagger = staggerProp !== undefined ? staggerProp : per === "char" ? 0.025 : 0.04;
   const baseVariants = defaultPresets[preset];
   const itemVariants = React.useMemo(() => {
     if (shouldReduceMotion) {
